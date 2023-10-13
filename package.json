@@ -9,11 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.3.1",
     "@tanstack/react-query": "^4.36.1",
     "axios": "^1.5.1",
     "next": "13.5.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.47.0",
+    "tw-elements-react": "^1.0.0-alpha1",
+    "yup": "^1.3.2"
   },
   "devDependencies": {
     "typescript": "^5",
