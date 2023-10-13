@@ -1,9 +1,10 @@
-"use client";
-
 import LoginForm from "@/components/LoginForm";
 import Link from "next/link"
 
-export default function Test() {
+//serverside rendering
+const Test = () => {
+  
+  console.log("Test");
   return (
     <div>
       <h1>TEST PAGE</h1>
@@ -12,3 +13,5 @@ export default function Test() {
     </div>
   )
 }
+
+export default Test;
