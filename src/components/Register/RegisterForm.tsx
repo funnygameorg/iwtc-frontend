@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { getRegisterFormSchema } from "@/utils/validations/registerValidation";
@@ -10,14 +11,13 @@ type FormTypes = {
   password: string;
   passwordConfirm: string;
   nickname: string;
-  email: string;
 };
 
 interface inputTypes {
   id: number;
   type: string;
   placeholder: string;
-  inputText: "username" | "password" | "passwordConfirm" | "nickname" | "email";
+  inputText: "username" | "password" | "passwordConfirm" | "nickname";
 }
 const RegisterForm = () => {
   const {
@@ -52,14 +52,14 @@ const RegisterForm = () => {
       placeholder: "비밀번호를 다시 입력해주세요.",
       inputText: "passwordConfirm",
     },
+    // {
+    //   id: 4,
+    //   type: "text",
+    //   placeholder: "email을 입력해주세요.",
+    //   inputText: "email",
+    // },
     {
       id: 4,
-      type: "text",
-      placeholder: "email을 입력해주세요.",
-      inputText: "email",
-    },
-    {
-      id: 5,
       type: "text",
       placeholder: "nickname을 입력해주세요.",
       inputText: "nickname",
@@ -84,12 +84,11 @@ const RegisterForm = () => {
   };
 
   const handleRegister = () => {
-    const { username, password, nickname, email } = watch();
+    const { username, password, nickname } = watch();
     const userInfo = {
       serviceId: username,
       password,
       nickname,
-      email,
     };
     mutate(userInfo);
     // mutate 사용
