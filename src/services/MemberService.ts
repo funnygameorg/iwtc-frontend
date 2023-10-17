@@ -1,4 +1,4 @@
-import userInfo from "@/interfaces/models/login/MemberData";
+import { userInfo } from "@/interfaces/models/login/MemberData";
 import { ajaxPost } from "./BaseService";
 
 //TODO: type 설정
