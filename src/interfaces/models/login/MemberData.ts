@@ -1,8 +1,6 @@
-interface userInfo {
-  id: string;
+export interface userInfo {
+  serviceId: string;
   email: string;
   nickname: string;
   password: string;
 }
-
-export type { userInfo as default };

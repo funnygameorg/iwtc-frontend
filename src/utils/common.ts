@@ -1,3 +1,4 @@
-export const getPlus = (a: number, b: number): number => {
-  return a + b;
-}
+export const getKeyByValue = (obj: any, value: string) => {
+  if (Object.keys(obj)) return true;
+  return false;
+};
