@@ -1,6 +1,10 @@
-export interface userInfo {
+export interface SignUpInfo {
   serviceId: string;
-  email: string;
   nickname: string;
+  password: string;
+}
+
+export interface SignInInfo {
+  serviceId: string;
   password: string;
 }
