@@ -1,34 +1,91 @@
-import React from 'react';
+"use client";
+import React, { useState } from "react";
 
 const RankSelect = () => {
-    return (
-        <div className="ml-4 mt-3 w-200 rounded-md shadow-sm" role="group">
-            <button
-                type="button"
-                className="p-4 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-l-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700"
-            >
-                전체
-            </button>
-            <button
-                type="button"
-                className="p-4 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700"
-            >
-                년
-            </button>
-            <button
-                type="button"
-                className="p-4 text-sm font-medium text-gray-900 bg-transparent border-t border-b border-l border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700"
-            >
-                월
-            </button>
-            <button
-                type="button"
-                className="p-4 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-r-md hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700"
-            >
-                주
-            </button>
-        </div>
+  const [tabList, setTabList] = useState([
+    {
+      id: 1,
+      name: "전체",
+      active: true,
+    },
+    {
+      id: 2,
+      name: "년",
+      active: false,
+    },
+    {
+      id: 3,
+      name: "월",
+      active: false,
+    },
+    {
+      id: 4,
+      name: "일",
+      active: false,
+    },
+  ]);
+
+  const handleTab = (id: number) => {
+    setTabList(
+      tabList.map((list) =>
+        list.id === id ? { ...list, active: true } : { ...list, active: false }
+      )
     );
+  };
+
+  return (
+    <ul className="ml-4 mt-3 w-200 flex flex-wrap text-sm font-medium text-center text-gray-50">
+      {tabList.map((list) => {
+        return (
+          <li className="mr-2" key={list.id}>
+            <a
+              href="javascript:"
+              className={`inline-block px-4 py-3 text-gray-400 ${
+                list.active ? "bg-blue-100 active" : "bg-gray-100"
+              } rounded-lg`}
+              // aria-current="page"
+              onClick={() => handleTab(list.id)}
+            >
+              {list.name}
+            </a>
+          </li>
+        );
+      })}
+      {/* <li className="mr-2 ">
+        <a
+          href="#"
+          className="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+          aria-current="page"
+        >
+          전체
+        </a>
+      </li>
+      <li className="mr-2">
+        <a
+          href="#"
+          className="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+        >
+          년
+        </a>
+      </li>
+      <li className="mr-2">
+        <a
+          href="#"
+          className="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+        >
+          원
+        </a>
+      </li>
+      <li className="mr-2">
+        <a
+          href="#"
+          className="inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white"
+        >
+          일
+        </a>
+      </li> */}
+    </ul>
+  );
 };
 
 export default RankSelect;
