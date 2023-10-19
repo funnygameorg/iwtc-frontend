@@ -51,7 +51,7 @@ const HomeLoginForm = () => {
 
     return (
         <>
-            <div className="p-4">
+            <div className="p-4 h-32">
                 <form className="flex max-w-sm mx-auto">
                     <div className="grid gap-y-2 mb-6 mr-1" style={{ width: '8.6rem' }}>
                         {/* <div className="flex"> */}
