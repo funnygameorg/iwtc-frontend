@@ -4,6 +4,7 @@ import '../styles/globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Header from '@/components/common/Header';
+import RouteHandler from '@/components/RouteHandler';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,6 +20,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                 <TanstackProvider>
                     {/* TODO: 공통 header적용 */}
                     <Header />
+                    <RouteHandler />
                     {children}
                 </TanstackProvider>
             </body>
