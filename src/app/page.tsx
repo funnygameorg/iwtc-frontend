@@ -1,8 +1,8 @@
 import HomeLoginForm from '@/components/Register/HomeLoginForm';
 import RankSelect from '@/components/button/RankSelect';
-import Sidebar from '@/components/common/Sidebar';
 import Order from '@/components/dropdown/Order';
-import SearchBar from '@/components/searsch';
+import SearchBar from '@/components/search';
+import Sidebar from '@/components/common/Sidebar';
 
 const Home = () => {
     return (
