@@ -15,17 +15,26 @@ export const userSignIn = async (param: SignInInfo) => {
 };
 
 export const userSignOut = async () => {
-    const response = await ajaxGet('/members/sign-out');
-    return response;
-};
-
-export const userSignOut2 = async () => {
     const headers = {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${getAccessToken()}`,
+        'access-token': `${getAccessToken()}`,
     };
 
-    const response = await axios.get('http://localhost:8080/api/member/sign-out', {
+    const response = await axios.get('http://localhost:8080/api/members/sign-out', {
+        headers: headers,
+        timeout: 5000,
+    });
+    if (response) {
+        console.log('response', response);
+    }
+};
+
+export const userMeSummary = async (token: string) => {
+    const headers = {
+        'Content-Type': 'application/json',
+        'access-token': `${token}`,
+    };
+    const response = await axios.get('http://localhost:8080/api/members/me/summary', {
         headers: headers,
         timeout: 5000,
     });
