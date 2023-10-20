@@ -12,7 +12,7 @@ export const userSignIn = async (param: SignInInfo) => {
     return response;
 };
 
-export const userLogOut = async () => {
-    const response = await ajaxGet('/members/sign-out');
+export const userSignOut = async () => {
+    const response = await ajaxGet('/members/sign-out',);
     return response;
 };
