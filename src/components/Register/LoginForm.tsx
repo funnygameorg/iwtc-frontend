@@ -6,13 +6,16 @@ import ValidateMessage from "../ValidateMessage";
 import { useMutation } from "@tanstack/react-query";
 import { userSignIn } from "@/services/MemberService";
 import Link from "next/link";
-
+import { setToken } from "@/utils/TokenManager";
+import { useRouter } from "next/navigation";
 interface FormTypes {
   username: string;
   password: string;
 }
 
 const LoginForm = () => {
+  const router = useRouter();
+
   const {
     register,
     watch,
@@ -24,8 +27,11 @@ const LoginForm = () => {
   });
 
   const { mutate } = useMutation(userSignIn, {
-    onSuccess: () => {
-      console.log("로그인 성공");
+    onSuccess: (data) => {
+      const token = data.headers["access-token"];
+      // ACCESS_TOKEN 저장
+      setToken("ACCESS_TOKEN", token);
+      router.push('/');
     },
     onError: (error) => {
       console.log("에러", error);
