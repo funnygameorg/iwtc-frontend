@@ -39,6 +39,6 @@ export const userMeSummary = async (token: string) => {
         timeout: 5000,
     });
     if (response) {
-        console.log('response', response);
+        return response.data;
     }
 };

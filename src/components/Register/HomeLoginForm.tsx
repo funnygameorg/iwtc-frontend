@@ -6,6 +6,7 @@ import ValidateMessage from '../ValidateMessage';
 import { useMutation } from '@tanstack/react-query';
 import { userSignIn } from '@/services/MemberService';
 import Link from 'next/link';
+import { getUserInfo } from '@/stores/LocalStore';
 
 interface FormTypes {
     username: string;
@@ -48,6 +49,19 @@ const HomeLoginForm = () => {
         };
         mutate(loginParam);
     };
+    if (getUserInfo()) {
+        const { serviceId, nickname } = getUserInfo();
+        return (
+            <div className="p-4 h-32">
+                <span className="grid gap-y-2 mb-6 mr-1" style={{ width: '8.6rem' }}>
+                    아이디: {serviceId}
+                </span>
+                <span className="grid gap-y-2 mb-6 mr-1" style={{ width: '8.6rem' }}>
+                    닉네임: {nickname}
+                </span>
+            </div>
+        );
+    }
 
     return (
         <>

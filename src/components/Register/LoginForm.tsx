@@ -8,6 +8,7 @@ import { userMeSummary, userSignIn } from '@/services/MemberService';
 import Link from 'next/link';
 import { setToken } from '@/utils/TokenManager';
 import { useRouter } from 'next/navigation';
+import { setUserInfo } from '@/stores/LocalStore';
 interface FormTypes {
     username: string;
     password: string;
@@ -27,11 +28,12 @@ const LoginForm = () => {
     });
 
     const { mutate } = useMutation(userSignIn, {
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             const token = data.headers['access-token'];
             // ACCESS_TOKEN 저장
             setToken('ACCESS_TOKEN', token);
-            userMeSummary(token);
+            const userInfo = await userMeSummary(token);
+            setUserInfo(userInfo.data);
             router.push('/');
         },
         onError: (error) => {
