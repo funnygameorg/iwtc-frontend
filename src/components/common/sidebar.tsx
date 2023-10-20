@@ -1,6 +1,6 @@
 import React from 'react';
-import LoginForm from '../Register/LoginForm';
-import HomeLoginForm from '../Register/HomeLoginForm';
+import LoginForm from '../register/LoginForm';
+import HomeLoginForm from '../register/HomeLoginForm';
 //https://flowbite.com/docs/components/sidebar/#sidebar-with-navbar
 
 function Sidebar() {
