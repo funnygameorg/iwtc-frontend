@@ -18,11 +18,17 @@ const Home = () => {
                     <Sidebar />
                 </aside>
                 {/* main header */}
-                <div className="flex h-32 items-center">
-                    <SearchBar />
-                    <RankSelect />
-                    <Order />
+                <div>
+                    <div className="flex w-full h-32 items-center">
+                        <SearchBar />
+                        <RankSelect />
+                        <Order />
+                    </div>
+                    <div>
+                        <h1>카드리스트</h1>
+                    </div>
                 </div>
+
                 <div className="z-50 line absolute mt-32 transform  h-0.5 bg-gray-200 w-full"></div>
             </div>
         </div>
