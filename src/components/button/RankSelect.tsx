@@ -33,14 +33,16 @@ const RankSelect = () => {
         <ul className="ml-4 w-200 flex flex-wrap text-sm font-medium text-center text-gray-50">
             {tabList.map((list) => {
                 return (
-                    <li className="mr-2" key={list.id}>
+                    <li className="mr-2" key={list.id} onClick={() => handleTab(list.id)}>
                         <a
-                            href="javascript:"
+                            href="#"
                             className={`inline-block px-4 py-3 text-gray-400 ${
                                 list.active ? 'bg-blue-100 active' : 'bg-gray-100'
                             } rounded-lg`}
                             // aria-current="page"
-                            onClick={() => handleTab(list.id)}
+                            onClick={(e) => {
+                                e.preventDefault();
+                            }}
                         >
                             {list.name}
                         </a>
