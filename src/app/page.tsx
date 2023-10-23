@@ -3,6 +3,7 @@ import RankSelect from '@/components/button/RankSelect';
 import Order from '@/components/dropdown/Order';
 import SearchBar from '@/components/search';
 import Sidebar from '@/components/common/Sidebar';
+import CupList from '@/components/home/Card/CupList';
 
 const Home = () => {
     return (
@@ -24,9 +25,7 @@ const Home = () => {
                         <RankSelect />
                         <Order />
                     </div>
-                    <div>
-                        <h1>카드리스트</h1>
-                    </div>
+                    <CupList />
                 </div>
 
                 <div className="z-50 line absolute mt-32 transform  h-0.5 bg-gray-200 w-full"></div>
