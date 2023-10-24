@@ -3,15 +3,7 @@ import { useQueryGetWorldCupAllList, worldCupAllList } from '@/services/WorldCup
 import Image from 'next/image';
 import React, { useEffect } from 'react';
 
-const WorldCupList = () => {
-    useEffect(() => {
-        testCupList();
-    }, []);
-
-    const testCupList = async () => {
-        const result = await useQueryGetWorldCupAllList(1, 1, 1);
-        console.log('result', result);
-    };
+const WorldCupList = ({wcList} : any) => {
 
     return (
         <div className="w-80 h-128 rounded overflow-hidden shadow-lg">

@@ -9,12 +9,12 @@ export const useQueryGetWorldCupAllList = (page: number, size: number, sort: num
     });
 };
 
-export const worldCupAllList = async (page: number, size: number, sort: number) => {
+export const worldCupAllList = async (page: number, size: number, sort: string) => {
     const param = {
         page,
         size,
         sort,
     };
-    const response = await ajaxGet('/world-cups', param);
+    const response = await ajaxGet('/world-cups', {params:param });
     return response;
 };
