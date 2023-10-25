@@ -28,7 +28,7 @@ const WorldCup = () => {
     );
     return (
         <>
-        {!isFetchingNextPage && 
+        {/* {!isFetchingNextPage &&  */}
             <InfiniteScroll loadMore={() => fetchNextPage()} hasMore={hasNextPage}>
                 <div className="flex flex-wrap justify-center mt-10overflow-auto">
                     {data?.pages.map((page: any) => {
@@ -38,7 +38,7 @@ const WorldCup = () => {
                     })}
                 </div>
             </InfiniteScroll>
-        }
+        {/* } */}
         </>
     );
 };
