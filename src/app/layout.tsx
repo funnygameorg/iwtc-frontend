@@ -1,10 +1,10 @@
-import TanstackProvider from '@/components/TanstackProvider';
 import '../styles/globals.css';
 // import "tw-elements-react/dist/css/tw-elements-react.min.css";
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Header from '@/components/common/Header';
 import RouteHandler from '@/components/RouteHandler';
+import Providers from '@/hooks/Provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,12 +17,12 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <html lang="en">
             <body className={inter.className} suppressHydrationWarning={true}>
-                <TanstackProvider>
+                <Providers>
                     {/* TODO: 공통 header적용 */}
                     <Header />
                     <RouteHandler />
                     {children}
-                </TanstackProvider>
+                </Providers>
             </body>
         </html>
     );

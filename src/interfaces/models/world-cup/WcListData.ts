@@ -8,7 +8,7 @@ interface WCListDataType {
     gameTitle: string;
 }
 
-interface WCListParent {
+export interface WCListParent {
     totalCount: number;
     list: WCListDataType[];
     pageable: any;

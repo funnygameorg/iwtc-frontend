@@ -1,9 +1,10 @@
-import HomeLoginForm from '@/components/Register/HomeLoginForm';
+import HomeLoginForm from '@/components/register/HomeLoginForm';
 import RankSelect from '@/components/button/RankSelect';
 import Order from '@/components/dropdown/Order';
 import SearchBar from '@/components/search';
 import Sidebar from '@/components/common/Sidebar';
 import WorldCup from '@/components/home/worldcup/WorldCup';
+import HydratedWCList from '@/components/home/HydratedWCList';
 
 const Home = () => {
     return (
@@ -25,7 +26,7 @@ const Home = () => {
                         <RankSelect />
                         <Order />
                     </div>
-                    <WorldCup />
+                    <HydratedWCList />
                 </div>
 
                 <div className="z-50 line absolute mt-32 transform  h-0.5 bg-gray-200 w-full"></div>

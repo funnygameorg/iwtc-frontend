@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { ajaxGet } from './BaseService';
-import { loadWCListData } from '@/interfaces/models/world-cup/WcListData';
+import { WCListParent, loadWCListData } from '@/interfaces/models/world-cup/WcListData';
 
 // export const useQueryGetWorldCupAllList = (page: number, size: number, sort: number) => {
 //     return useQuery<any, Error>(['WorldCupList', page, size, sort], () => worldCupAllList(page, size, sort), {
@@ -10,13 +10,12 @@ import { loadWCListData } from '@/interfaces/models/world-cup/WcListData';
 //     });
 // };
 
-export const worldCupAllList = async (page: number, size: number, sort: string) => {
+export const worldCupAllList = async (page: number, size: number, sort: string):Promise<WCListParent> => {
     const param = {
         page,
         size,
         sort,
     };
     const response = await ajaxGet('/world-cups', { params: param });
-    console.log('response ===>', response);
     return loadWCListData(response.data.data);
 };
