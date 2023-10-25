@@ -10,11 +10,13 @@ import { WCListParent, loadWCListData } from '@/interfaces/models/world-cup/WcLi
 //     });
 // };
 
-export const worldCupAllList = async (page: number, size: number, sort: string):Promise<WCListParent> => {
+export const worldCupAllList = async (page: number, size: number, sort: string, keyword?:string, dateRange='ALL'):Promise<WCListParent> => {
     const param = {
         page,
         size,
         sort,
+        keyword,
+        dateRange
     };
     const response = await ajaxGet('/world-cups', { params: param });
     return loadWCListData(response.data.data);

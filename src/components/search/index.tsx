@@ -1,13 +1,31 @@
-import React from 'react';
+'use client'
+import React, { Dispatch, SetStateAction, useState } from 'react';
 
-const SearchBar = () => {
+interface IProps {
+  setKeyword: Dispatch<SetStateAction<undefined | string>>
+}
+
+const SearchBar = ({setKeyword} : IProps) => {
+    const [text, setText] = useState('');
+
+    const onChangeKeyword = (e) => {
+      const {value} = e.target
+
+      setText(value ? value : undefined);
+    }
+
+    const onClickSearch = () => {
+      console.log("click!!");
+      setKeyword(text);
+    }
+
     return (
         <div className="ml-4 w-200">
-            <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
+            <label  htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
                 Search
             </label>
             <div className="relative">
-                <div className="absolute right-0 inset-y-0 flex items-center pr-3 pointer-events-none">
+                <div className="absolute right-0 inset-y-0 flex items-center pr-3 " onClick={onClickSearch}  >
                     <svg
                         className="w-4 h-4 text-gray-500 dark:text-gray-400 "
                         aria-hidden="true"
@@ -28,8 +46,10 @@ const SearchBar = () => {
                     type="search"
                     id="default-search"
                     className="block p-4 pr-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="제목을 검색하세요."
+                    placeholder="키워드를 검색하세요."
                     required
+                    onChange={(e) => onChangeKeyword(e)}
+                    value={text}
                 />
                 {/* <button
                     type="submit"

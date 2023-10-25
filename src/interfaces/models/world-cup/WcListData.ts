@@ -9,6 +9,7 @@ interface WCListDataType {
 }
 
 export interface WCListParent {
+    totalPage: number;
     totalCount: number;
     list: WCListDataType[];
     pageable: any;
@@ -19,6 +20,7 @@ export const loadWCListData = (data: any): WCListParent => {
         totalCount: data.totalElements,
         list: (data.content || []).map(mapWCListData),
         pageable: data.pageable,
+        totalPage: data.totalPages
     };
 };
 

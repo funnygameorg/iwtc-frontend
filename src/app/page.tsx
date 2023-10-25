@@ -3,7 +3,7 @@ import RankSelect from '@/components/button/RankSelect';
 import Order from '@/components/dropdown/Order';
 import SearchBar from '@/components/search';
 import Sidebar from '@/components/common/Sidebar';
-import WorldCup from '@/components/home/worldcup/WorldCup';
+import WorldCup from '@/components/home/worldcup/WorldCupWrapper';
 import HydratedWCList from '@/components/home/HydratedWCList';
 
 const Home = () => {
@@ -21,11 +21,6 @@ const Home = () => {
                 </aside>
                 {/* main header */}
                 <div>
-                    <div className="flex w-full h-32 items-center">
-                        <SearchBar />
-                        <RankSelect />
-                        <Order />
-                    </div>
                     <HydratedWCList />
                 </div>
 
