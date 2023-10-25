@@ -9,7 +9,6 @@ const WorldCup = () => {
     const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery(
         ['wclist'],
         async ({ pageParam }) => {
-          console.log("pageParam", pageParam);
           return await worldCupAllList(pageParam, 20, 'id')}
           ,
         {
@@ -27,9 +26,9 @@ const WorldCup = () => {
             // cacheTime: 60 * 1000
         }
     );
-  
     return (
         <>
+        {!isFetchingNextPage && 
             <InfiniteScroll loadMore={() => fetchNextPage()} hasMore={hasNextPage}>
                 <div className="flex flex-wrap justify-center mt-10overflow-auto">
                     {data?.pages.map((page: any) => {
@@ -39,6 +38,7 @@ const WorldCup = () => {
                     })}
                 </div>
             </InfiniteScroll>
+        }
         </>
     );
 };
