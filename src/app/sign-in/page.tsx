@@ -1,8 +1,8 @@
-import LoginForm from "@/components/register/LoginForm";
-import React from "react";
+import React from 'react';
+import LoginForm from '@/components/Register/LoginForm';
 
 const SignIn = () => {
-  return <LoginForm />;
+    return <LoginForm />;
 };
 
 export default SignIn;
