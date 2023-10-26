@@ -20,7 +20,9 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
     (response: AxiosResponse) => {
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 201) {
+            return response;
+        } else if (response.status === 204) {
             return response;
         } else {
             if (response.status === 401) {

@@ -25,7 +25,7 @@ export const userSignOut = async () => {
         timeout: 5000,
     });
     if (response) {
-        console.log('response', response);
+        return response;
     }
 };
 

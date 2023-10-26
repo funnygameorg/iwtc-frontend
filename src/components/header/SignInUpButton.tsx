@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getUserInfo } from '@/stores/LocalStore';
+import { getUserInfo, localStorageClear } from '@/stores/LocalStore';
 
 const SignInUpButton = () => {
     const router = useRouter();
@@ -19,10 +19,13 @@ const SignInUpButton = () => {
     //     },
     // });
 
-    const onClickHandler = (isLogin: boolean) => {
+    const onClickHandler = async (isLogin: boolean) => {
         if (isLogin) {
             //TODO: return 받아서 이후 로직처리 필요
-            userSignOut();
+            const response = await userSignOut();
+            if (response) {
+                localStorageClear();
+            }
         } else {
             router.push('/sign-in');
         }
