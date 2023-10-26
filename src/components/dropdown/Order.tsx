@@ -2,23 +2,27 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
 enum OrderType {
-  Latest = '최신순',
-  Popularity = '인기순'
+    Latest = '최신순',
+    Popularity = '인기순',
 }
 
 interface IProps {
-  setRank: Dispatch<SetStateAction<string>>
+    setOrder: Dispatch<SetStateAction<string>>;
 }
 
-
-const Order = ({setRank}:IProps) => {
+const Order = ({ setOrder }: IProps) => {
     const orderOptions = Object.values(OrderType);
 
     const [selectedOrder, setSelectedOrder] = useState<OrderType>(OrderType.Latest);
     const [isOpen, setOpen] = useState<boolean>(false);
-    
+
     const handleDropDown = () => {
         setOpen(!isOpen);
+    };
+
+    const handleOrderChange = (type: string) => {
+        const valueToSet = type === '최신순' ? 'id' : 'views';
+        setOrder(valueToSet);
     };
 
     return (
@@ -63,11 +67,14 @@ const Order = ({setRank}:IProps) => {
                         <li key={index}>
                             <a
                                 href="#"
-                                className={`block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white ${option === selectedOrder ? 'font-bold' : ''}`}
+                                className={`block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white ${
+                                    option === selectedOrder ? 'font-bold' : ''
+                                }`}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     setSelectedOrder(option);
                                     setOpen(false);
+                                    handleOrderChange(option);
                                 }}
                             >
                                 {option}
