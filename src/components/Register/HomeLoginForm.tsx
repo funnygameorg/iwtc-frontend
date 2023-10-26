@@ -4,9 +4,10 @@ import { useForm } from 'react-hook-form';
 import { getLoginFormSchema } from '@/utils/validations/loginValidation';
 import ValidateMessage from '../ValidateMessage';
 import { useMutation } from '@tanstack/react-query';
-import { userSignIn } from '@/services/MemberService';
+import { userMeSummary, userSignIn } from '@/services/MemberService';
 import Link from 'next/link';
-import { getUserInfo } from '@/stores/LocalStore';
+import { getUserInfo, setUserInfo } from '@/stores/LocalStore';
+import { setToken } from '@/utils/TokenManager';
 
 interface FormTypes {
     username: string;
@@ -25,8 +26,12 @@ const HomeLoginForm = () => {
     });
 
     const { mutate } = useMutation(userSignIn, {
-        onSuccess: (data) => {
-            console.log('로그인 성공', data.headers);
+        onSuccess: async (data) => {
+            const token = data.headers['access-token'];
+            // ACCESS_TOKEN 저장
+            setToken('ACCESS_TOKEN', token);
+            const userInfo = await userMeSummary(token);
+            setUserInfo(userInfo.data);
         },
         onError: (error) => {
             console.log('에러', error);
@@ -42,7 +47,6 @@ const HomeLoginForm = () => {
     };
     const handleLogin = () => {
         const { username, password } = watch();
-        console.log('TEST ===>');
         const loginParam = {
             serviceId: username,
             password,
