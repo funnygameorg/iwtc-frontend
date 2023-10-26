@@ -8,13 +8,13 @@ import Order from '../dropdown/Order'
 
 export default async function HydratedWCList() {
   const queryClient = getQueryClient()
-  await queryClient.prefetchInfiniteQuery(['wclist', undefined, 'ALL'], async () => await worldCupAllList(0 ,20, 'id', undefined, 'ALL'))
+  await queryClient.prefetchInfiniteQuery(['wclist','id',undefined,'ALL'], async () => await worldCupAllList(0 ,20, 'id', undefined, 'ALL'))
   // queryClient.setQueryData(queryKey, (data) => ({
   //   ...data,
   //   pageParams: [],
   // }));
   const dehydratedState = JSON.parse(JSON.stringify(dehydrate(queryClient)))
-  console.log("dehydratedState",dehydratedState.queries[0].state.data.pages);
+  // console.log("dehydratedState",dehydratedState.queries[0].state.data.pages);
   
   dehydratedState.queries[0].state.data.pageParams[0]= 0;
   return (

@@ -14,7 +14,7 @@ const WorldCupWrapper = () => {
     const [rank, setRank] = useState('ALL');
 
     const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery(
-        ['wclist', keyword, rank],
+        ['wclist',order, keyword, rank],
         async ({ pageParam = 0 }) => {
           return await worldCupAllList(pageParam, 20, order, keyword, rank)}
           ,
@@ -43,7 +43,7 @@ const WorldCupWrapper = () => {
         <div className="flex w-full h-32 items-center">
           <SearchBar setKeyword={setKeyword} />
           <RankSelect setRank={setRank} />
-          <Order />
+          <Order setOrder={setOrder} />
         </div>
           <>
             {/* {!isFetchingNextPage &&  */}

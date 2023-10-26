@@ -1,9 +1,22 @@
 'use client';
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 
-const Order = () => {
-    const [isOpen, setOpen] = useState(false);
+enum OrderType {
+  Latest = '최신순',
+  Popularity = '인기순'
+}
 
+interface IProps {
+  setRank: Dispatch<SetStateAction<string>>
+}
+
+
+const Order = ({setRank}:IProps) => {
+    const orderOptions = Object.values(OrderType);
+
+    const [selectedOrder, setSelectedOrder] = useState<OrderType>(OrderType.Latest);
+    const [isOpen, setOpen] = useState<boolean>(false);
+    
     const handleDropDown = () => {
         setOpen(!isOpen);
     };
@@ -17,7 +30,7 @@ const Order = () => {
                 type="button"
                 onClick={handleDropDown}
             >
-                최신순
+                {selectedOrder}
                 <svg
                     className="w-2.5 h-2.5 ml-2.5"
                     aria-hidden="true"
@@ -46,14 +59,21 @@ const Order = () => {
                     className="py-2 z-50 text-sm text-gray-700 dark:text-gray-200"
                     aria-labelledby="dropdownDefaultButton"
                 >
-                    <li>
-                        <a
-                            href="#"
-                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                            인기순
-                        </a>
-                    </li>
+                    {orderOptions.map((option, index) => (
+                        <li key={index}>
+                            <a
+                                href="#"
+                                className={`block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white ${option === selectedOrder ? 'font-bold' : ''}`}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setSelectedOrder(option);
+                                    setOpen(false);
+                                }}
+                            >
+                                {option}
+                            </a>
+                        </li>
+                    ))}
                 </ul>
             </div>
         </div>
