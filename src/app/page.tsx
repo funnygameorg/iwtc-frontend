@@ -1,4 +1,4 @@
-import HomeLoginForm from '@/components/register/HomeLoginForm';
+import HomeLoginForm from '@/components/Register/HomeLoginForm';
 import RankSelect from '@/components/button/RankSelect';
 import Order from '@/components/dropdown/Order';
 import SearchBar from '@/components/search';
