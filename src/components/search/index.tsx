@@ -1,23 +1,22 @@
 'use client';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, Dispatch, SetStateAction, useState } from 'react';
 
 interface IProps {
     setKeyword: Dispatch<SetStateAction<undefined | string>>;
 }
 
 const SearchBar = ({ setKeyword }: IProps) => {
-    const [text, setText] = useState('');
+    const [text, setText] = useState<undefined | string>('');
 
-    const onChangeKeyword = (e) => {
+    const onChangeKeyword = (e: ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
-
         setText(value ? value : undefined);
     };
 
     const onClickSearch = () => {
         setKeyword(text);
     };
-    const handleOnKeyPress = (e) => {
+    const handleOnKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             onClickSearch();
         }
