@@ -51,8 +51,8 @@ const WorldCupWrapper = () => {
                 <InfiniteScroll loadMore={() => fetchNextPage()} hasMore={hasNextPage}>
                     <div className="flex flex-wrap justify-center mt-10overflow-auto">
                         {data?.pages.map((page: any) => {
-                            return page.list.map((items: any) => {
-                                return <WorldCupList wcList={items} key={items.id} />;
+                            return page.list.map((items: any, idx: number) => {
+                                return <WorldCupList wcList={items} key={idx} />;
                             });
                         })}
                     </div>
