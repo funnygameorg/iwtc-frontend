@@ -29,10 +29,13 @@ const LoginForm = () => {
 
     const { mutate } = useMutation(userSignIn, {
         onSuccess: async (data) => {
-            const token = data.headers['access-token'];
+            const accessToken = data.headers['access-token'];
+            const refreshToken = data.headers['refresh-token'];
             // ACCESS_TOKEN 저장
-            setToken('ACCESS_TOKEN', token);
-            const userInfo = await userMeSummary(token);
+            setToken('ACCESS_TOKEN', accessToken);
+            setToken('REFRESH_TOKEN', refreshToken);
+
+            const userInfo = await userMeSummary(accessToken);
             setUserInfo(userInfo.data);
             router.push('/');
         },
