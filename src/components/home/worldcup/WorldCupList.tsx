@@ -10,7 +10,7 @@ const WorldCupList = ({ wcList }: any) => {
     return (
         <div className="p-4 max-w-sm">
             <div className="w-80 h-128 rounded overflow-hidden shadow-lg">
-                <Link href="/play-game">
+                <Link href={`/play-game/${contentNum}`}>
                     <div className="flex">
                         <div className="flex-1">
                             <Image

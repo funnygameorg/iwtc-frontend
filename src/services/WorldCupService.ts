@@ -10,14 +10,26 @@ import { WCListParent, loadWCListData } from '@/interfaces/models/world-cup/WcLi
 //     });
 // };
 
-export const worldCupAllList = async (page: number, size: number, sort: string, keyword?:string, dateRange='ALL'):Promise<WCListParent> => {
+export const worldCupAllList = async (
+    page: number,
+    size: number,
+    sort: string,
+    keyword?: string,
+    dateRange = 'ALL'
+): Promise<WCListParent> => {
     const param = {
         page,
         size,
         sort,
         keyword,
-        dateRange
+        dateRange,
     };
     const response = await ajaxGet('/world-cups', { params: param });
     return loadWCListData(response.data.data);
+};
+
+export const worldCupGameRound = async (worldcupId: number) => {
+    const response = await ajaxGet(`/world-cups/${worldcupId}/available-rounds`);
+    console.log('round ===>', response);
+    // return loadWCListData(response.data.data);
 };
