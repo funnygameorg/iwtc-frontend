@@ -10,8 +10,8 @@ import Order from '@/components/dropdown/Order';
 
 const WorldCupWrapper = () => {
     const [keyword, setKeyword] = useState<undefined | string>(undefined);
-    const [order, setOrder] = useState('id');
-    const [rank, setRank] = useState('ALL');
+    const [order, setOrder] = useState<string>('id');
+    const [rank, setRank] = useState<string>('ALL');
 
     const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery(
         ['wclist', order, keyword, rank],
