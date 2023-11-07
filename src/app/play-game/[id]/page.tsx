@@ -40,9 +40,10 @@ const Page = ({ params }: { params: { id: number } }) => {
 
     const handleSelection = (index: number) => {
         // selectRound가 2이면 결승
-        setSaveClickContents(saveClickContents.concat(gameList[index].name));
+        // setSaveClickContents(saveClickContents.concat(gameList[index].name));
 
         if (selectRound === 2) {
+            return;
             // 최종 선택 API 호출 후 return
         }
         // 배열을 2개씩 자름 결국 2개 남았을 때 클릭 하면 다음 라운드 진출
@@ -87,7 +88,7 @@ const Page = ({ params }: { params: { id: number } }) => {
         <>
             <div className="grid h-screen place-items-center box-border">
                 <h1 className="text-white text-3xl">{roundList?.data?.worldCupTitle}</h1>
-                <h1 className="text-white text-3xl">{selectRound === 2 ? '결승' : selectRound}강</h1>
+                <h1 className="text-white text-3xl">{selectRound === 2 ? '결승' : selectRound + '강'}</h1>
 
                 <div className="flex p-4 text-black shadow" style={{ width: '1600px', height: '1000px' }}>
                     <div className="flex items-start" onClick={() => handleSelection(0)}>
