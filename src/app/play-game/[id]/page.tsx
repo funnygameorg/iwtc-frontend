@@ -1,13 +1,21 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
-import { useQueryGetWorldCupGameRound, worldCupGameRound } from '@/services/WorldCupService';
+import { useQueryGetWorldCupGameRound, worldCupGamePlay } from '@/services/WorldCupService';
 import RoundPopup from '@/components/popup/RoundPopup';
+import { useMutation } from '@tanstack/react-query';
 
-const page = ({ params }: { params: { id: number } }) => {
+const Page = ({ params }: { params: { id: number } }) => {
     const { id } = params;
     const { data: roundList } = useQueryGetWorldCupGameRound(id);
-    const [selectRound, setSelectRound] = useState<number>();
+    // const {worldCupTitle} = roundList?.data
+    const [selectRound, setSelectRound] = useState<number>(0);
+
+    const gameList:any = useMutation(worldCupGamePlay, {
+      onSuccess: (data: any) => {
+        console.log("data", data);
+      }
+    })
 
     useEffect(() => {
         document.documentElement.classList.add('dark');
@@ -19,16 +27,32 @@ const page = ({ params }: { params: { id: number } }) => {
         };
     }, []);
 
-    useEffect(() => {
-        if (selectRound) {
-            console.log('selectRound', selectRound);
-        }
-    }, [selectRound]);
+    const playMutation = 
+      () => {
+        const param = {
+          worldcupId: id,
+          currentRound: selectRound,
+          divideContentsSizePerRequest: 2,
+          alreadyPlayedContentsIds: undefined
+        };
+        gameList.mutate(param);
+      }
+      
+    ;
 
+    // useEffect(() => {
+    //     if (selectRound) {
+    //         playMutation();
+    //     }
+    // }, [selectRound]);
+
+    
+    
     return (
         <>
             <RoundPopup roundList={roundList} setSelectRound={setSelectRound} />
             <div className="grid h-screen place-items-center box-border">
+            <h1 className='text-white text-3xl'>{roundList?.data?.worldCupTitle}</h1>
                 <div className="flex p-4 text-black shadow" style={{ width: '1600px', height: '1000px' }}>
                     <div className="flex items-start">
                         <Image
@@ -58,5 +82,5 @@ const page = ({ params }: { params: { id: number } }) => {
     );
 };
 
-export default page;
+export default Page;
 // public/images/default.png

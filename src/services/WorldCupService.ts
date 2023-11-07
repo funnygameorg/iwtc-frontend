@@ -43,3 +43,16 @@ export const worldCupGameRound = async (worldcupId: number) => {
     console.log('round ===>', response);
     return response.data;
 };
+
+export const worldCupGamePlay =  async ({worldcupId, currentRound, divideContentsSizePerRequest, alreadyPlayedContentsIds}: any  ):Promise<any> => {
+  const param = {
+    currentRound,
+    divideContentsSizePerRequest,
+    alreadyPlayedContentsIds,
+  }
+  console.log("param", param);
+  const response = await ajaxGet(`/world-cups/${worldcupId}/contents`, {params: param});
+  console.log("response ====>", response);
+  return response.data;
+  
+}

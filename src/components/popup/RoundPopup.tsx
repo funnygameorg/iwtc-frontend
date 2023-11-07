@@ -6,7 +6,6 @@ interface IProps {
 }
 
 const RoundPopup = ({ roundList, setSelectRound }: IProps) => {
-    // console.log('roundListroundList', roundList.data);
     const [isOnPopup, setIsOnPopup] = useState<boolean>(true);
 
     const selectRound = (round: number) => {
