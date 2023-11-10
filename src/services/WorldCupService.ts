@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { ajaxGet } from './BaseService';
+import { ajaxGet, ajaxPost } from './BaseService';
 import { WCListParent, loadWCListData } from '@/interfaces/models/world-cup/WcListData';
 import Error from 'next/error';
 
@@ -44,19 +44,33 @@ export const worldCupGameRound = async (worldcupId: number) => {
     return response.data;
 };
 
-export const worldCupGamePlay =  async ({worldcupId, currentRound, sliceContents, excludeContentsIds}: any  ):Promise<any> => {
-  const param = {
+export const worldCupGamePlay = async ({
+    worldcupId,
     currentRound,
     sliceContents,
     excludeContentsIds,
-  }
-  console.log("param", param);
-  const response = await ajaxGet(`/world-cups/${worldcupId}/contents`, {params: param});
-  console.log("response ====>", response);
-  return response.data;
-}
+}: any): Promise<any> => {
+    const param = {
+        currentRound,
+        sliceContents,
+        excludeContentsIds,
+    };
+    console.log('param', param);
+    const response = await ajaxGet(`/world-cups/${worldcupId}/contents`, { params: param });
+    console.log('response ====>', response);
+    return response.data;
+};
 
-// export const worldCupGameClear = async (param) => {
-//   const response = await ajaxGet(`/world-cups/${worldcupId}/contents`, {params: param});
-
-// }
+export const worldCupGameClear = async (param: any) => {
+    const [worldcupId, firstWinnerContentsId, secondWinnerContentsId, thirdWinnerContentsId, fourthWinnerContentsId] =
+        param;
+    const params = {
+        firstWinnerContentsId,
+        secondWinnerContentsId,
+        thirdWinnerContentsId,
+        fourthWinnerContentsId,
+    };
+    const response = await ajaxPost(`/world-cups/${worldcupId}/clear`, { params });
+    console.log('response ===>', response);
+    return response.status ? true : false;
+};

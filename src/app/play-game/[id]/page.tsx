@@ -5,8 +5,11 @@ import { useQueryGetWorldCupGameRound, worldCupGamePlay } from '@/services/World
 import RoundPopup from '@/components/popup/RoundPopup';
 import { useMutation } from '@tanstack/react-query';
 import { getEncodedArray } from '@/utils/common';
+import { useRouter } from 'next/navigation';
 
 const Page = ({ params }: { params: { id: number } }) => {
+    const router = useRouter();
+
     const { id } = params;
     const { data: roundList } = useQueryGetWorldCupGameRound(id);
     // const {worldCupTitle} = roundList?.data
@@ -15,11 +18,11 @@ const Page = ({ params }: { params: { id: number } }) => {
     const [gameList, setGameList] = useState<any>([]);
     const [saveClickContents, setSaveClickContents] = useState([]);
     const [rankContents, setRankContents] = useState({
-      firstWinnerContentsId: 0,
-      secondWinnerContentsId: 0,
-      thirdWinnerContentsId: 0,
-      fourthWinnerContentsId: 0
-    })
+        firstWinnerContentsId: 0,
+        secondWinnerContentsId: 0,
+        thirdWinnerContentsId: 0,
+        fourthWinnerContentsId: 0,
+    });
 
     const getGame: any = useMutation(worldCupGamePlay, {
         onSuccess: (data: any) => {
@@ -44,30 +47,31 @@ const Page = ({ params }: { params: { id: number } }) => {
         }
     }, [gameList]);
     const handleSelection = (index: number) => {
-        const loseConetentId = gameList[index].contentsId
-        const winContentId = gameList[index === 1 ? 0 : index].contentsId
+        const loseConetentId = gameList[index].contentsId;
+        const winContentId = gameList[index === 1 ? 0 : index].contentsId;
         // selectRound가 2이면 결승
         setSaveClickContents(saveClickContents.concat(loseConetentId));
-        if(selectRound === 4) {
-          if(rankContents.fourthWinnerContentsId !== 0){
-            const updatedRankContents = { ...rankContents, 
-              thirdWinnerContentsId: loseConetentId,
-            };
-            setRankContents(updatedRankContents)
-          }else{ 
-            const updatedRankContents = { ...rankContents, 
-              fourthWinnerContentsId: loseConetentId 
-            };
-            setRankContents(updatedRankContents)
-          }
+        if (selectRound === 4) {
+            if (rankContents.fourthWinnerContentsId !== 0) {
+                const updatedRankContents = { ...rankContents, thirdWinnerContentsId: loseConetentId };
+                setRankContents(updatedRankContents);
+            } else {
+                const updatedRankContents = { ...rankContents, fourthWinnerContentsId: loseConetentId };
+                setRankContents(updatedRankContents);
+            }
         }
 
         if (selectRound === 2) {
-          const updatedRankContents = { ...rankContents, 
-            firstWinnerContentsId: winContentId,
-            secondWinnerContentsId: loseConetentId 
-          };
-          setRankContents(updatedRankContents)
+            const updatedRankContents = {
+                ...rankContents,
+                firstWinnerContentsId: winContentId,
+                secondWinnerContentsId: loseConetentId,
+            };
+            // setRankContents(updatedRankContents);
+            console.log('last click ===>', updatedRankContents);
+            router.push(
+                `/play-clear/${id}/${updatedRankContents.firstWinnerContentsId}/${updatedRankContents.secondWinnerContentsId}/${updatedRankContents.thirdWinnerContentsId}/${updatedRankContents.fourthWinnerContentsId}`
+            );
             return;
             // 최종 선택 API 호출 후 return
         }
@@ -102,8 +106,8 @@ const Page = ({ params }: { params: { id: number } }) => {
     }, [saveClickContents]);
 
     useEffect(() => {
-      console.log("rankContents",rankContents);
-    }, [rankContents])
+        console.log('rankContents', rankContents);
+    }, [rankContents]);
 
     // const handleSelection = (index) => {
     //     setSelectedIndex(index);
@@ -131,16 +135,16 @@ const Page = ({ params }: { params: { id: number } }) => {
                     </div>
                     {/* <div className="grid place-items-center "> */}
                     <div className="grid place-items-center">
-                      <div className="relative">
-                        <div className="absolute px-12 py-6 bg-gradient-to-r from-blue-400 via-red-500 to-yellow-500 text-white font-black text-6xl rounded-full shadow-xl opacity-75 transform scale-y-1 animate-pulse infinite">
-                          VS
+                        <div className="relative">
+                            <div className="absolute px-12 py-6 bg-gradient-to-r from-blue-400 via-red-500 to-yellow-500 text-white font-black text-6xl rounded-full shadow-xl opacity-75 transform scale-y-1 animate-pulse infinite">
+                                VS
+                            </div>
+                            <div className="px-12 py-6 bg-gradient-to-l from-green-400 via-purple-500 to-pink-500 text-white font-black text-6xl rounded-full shadow-xl animate-spin-slow animate-bounce infinite">
+                                VS
+                            </div>
                         </div>
-                        <div className="px-12 py-6 bg-gradient-to-l from-green-400 via-purple-500 to-pink-500 text-white font-black text-6xl rounded-full shadow-xl animate-spin-slow animate-bounce infinite">
-                          VS
-                        </div>
-                      </div>
                     </div>
-                        {/* <span className='text-white'>VS</span> */}
+                    {/* <span className='text-white'>VS</span> */}
                     <div className="flex items-end" onClick={() => handleSelection(0)}>
                         <Image
                             className="h-full w-full"
