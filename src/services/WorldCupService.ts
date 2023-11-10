@@ -44,15 +44,19 @@ export const worldCupGameRound = async (worldcupId: number) => {
     return response.data;
 };
 
-export const worldCupGamePlay =  async ({worldcupId, currentRound, divideContentsSizePerRequest, alreadyPlayedContentsIds}: any  ):Promise<any> => {
+export const worldCupGamePlay =  async ({worldcupId, currentRound, sliceContents, excludeContentsIds}: any  ):Promise<any> => {
   const param = {
     currentRound,
-    divideContentsSizePerRequest,
-    alreadyPlayedContentsIds,
+    sliceContents,
+    excludeContentsIds,
   }
   console.log("param", param);
   const response = await ajaxGet(`/world-cups/${worldcupId}/contents`, {params: param});
   console.log("response ====>", response);
   return response.data;
-  
 }
+
+// export const worldCupGameClear = async (param) => {
+//   const response = await ajaxGet(`/world-cups/${worldcupId}/contents`, {params: param});
+
+// }
