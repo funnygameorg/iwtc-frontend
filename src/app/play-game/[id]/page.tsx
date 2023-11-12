@@ -109,8 +109,8 @@ const Page = ({ params }: { params: { id: number } }) => {
         <>
             <div className="grid h-screen place-items-center box-border">
                 <div className="fixed flex p-4 text-black shadow" style={{ width: '1600px', height: '100%' }}>
-                    <div className="fixed flex justify-center">
-                        <h1 className="text-white text-3xl justify-center">{roundList?.data?.worldCupTitle}</h1>
+                    <div className="fixed mx-auto left-0 right-0 text-center">
+                        <h1 className="text-white text-3xl">{roundList?.data?.worldCupTitle}</h1>
                         <h1 className="text-white text-3xl">{selectRound === 2 ? '결승' : selectRound + '강'}</h1>
                     </div>
                     <div className="flex items-start" onClick={() => handleSelection(1)}>
