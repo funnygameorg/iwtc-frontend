@@ -72,7 +72,7 @@ const RegisterForm = () => {
     const { mutate, isLoading, error, isSuccess } = useMutation(userSignUp, {
         onSuccess: () => {
             router.push('/sign-in');
-            console.log('회원가입 성공');
+            window.alert('회원가입에 성공하셨습니다.');
         },
         onError: (error) => {
             console.log('에러', error);
