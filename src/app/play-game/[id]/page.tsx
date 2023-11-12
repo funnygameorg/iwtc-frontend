@@ -114,6 +114,8 @@ const Page = ({ params }: { params: { id: number } }) => {
                         <h1 className="text-white text-3xl">{selectRound === 2 ? '결승' : selectRound + '강'}</h1>
                     </div>
                     <div className="flex items-start" onClick={() => handleSelection(1)}>
+                        <span className="fixed text-white text-3xl bottom-0 left-0">{gameList[0].name}</span>
+
                         <Image
                             className="h-full w-full"
                             src={gameList[0].filePath}
@@ -134,7 +136,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                         </div>
                     </div>
                     {/* <span className='text-white'>VS</span> */}
-                    <div className="flex items-end" onClick={() => handleSelection(0)}>
+                    <div className="flex items-end mx-auto left-0 right-0" onClick={() => handleSelection(0)}>
                         <Image
                             className="h-full w-full"
                             src={gameList[1].filePath}
@@ -142,6 +144,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                             height={'500'}
                             alt={gameList[1].name}
                         />
+                        <span className="block text-white text-3xl">{gameList[1].name}</span>
                     </div>
                 </div>
             </div>
