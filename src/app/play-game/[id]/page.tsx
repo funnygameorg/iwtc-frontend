@@ -101,18 +101,6 @@ const Page = ({ params }: { params: { id: number } }) => {
         }
     }, [selectRound]);
 
-    useEffect(() => {
-        console.log('saveClickContents', saveClickContents);
-    }, [saveClickContents]);
-
-    useEffect(() => {
-        console.log('rankContents', rankContents);
-    }, [rankContents]);
-
-    // const handleSelection = (index) => {
-    //     setSelectedIndex(index);
-    // };
-
     if (!isPlay) {
         return <RoundPopup roundList={roundList} setSelectRound={setSelectRound} />;
     }
@@ -120,10 +108,11 @@ const Page = ({ params }: { params: { id: number } }) => {
     return (
         <>
             <div className="grid h-screen place-items-center box-border">
-                <h1 className="text-white text-3xl">{roundList?.data?.worldCupTitle}</h1>
-                <h1 className="text-white text-3xl">{selectRound === 2 ? '결승' : selectRound + '강'}</h1>
-
-                <div className="flex p-4 text-black shadow" style={{ width: '1600px', height: '1000px' }}>
+                <div className="fixed flex p-4 text-black shadow" style={{ width: '1600px', height: '100%' }}>
+                    <div className="fixed flex justify-center">
+                        <h1 className="text-white text-3xl justify-center">{roundList?.data?.worldCupTitle}</h1>
+                        <h1 className="text-white text-3xl">{selectRound === 2 ? '결승' : selectRound + '강'}</h1>
+                    </div>
                     <div className="flex items-start" onClick={() => handleSelection(1)}>
                         <Image
                             className="h-full w-full"
@@ -134,8 +123,8 @@ const Page = ({ params }: { params: { id: number } }) => {
                         />
                     </div>
                     {/* <div className="grid place-items-center "> */}
-                    <div className="grid place-items-center">
-                        <div className="relative">
+                    <div className="flex items-center justify-center">
+                        <div className="fixed">
                             <div className="absolute px-12 py-6 bg-gradient-to-r from-blue-400 via-red-500 to-yellow-500 text-white font-black text-6xl rounded-full shadow-xl opacity-75 transform scale-y-1 animate-pulse infinite">
                                 VS
                             </div>
