@@ -70,7 +70,8 @@ export const worldCupGameClear = async (param: any) => {
         thirdWinnerContentsId,
         fourthWinnerContentsId,
     };
-    const response = await ajaxPost(`/world-cups/${worldcupId}/clear`, { params });
+    const numberworldcupId = Number(worldcupId);
+    const response = await ajaxPost(`/world-cups/${worldcupId}/clear`, params);
     console.log('response ===>', response);
-    return response.status ? true : false;
+    return response.data;
 };
