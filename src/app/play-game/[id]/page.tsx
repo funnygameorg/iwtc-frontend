@@ -108,14 +108,12 @@ const Page = ({ params }: { params: { id: number } }) => {
     return (
         <>
             <div className="grid h-screen place-items-center box-border">
-                <div className="fixed flex p-4 text-black shadow" style={{ width: '1600px', height: '100%' }}>
-                    <div className="fixed mx-auto left-0 right-0 text-center">
+                <div className="relative flex p-4 text-black shadow" style={{ width: '1600px', height: '100%' }}>
+                    <div className="absolute mx-auto left-0 right-0 text-center z-10">
                         <h1 className="text-white text-3xl">{roundList?.data?.worldCupTitle}</h1>
                         <h1 className="text-white text-3xl">{selectRound === 2 ? '결승' : selectRound + '강'}</h1>
                     </div>
-                    <div className="flex items-start" onClick={() => handleSelection(1)}>
-                        <span className="fixed text-white text-3xl bottom-0 left-0">{gameList[0].name}</span>
-
+                    <div className="flex items-start relative" onClick={() => handleSelection(1)}>
                         <Image
                             className="h-full w-full"
                             src={gameList[0].filePath}
@@ -123,10 +121,13 @@ const Page = ({ params }: { params: { id: number } }) => {
                             height={'500'}
                             alt={gameList[0].name}
                         />
+                        {/* <div className="fixed bottom-0 left-0 bg-white p-4 text-white"> */}
+                        <h2 className="absolute text-white text-3xl  bottom-10 left-10">{gameList[0].name}</h2>
+                        {/* </div> */}
                     </div>
                     {/* <div className="grid place-items-center "> */}
                     <div className="flex items-center justify-center">
-                        <div className="fixed">
+                        <div className="absolute">
                             <div className="absolute px-12 py-6 bg-gradient-to-r from-blue-400 via-red-500 to-yellow-500 text-white font-black text-6xl rounded-full shadow-xl opacity-75 transform scale-y-1 animate-pulse infinite">
                                 VS
                             </div>
@@ -144,7 +145,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                             height={'500'}
                             alt={gameList[1].name}
                         />
-                        <span className="block text-white text-3xl">{gameList[1].name}</span>
+                        <h2 className="absolute text-white text-3xl  bottom-10 right-10">{gameList[1].name}</h2>
                     </div>
                 </div>
             </div>
