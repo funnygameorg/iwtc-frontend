@@ -97,9 +97,9 @@ const Page = ({ params }: { params: { id: number } }) => {
             };
             // setRankContents(updatedRankContents);
             console.log('last click ===>', updatedRankContents);
-            // router.push(
-            //     `/play-clear/${id}/${updatedRankContents.firstWinnerContentsId}/${updatedRankContents.secondWinnerContentsId}/${updatedRankContents.thirdWinnerContentsId}/${updatedRankContents.fourthWinnerContentsId}`
-            // );
+            router.push(
+                `/play-clear/${id}/${updatedRankContents.firstWinnerContentsId}/${updatedRankContents.secondWinnerContentsId}/${updatedRankContents.thirdWinnerContentsId}/${updatedRankContents.fourthWinnerContentsId}`
+            );
             return;
             // 최종 선택 API 호출 후 return
         }
