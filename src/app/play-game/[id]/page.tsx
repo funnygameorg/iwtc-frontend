@@ -6,6 +6,7 @@ import RoundPopup from '@/components/popup/RoundPopup';
 import { useMutation } from '@tanstack/react-query';
 import { getEncodedArray } from '@/utils/common';
 import { useRouter } from 'next/navigation';
+import { animated, useSpring } from '@react-spring/web';
 
 const Page = ({ params }: { params: { id: number } }) => {
     const router = useRouter();
@@ -23,6 +24,33 @@ const Page = ({ params }: { params: { id: number } }) => {
         thirdWinnerContentsId: 0,
         fourthWinnerContentsId: 0,
     });
+    const handleAnimationRest = () => {
+        console.log('Animation finished.');
+        // 여기에 원하는 작업을 추가할 수 있습니다.
+    };
+
+    const useSpringAnimation = (from: number, to: number) => {
+        return useSpring(() => ({
+            from: { x: from },
+            to: { x: to },
+            loop: {
+                reset: true,
+            },
+        }));
+    };
+
+    const [left, leftApi] = useSpringAnimation(0, 0);
+    const [light, lightApi] = useSpringAnimation(0, 0);
+
+    const handleLeftImageClick = (left: number, light: number) => {
+        leftApi.start({ to: { x: left } });
+        lightApi.start({ to: { x: light } });
+    };
+
+    const handleRightImageClick = (light: number, left: number) => {
+        lightApi.start({ to: { x: -light } });
+        leftApi.start({ to: { x: -left } });
+    };
 
     const getGame: any = useMutation(worldCupGamePlay, {
         onSuccess: (data: any) => {
@@ -41,12 +69,12 @@ const Page = ({ params }: { params: { id: number } }) => {
         };
     }, []);
 
-    useEffect(() => {
-        if (gameList) {
-            console.log('gameList', gameList);
+    const handleSelection = async (index: number) => {
+        if (index === 1) {
+            handleLeftImageClick(400, 2000);
+        } else {
+            handleRightImageClick(400, 2000);
         }
-    }, [gameList]);
-    const handleSelection = (index: number) => {
         const loseConetentId = gameList[index].contentsId;
         const winContentId = gameList[index === 1 ? 0 : index].contentsId;
         // selectRound가 2이면 결승
@@ -69,20 +97,29 @@ const Page = ({ params }: { params: { id: number } }) => {
             };
             // setRankContents(updatedRankContents);
             console.log('last click ===>', updatedRankContents);
-            router.push(
-                `/play-clear/${id}/${updatedRankContents.firstWinnerContentsId}/${updatedRankContents.secondWinnerContentsId}/${updatedRankContents.thirdWinnerContentsId}/${updatedRankContents.fourthWinnerContentsId}`
-            );
+            // router.push(
+            //     `/play-clear/${id}/${updatedRankContents.firstWinnerContentsId}/${updatedRankContents.secondWinnerContentsId}/${updatedRankContents.thirdWinnerContentsId}/${updatedRankContents.fourthWinnerContentsId}`
+            // );
             return;
             // 최종 선택 API 호출 후 return
         }
         // 배열을 2개씩 자름 결국 2개 남았을 때 클릭 하면 다음 라운드 진출
         if (gameList.length === 2) {
-            setSelectRound((prev) => prev / 2);
+            setTimeout(() => {
+                handleRightImageClick(0, 0);
+                handleLeftImageClick(0, 0);
+                setSelectRound((prev) => prev / 2);
+            }, 1000);
             return;
         }
+        setTimeout(() => {
+            handleRightImageClick(0, 0);
+            handleLeftImageClick(0, 0);
+            const newGameList = gameList.slice(2);
+            setGameList(newGameList);
+        }, 1000);
+        // useSpringAnimation(0, 0);
         //클릭한 아이템은 저장!
-        const newGameList = gameList.slice(2);
-        setGameList(newGameList);
     };
 
     const playMutation = () => {
@@ -113,7 +150,14 @@ const Page = ({ params }: { params: { id: number } }) => {
                         <h1 className="text-white text-3xl">{roundList?.data?.worldCupTitle}</h1>
                         <h1 className="text-white text-3xl">{selectRound === 2 ? '결승' : selectRound + '강'}</h1>
                     </div>
-                    <div className="flex items-start relative" onClick={() => handleSelection(1)}>
+                    {/* <div className="flex items-start relative" onClick={() => handleClick()}> */}
+                    <animated.div
+                        className={'flex items-start relative'}
+                        style={{
+                            ...left,
+                        }}
+                        onClick={() => handleSelection(1)}
+                    >
                         <Image
                             className="h-full w-full"
                             src={gameList[0].filePath}
@@ -121,10 +165,11 @@ const Page = ({ params }: { params: { id: number } }) => {
                             height={'500'}
                             alt={gameList[0].name}
                         />
-                        {/* <div className="fixed bottom-0 left-0 bg-white p-4 text-white"> */}
-                        <h2 className="absolute text-white text-3xl  bottom-10 left-10">{gameList[0].name}</h2>
-                        {/* </div> */}
-                    </div>
+                    </animated.div>
+                    {/* <div className="fixed bottom-0 left-0 bg-white p-4 text-white"> */}
+                    <h2 className="absolute text-white text-3xl  bottom-10 left-10">{gameList[0].name}</h2>
+                    {/* </div> */}
+                    {/* </div> */}
                     {/* <div className="grid place-items-center "> */}
                     <div className="flex items-center justify-center">
                         <div className="absolute">
@@ -137,7 +182,14 @@ const Page = ({ params }: { params: { id: number } }) => {
                         </div>
                     </div>
                     {/* <span className='text-white'>VS</span> */}
-                    <div className="flex items-end mx-auto left-0 right-0" onClick={() => handleSelection(0)}>
+                    {/* <div className="flex items-end mx-auto left-0 right-0" onClick={() => handleSelection(0)}> */}
+                    <animated.div
+                        className={'flex items-end mx-auto left-0 right-0'}
+                        style={{
+                            ...light,
+                        }}
+                        onClick={() => handleSelection(0)}
+                    >
                         <Image
                             className="h-full w-full"
                             src={gameList[1].filePath}
@@ -146,7 +198,8 @@ const Page = ({ params }: { params: { id: number } }) => {
                             alt={gameList[1].name}
                         />
                         <h2 className="absolute text-white text-3xl  bottom-10 right-10">{gameList[1].name}</h2>
-                    </div>
+                    </animated.div>
+                    {/* </div> */}
                 </div>
             </div>
             {/* <div className="grid place-items-center box-border h-32 w-32 p-4 border-4">GamePage</div> */}
