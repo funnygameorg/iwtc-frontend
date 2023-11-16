@@ -4,7 +4,7 @@ import SignInUpButton from '../header/SignInUpButton';
 
 const Header = () => {
 
-  return (
+    return (
         <nav className="flex items-center justify-between flex-wrap bg-teal-500 p-6">
             <div className="flex items-center flex-shrink-0 text-white mr-6">
                 <svg
@@ -29,25 +29,13 @@ const Header = () => {
                 </button>
             </div>
             <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-                <div className="text-sm lg:flex-grow">
-                    <a
-                        href="#responsive-header"
+                <div className="text-lg lg:flex-grow">
+                    <Link
+                        href="/manage"
                         className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
                     >
-                        어떤것을
-                    </a>
-                    <a
-                        href="#responsive-header"
-                        className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
-                    >
-                        추가할지
-                    </a>
-                    <a
-                        href="#responsive-header"
-                        className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white"
-                    >
-                        생각
-                    </a>
+                        월드컵 생성하기
+                    </Link>
                 </div>
                 {/* TODO: 로그인 완료 시 번경 */}
                 <SignInUpButton />
