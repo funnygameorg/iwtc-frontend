@@ -35,9 +35,9 @@ const WorldCupContentsManageListWrapper = () => {
 
                 </div>
             </div>
-            < div >
+            <div className='h-screen overflow-y-auto'>
                 < WorldCupContentsManageList />
-            </div >
+            </div>
         </div >
     )
 };

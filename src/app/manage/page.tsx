@@ -12,11 +12,16 @@ import WorldCupContentsManageListWrapper from '@/components/manage/WorldCupConte
 */
 const ManageForm = () => {
     return (
-        <div>
-            <div className='m-8'>
+        <div className='flex my-5'>
+            <div className='flex-none m-5'>
                 <WorldCupManageForm />
             </div>
+
             <div>
+
+            </div>
+
+            <div className='flex-auto'>
                 <WorldCupContentsManageListWrapper />
             </div>
         </div>
