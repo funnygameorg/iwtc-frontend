@@ -34,7 +34,7 @@ const Header = () => {
                         href="/manage"
                         className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
                     >
-                        월드컵 생성하기
+                        월드컵 만들기
                     </Link>
                 </div>
                 {/* TODO: 로그인 완료 시 번경 */}
