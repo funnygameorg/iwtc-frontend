@@ -12,7 +12,7 @@ const WorldCupContentsManageListWrapper = () => {
         <div>
             <div className="flex justify-between items-center">
                 <h1 className="text-lg font-semibold" style={{ marginLeft: '2%' }}>
-                    이상형 목록
+                    ❤️ 이상형 리스트 ❤️
                 </h1>
                 <div className="ml-auto" style={{ marginRight: '2%' }}>
 

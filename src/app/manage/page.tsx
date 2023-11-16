@@ -17,10 +17,6 @@ const ManageForm = () => {
                 <WorldCupManageForm />
             </div>
 
-            <div>
-
-            </div>
-
             <div className='flex-auto'>
                 <WorldCupContentsManageListWrapper />
             </div>
