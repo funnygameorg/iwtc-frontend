@@ -18,7 +18,8 @@ export default async function HydratedWCList() {
     // }));
     const dehydratedState = JSON.parse(JSON.stringify(dehydrate(queryClient)));
     // console.log("dehydratedState",dehydratedState.queries[0].state.data.pages);
-    dehydratedState.queries[0].state.data.pageParams[0] = 0;
+    // TODO : 아래 코드에서 터져요
+    // dehydratedState.queries[0].state.data.pageParams[0] = 0;
     return (
         <Hydrate state={dehydratedState}>
             <WorldCup />

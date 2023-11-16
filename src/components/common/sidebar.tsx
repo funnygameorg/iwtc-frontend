@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 //https://flowbite.com/docs/components/sidebar/#sidebar-with-navbar
 
 function Sidebar() {
@@ -13,8 +14,8 @@ function Sidebar() {
             <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
                 <ul className="space-y-2 font-medium">
                     <li>
-                        <a
-                            href="#"
+                        <Link
+                            href="/manage"
                             className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                         >
                             <svg
@@ -27,8 +28,8 @@ function Sidebar() {
                                 <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
                                 <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
                             </svg>
-                            <span className="ml-3">Dashboard</span>
-                        </a>
+                            <span className="ml-3">수정/생성 페이지 임시 이동</span>
+                        </Link>
                     </li>
                     <li>
                         <a
