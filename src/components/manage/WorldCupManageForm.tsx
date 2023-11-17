@@ -45,10 +45,18 @@ const WorldCupManageForm = () => {
     const mutation = useMutation(createWorldCup, {
 
         onSuccess: () => {
+
+            setFreezeWorldCup({
+                freezeTitle: title,
+                freezeDescription: description,
+                freezeVisibleType: visibleType
+            });
+
             window.alert('성공');
         },
         onError: (error) => {
-            console.log('에러', error)
+
+            window.alert('에러 ' + error);
         }
     });
 
@@ -65,19 +73,13 @@ const WorldCupManageForm = () => {
             token
         };
 
-        setFreezeWorldCup({
-            freezeTitle: newWorldCup.title,
-            freezeDescription: newWorldCup.description,
-            freezeVisibleType: newWorldCup.visibleType
-        });
-
         e.preventDefault();
 
         mutation.mutate(newWorldCup);
     }
 
 
-    // 월드컵 업데이트를 한 후의 상태와 같거나 처음 월드컵 상태(blank)일 때만 업데이트 버튼이 활성화된다.
+    // 월드컵 업데이트를 한 후의 상태와 다르거나 처음 월드컵 상태(blank)일 때만 업데이트 버튼이 활성화된다.
     const isNotUpdateWorldCupState = (freezeWorldCup: any, worldCup: any) => {
 
         const equalsUpdateWorldCup = freezeWorldCup.freezeTitle === worldCup.title &&
