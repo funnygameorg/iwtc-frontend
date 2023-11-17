@@ -1,7 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { ajaxGet, ajaxPost } from './BaseService';
+import { ajaxGet, ajaxPost, ajaxPostWithToken } from './BaseService';
 import { WCListParent, loadWCListData } from '@/interfaces/models/world-cup/WcListData';
 import Error from 'next/error';
+import { getAccessToken } from '@/utils/TokenManager';
+import axios from 'axios';
+
 
 // export const useQueryGetWorldCupAllList = (page: number, size: number, sort: number) => {
 //     return useQuery<any, Error>(['WorldCupList', page, size, sort], () => worldCupAllList(page, size, sort), {
@@ -75,3 +78,21 @@ export const worldCupGameClear = async (param: any) => {
     console.log('response ===>', response);
     return response.data;
 };
+
+export const createWorldCup = async ({ title, description, visibleType, token }: any) => {
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'access-token': `${token}`,
+    };
+    console.log("헤더 정보", headers);
+    const param = { title, description, visibleType };
+    const response = await axios.post(
+        `http://localhost:8080/api/world-cups/me`,
+        param,
+        { headers }
+    );
+    console.log('response ===>', response);
+    return response.data;
+
+}
