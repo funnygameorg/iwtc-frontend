@@ -1,8 +1,10 @@
 'use client'
+import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
 import { createWorldCup } from '@/services/WorldCupService';
 import { getAccessToken } from '@/utils/TokenManager';
 import { useMutation } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { isContext } from 'vm';
 
 
 
@@ -12,6 +14,7 @@ import React, { useEffect, useState } from 'react';
 
 */
 const WorldCupManageForm = () => {
+    const { isCreateWorldCup, setIsCreateWorldCup } = useContext(WorldCupManageContext);
 
     const [worldCup, setValue] = useState({
         title: "",
@@ -24,8 +27,6 @@ const WorldCupManageForm = () => {
         freezeDescription: "",
         freezeVisibleType: ""
     });
-
-    const { freezeTitle, freezeDescription, freezeVisibleType } = freezeWorldCup;
 
     const { title, description, visibleType } = worldCup;
 
@@ -56,7 +57,7 @@ const WorldCupManageForm = () => {
         },
         onError: (error) => {
 
-            window.alert('에러 ' + error);
+            console.log('에러 ' + error);
         }
     });
 
@@ -74,7 +75,7 @@ const WorldCupManageForm = () => {
         };
 
         e.preventDefault();
-
+        setIsCreateWorldCup(false);
         mutation.mutate(newWorldCup);
     }
 

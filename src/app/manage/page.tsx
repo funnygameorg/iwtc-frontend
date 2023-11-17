@@ -1,7 +1,8 @@
-import React from 'react';
-import Link from 'next/link';
+'use client'
+import React, { useState } from 'react';
 import WorldCupManageForm from '@/components/manage/WorldCupManageForm';
 import WorldCupContentsManageListWrapper from '@/components/manage/WorldCupContentsManagerListWrapper';
+import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
 
 
 
@@ -11,15 +12,23 @@ import WorldCupContentsManageListWrapper from '@/components/manage/WorldCupConte
     월드컵 관리 페이지를 표현합니다.
 */
 const ManageForm = () => {
-    return (
-        <div className='flex my-5'>
-            <div className='flex-none m-5'>
-                <WorldCupManageForm />
-            </div>
 
-            <div className='flex-auto'>
-                <WorldCupContentsManageListWrapper />
-            </div>
+    const [isCreateWorldCup, setIsCreateWorldCup] = useState("");
+    return (
+        <div>
+            <WorldCupManageContext.Provider value={{ isCreateWorldCup, setIsCreateWorldCup }}>
+
+                <div className='flex my-5'>
+                    <div className='flex-none m-5'>
+                        <WorldCupManageForm />
+                    </div>
+
+                    <div className='flex-auto'>
+                        <WorldCupContentsManageListWrapper />
+                    </div>
+                </div>
+
+            </WorldCupManageContext.Provider>
         </div>
     );
 };
