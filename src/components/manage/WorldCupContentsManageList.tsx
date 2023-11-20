@@ -4,6 +4,7 @@ import dummyManageContentsState, { ManageContentsItemType } from './dummyContent
 import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
+import YoutubePlayer from '../youtubePlayer/YoutubePlayer';
 
 
 
@@ -14,17 +15,92 @@ import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
 */
 const WorldCupContentsManageList = () => {
 
+    // 유튜브 영상 상태
+    const [youtubeUrl, setYoutubeUrl] = useState('');
+
+
+    // 영상 컴포넌트 리로딩
+    const handleYoutubeUrl = (data: any) => {
+        let url;
+
+        try {
+            url = new URL(data.mediaPath);
+        } catch (err) {
+            alert('영상 주소를 다시 확인해주세요.');
+        }
+
+        // URLSearchParams를 사용하여 매개변수 추출
+        const searchParams = new URLSearchParams(url.search);
+
+        // 'v' 매개변수의 값을 가져오기
+        const videoId = searchParams.get('v');
+        setYoutubeUrl(videoId)
+    }
+
+
+
+    // 컨텐츠 데이터 
+    const [worldCupContents, setWorldCupContents] = useState({
+        contentsName: '',
+        visibleType: '',
+
+        fileType: '',
+        mediaPath: '',
+        originalName: '',
+        absoluteName: '',
+        videoStartTime: '',
+        videoPlayDuration: ''
+
+    });
+    console.log("컨텐츠 ", worldCupContents);
+    const {
+        contentsName,
+        visibleType,
+
+        fileType,
+        mediaPath,
+        originalName,
+        absoluteName,
+        videoStartTime,
+        videoPlayDuration
+
+    } = worldCupContents;
+
+    const handleCreateWorldCupContents = (e: any) => {
+
+        const { name, value } = e.target;
+
+        setWorldCupContents(prevWorldCupContents => ({
+            ...prevWorldCupContents,
+            [name]: value
+        }));
+
+    };
+
     // 공개 여부 상태
     const [selectedValue, setSelectedValue] = useState('option1');
 
-    const handleChange = (value) => {
+
+    const handleVisibleType = (value) => {
+
+        setWorldCupContents(prevWorldCupContents => ({
+            ...prevWorldCupContents,
+            visibleType: value
+        }));
+
         setSelectedValue(value);
     };
+
 
     // 생성하기 원하는 이상형의 미디어파일 타입 상태
     const [mediaFileType, setMediaFileType] = useState('');
 
     const handleMediaFileType = (value) => {
+        setWorldCupContents(prevWorldCupContents => ({
+            ...prevWorldCupContents,
+            fileType: value
+        }));
+
         setMediaFileType(value);
     };
 
@@ -53,13 +129,26 @@ const WorldCupContentsManageList = () => {
         return (
             <div className="mb-2">
                 <strong className='ml-1'>동영상 링크</strong>
-                <div className="flex flex-col space-y-2">
-                    <input
-                        id="videoLinkInput"
-                        type="text"
-                        className=" w-full p-1 border rounded-xl"
-                        placeholder="유튜브 동영상 링크"
-                    />
+                <div>
+                    <div className="flex">
+                        <input
+                            id="videoLinkInput"
+                            type="text"
+                            className=" w-full h-10 p-1 border rounded-xl"
+                            name='mediaPath'
+                            value={mediaPath}
+                            placeholder="유튜브 동영상 링크"
+                            onChange={handleCreateWorldCupContents}
+                        />
+                        <div className='ml-3'>
+                            <button
+                                className="bg-orange-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                onClick={() => handleYoutubeUrl({ mediaPath })}
+                            >
+                                check
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div className='flex'>
                     <div className='mr-2'>
@@ -69,6 +158,9 @@ const WorldCupContentsManageList = () => {
                         <input
                             type="text"
                             className="p-1 border rounded-xl"
+                            name='videoStartTime'
+                            value={videoStartTime}
+                            onChange={handleCreateWorldCupContents}
                             placeholder='형식 : 00000'
                         />
                     </div>
@@ -79,21 +171,17 @@ const WorldCupContentsManageList = () => {
                         <input
                             type="text"
                             className="p-1 border rounded-xl"
+                            name='videoPlayDuration'
+                            value={videoPlayDuration}
+                            onChange={handleCreateWorldCupContents}
                             placeholder='3~5초 사이'
                         />
                     </div>
                 </div>
                 <div className='m-5'>
-                    <iframe
-                        width="560"
-                        height="315"
-                        src="https://www.youtube.com/embed/XzpWD2Yz-KI?si=d1SLtx3LwljZsk05?start=30&end=60"
-                        title="YouTube video player"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
-                    </iframe>
+                    <YoutubePlayer videoId={youtubeUrl} />
                 </div>
-            </div>
+            </div >
         )
     }
 
@@ -152,11 +240,11 @@ const WorldCupContentsManageList = () => {
                     <strong>공개 여부 </strong>
                 </div>
                 <div className="flex items-center space-x-4 ml-3">
-                    {/* 첫 번째 라디오 버튼 */}
+
                     <label
-                        className={`inline-flex items-center px-4 py-2 border rounded-md cursor-pointer ${selectedValue === 'option1' ? 'bg-blue-500 text-white' : 'bg-white'
+                        className={`inline-flex items-center px-4 py-2 border rounded-md cursor-pointer ${selectedValue === 'PUBLIC' ? 'bg-blue-500 text-white' : 'bg-white'
                             }`}
-                        onClick={() => handleChange('option1')}
+                        onClick={() => handleVisibleType('PUBLIC')}
                     >
                         공개
                         <input
@@ -164,16 +252,16 @@ const WorldCupContentsManageList = () => {
                             className="hidden"
                             name="radioOption"
                             value="option1"
-                            checked={selectedValue === 'option1'}
+                            checked={selectedValue === 'PUBLIC'}
+                            defaultChecked={true}
                             onChange={() => { }}
                         />
                     </label>
 
-                    {/* 두 번째 라디오 버튼 */}
                     <label
-                        className={`inline-flex items-center px-4 py-2 border rounded-md cursor-pointer ${selectedValue === 'option2' ? 'bg-blue-500 text-white' : 'bg-white'
+                        className={`inline-flex items-center px-4 py-2 border rounded-md cursor-pointer ${selectedValue === 'PRIVATE' ? 'bg-blue-500 text-white' : 'bg-white'
                             }`}
-                        onClick={() => handleChange('option2')}
+                        onClick={() => handleVisibleType('PRIVATE')}
                     >
                         비공개
                         <input
@@ -181,10 +269,11 @@ const WorldCupContentsManageList = () => {
                             className="hidden"
                             name="radioOption"
                             value="option2"
-                            checked={selectedValue === 'option2'}
+                            checked={selectedValue === 'PRIVATE'}
                             onChange={() => { }}
                         />
                     </label>
+
                 </div>
 
 
@@ -218,8 +307,9 @@ const WorldCupContentsManageList = () => {
                                             type="text"
                                             className="p-1 border rounded-xl"
                                             placeholder="이상형 이름"
-                                        // value="A"
-                                        // onChange={ }
+                                            name='contentsName'
+                                            value={contentsName}
+                                            onChange={handleCreateWorldCupContents}
                                         />
                                     </div>
                                 </div>
