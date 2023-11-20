@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState } from 'react';
+import React, { ChangeEvent, useContext, useRef, useState } from 'react';
 import dummyManageContentsState, { ManageContentsItemType } from './dummyContentsList';
 import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
@@ -7,6 +7,7 @@ import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
 import YoutubePlayer from '../youtubePlayer/YoutubePlayer';
 import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageContext';
 import InternetVideoUrlCard from './contentsListCard/InternetVideoUrlCard';
+import StaticMediaFileTypeCard from './contentsListCard/StaticMediaFileTypeCard';
 
 
 
@@ -38,6 +39,8 @@ const WorldCupContentsManageList = () => {
         const videoId = searchParams.get('v');
         setYoutubeUrl(videoId)
     }
+
+
 
 
 
@@ -79,6 +82,9 @@ const WorldCupContentsManageList = () => {
 
     };
 
+    console.log(worldCupContents);
+
+
 
     // 새로운 컨텐츠를 리스트 추가
 
@@ -102,6 +108,9 @@ const WorldCupContentsManageList = () => {
         setWorldCupContentsManageContext(prev => [...prev, newContent]);
     }
 
+
+
+
     // 공개 여부 상태
     const [selectedValue, setSelectedValue] = useState('option1');
 
@@ -115,6 +124,8 @@ const WorldCupContentsManageList = () => {
 
         setSelectedValue(value);
     };
+
+
 
 
     // 생성하기 원하는 이상형의 미디어파일 타입 상태
@@ -131,27 +142,78 @@ const WorldCupContentsManageList = () => {
             videoStartTime: '',
             videoPlayDuration: ''
         });
+        setIsImageLoaded(false);
+        if (imgRef.current) {
+            imgRef.current.src = null;
+        }
         setYoutubeUrl('');
         setMediaFileType(value);
     };
 
 
 
+
     // 정적 파일 입력 컴포넌트
+    const imgRef = useRef<HTMLImageElement>(null);
+
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+
     const staticMediaFileType = () => {
+
+
+        const readImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setIsImageLoaded(true);
+
+            if (!e.target.files?.length) return;
+
+            const imageFile = e.target.files[0];
+            const reader = new FileReader();
+
+            reader.addEventListener('load', (e: ProgressEvent<FileReader>) => {
+                if (!e || !e.target) return;
+                if (typeof e.target.result !== 'string' || !imgRef.current) return;
+
+                imgRef.current.src = e.target.result;
+
+                setWorldCupContents(prevWorldCupContents => ({
+                    ...prevWorldCupContents,
+                    mediaPath: e.target.result
+                }));
+
+            });
+
+            reader.readAsDataURL(imageFile);
+        };
+
+
+
         return (
             <div className="mb-2">
                 <strong>파일</strong>
-                <div>
+                <div className="mb-3 w-96">
                     <input
-                        type="text"
-                        value="파일 넣기"
-                        className="ml-2 p-1 border rounded"
+                        className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
+                        type="file"
+                        id="formFileMultiple"
+                        name='mediaPath'
+                        onChange={readImage}
+                        multiple
                     />
+                    {isImageLoaded === true ?
+                        <div style={{ marginTop: '10px' }}>
+                            <img ref={imgRef} width={'auto'} height={100} alt="img" />
+                        </div>
+                        :
+                        <div></div>
+                    }
                 </div>
             </div>
         )
+
+
     }
+
 
 
 
@@ -218,6 +280,8 @@ const WorldCupContentsManageList = () => {
 
 
 
+
+
     // 미디어 파일 타입 선택 컴포넌트
     const choiceMediaTypeComponent = () => {
         return (
@@ -249,19 +313,7 @@ const WorldCupContentsManageList = () => {
     }
 
 
-    // 미디어 파일 노출 컴포넌트
-    const thumbnailMediaFileComponent = () => {
-        return (
-            <div className="flex min-w-0 gap-x-4">
-                <Image
-                    className="w-full h-52"
-                    src='https://picsum.photos/seed/gf/600/800'
-                    width={'50'}
-                    height={'10'}
-                />
-            </div>
-        );
-    }
+
 
     // 공개 여부 선택 컴포넌트
     const choiceVisibleTypeComponent = () => {
@@ -311,6 +363,8 @@ const WorldCupContentsManageList = () => {
             </div>
         );
     }
+
+
 
 
 
@@ -396,7 +450,10 @@ const WorldCupContentsManageList = () => {
             {applyContentsList.length !== 0 ?
                 (
                     applyContentsList.map((contents, index) => (
-                        <InternetVideoUrlCard index={index} contents={contents} />
+                        contents.fileType === 'video' ?
+                            <InternetVideoUrlCard index={index} contents={contents} />
+                            :
+                            <StaticMediaFileTypeCard index={index} contents={contents} />
                     ))
                 )
                 :
