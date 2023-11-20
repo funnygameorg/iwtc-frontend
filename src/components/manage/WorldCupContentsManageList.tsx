@@ -96,11 +96,17 @@ const WorldCupContentsManageList = () => {
     const [mediaFileType, setMediaFileType] = useState('');
 
     const handleMediaFileType = (value) => {
-        setWorldCupContents(prevWorldCupContents => ({
-            ...prevWorldCupContents,
-            fileType: value
-        }));
-
+        setWorldCupContents({
+            contentsName: '',
+            visibleType: '',
+            fileType: '',
+            mediaPath: '',
+            originalName: '',
+            absoluteName: '',
+            videoStartTime: '',
+            videoPlayDuration: ''
+        });
+        setYoutubeUrl('');
         setMediaFileType(value);
     };
 
