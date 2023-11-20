@@ -5,6 +5,8 @@ import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
 import YoutubePlayer from '../youtubePlayer/YoutubePlayer';
+import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageContext';
+import InternetVideoUrlCard from './contentsListCard/InternetVideoUrlCard';
 
 
 
@@ -52,7 +54,7 @@ const WorldCupContentsManageList = () => {
         videoPlayDuration: ''
 
     });
-    console.log("컨텐츠 ", worldCupContents);
+
     const {
         contentsName,
         visibleType,
@@ -77,6 +79,29 @@ const WorldCupContentsManageList = () => {
 
     };
 
+
+    // 새로운 컨텐츠를 리스트 추가
+
+    const { worldCupContentsManageContext, setWorldCupContentsManageContext } = useContext(WorldCupContentsManageContext);
+
+
+    const applyNewContents = () => {
+
+        const newContent = {
+            contentsName,
+            visibleType,
+            fileType,
+            mediaPath,
+            originalName,
+            absoluteName,
+            videoStartTime,
+            videoPlayDuration
+        };
+
+        console.log(newContent);
+        setWorldCupContentsManageContext(prev => [...prev, newContent]);
+    }
+
     // 공개 여부 상태
     const [selectedValue, setSelectedValue] = useState('option1');
 
@@ -99,7 +124,7 @@ const WorldCupContentsManageList = () => {
         setWorldCupContents({
             contentsName: '',
             visibleType: '',
-            fileType: '',
+            fileType: value,
             mediaPath: '',
             originalName: '',
             absoluteName: '',
@@ -291,7 +316,7 @@ const WorldCupContentsManageList = () => {
 
 
     // 임시 더미데이터
-    const [contents] = dummyManageContentsState();
+    const applyContentsList = worldCupContentsManageContext;
 
     // TODO : 월드컵 생성 폼 컴포넌트 분리하기
     const createWorldCupComponent = () => {
@@ -329,7 +354,10 @@ const WorldCupContentsManageList = () => {
 
                         <div className="sm:flex sm:flex-col sm:items-end">
                             <div>
-                                <button className="bg-green-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded">
+                                <button
+                                    className="bg-green-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded"
+                                    onClick={() => applyNewContents()}
+                                >
                                     추가하기
                                 </button>
                             </div>
@@ -361,75 +389,20 @@ const WorldCupContentsManageList = () => {
                 <span className="h-4 w-4 bg-green-500 rounded-full inline-block mr-2">
                 </span>
                 <span>
-                    새로운 이상형 컨텐츠 1개
+                    새로운 이상형 컨텐츠 {applyContentsList.length}개
                 </span>
             </div>
             {createWorldCupComponent()}
-            {contents.length !== 0 ?
+            {applyContentsList.length !== 0 ?
                 (
-                    contents.map((content, index) => (
-
-                        // TODO : Card 컴포넌트 분리하기
-                        <div key={index} className="mb-4 p-4 border rounded-xl shadow-sm">
-                            <div className='flex justify-between'>
-                                <div className="flex min-w-0 gap-x-4">
-
-                                    <div className="flex min-w-0 gap-x-4">
-                                        <Image
-                                            className="w-full h-52"
-                                            src='https://picsum.photos/seed/gf/600/800'
-                                            width={'50'}
-                                            height={'10'}
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <div className='flex-1 min-w-0'>
-                                            <div className="mb-2">
-                                                <strong>컨텐츠 이름:</strong> {content.name}
-                                            </div>
-                                            <div className="mb-2">
-                                                <strong>파일 경로:</strong>
-                                                <input
-                                                    type="text"
-                                                    value={content.filePath}
-                                                    className="ml-2 p-1 border rounded"
-                                                />
-                                            </div>
-
-                                            <div className="mb-2">
-                                                <strong>공개 여부:</strong> {content.isVisible === 'PUBLIC' ? "공개" : "비공개"}
-                                            </div>
-
-                                            <div className="mb-2">
-                                                <strong>게임 랭크:</strong> {content.gameRank}
-                                            </div>
-
-                                            <div>
-                                                <strong>게임 스코어:</strong> {content.gameScore}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div className="sm:flex sm:flex-col sm:items-end">
-                                    <div>
-                                        <button className="bg-red-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded">
-                                            삭제/ 삭제 취소
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <span className="h-4 w-4 bg-green-500 rounded-full inline-block mr-2"></span>
-                                        변경 이상형
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    )
-                    )
-                ) : (<div></div>)
+                    applyContentsList.map((contents, index) => (
+                        <InternetVideoUrlCard index={index} contents={contents} />
+                    ))
+                )
+                :
+                (
+                    <div></div>
+                )
             }
         </div >
     );

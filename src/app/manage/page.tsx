@@ -1,8 +1,9 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import WorldCupManageForm from '@/components/manage/WorldCupManageForm';
 import WorldCupContentsManageListWrapper from '@/components/manage/WorldCupContentsManagerListWrapper';
 import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
+import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageContext';
 
 
 
@@ -13,22 +14,28 @@ import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
 */
 const ManageForm = () => {
 
+    const [worldCupContentsManageContext, setWorldCupContentsManageContext] = useState([]);
+
+    console.log("새로운 컨텐츠 리스트", worldCupContentsManageContext);
+
     const [isCreateWorldCup, setIsCreateWorldCup] = useState("");
     return (
         <div>
-            <WorldCupManageContext.Provider value={{ isCreateWorldCup, setIsCreateWorldCup }}>
+            <WorldCupContentsManageContext.Provider value={{ worldCupContentsManageContext, setWorldCupContentsManageContext }}>
+                <WorldCupManageContext.Provider value={{ isCreateWorldCup, setIsCreateWorldCup }}>
 
-                <div className='flex my-5'>
-                    <div className='flex-none m-5'>
-                        <WorldCupManageForm />
+                    <div className='flex my-5'>
+                        <div className='flex-none m-5'>
+                            <WorldCupManageForm />
+                        </div>
+
+                        <div className='flex-auto'>
+                            <WorldCupContentsManageListWrapper />
+                        </div>
                     </div>
 
-                    <div className='flex-auto'>
-                        <WorldCupContentsManageListWrapper />
-                    </div>
-                </div>
-
-            </WorldCupManageContext.Provider>
+                </WorldCupManageContext.Provider>
+            </WorldCupContentsManageContext.Provider>
         </div>
     );
 };
