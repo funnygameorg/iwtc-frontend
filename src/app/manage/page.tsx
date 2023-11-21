@@ -17,13 +17,13 @@ const ManageForm = () => {
 
     const [worldCupContentsManageContext, setWorldCupContentsManageContext] = useState([]);
 
-    const [worldCupIdManageContext, setWorldCupIdManageContext] = useState(0);
+    const [worldCupId, setWorldCupId] = useState(0);
 
     const [isCreateWorldCup, setIsCreateWorldCup] = useState("");
 
     return (
         <div>
-            <WorldCupIdManageContext.Provider value={{ worldCupIdManageContext, setWorldCupIdManageContext }}>
+            <WorldCupIdManageContext.Provider value={{ worldCupId, setWorldCupId }}>
                 <WorldCupContentsManageContext.Provider value={{ worldCupContentsManageContext, setWorldCupContentsManageContext }}>
                     <WorldCupManageContext.Provider value={{ isCreateWorldCup, setIsCreateWorldCup }}>
 

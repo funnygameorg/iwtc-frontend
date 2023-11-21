@@ -16,7 +16,7 @@ import { isContext } from 'vm';
 */
 const WorldCupManageForm = () => {
     const { isCreateWorldCup, setIsCreateWorldCup } = useContext(WorldCupManageContext);
-    const { worldCupIdManageContext, setWorldCupIdManageContext } = useContext(WorldCupIdManageContext);
+    const { worldCupId, setWorldCupId } = useContext(WorldCupIdManageContext);
 
     const [worldCup, setValue] = useState({
         title: "",
@@ -55,8 +55,11 @@ const WorldCupManageForm = () => {
                 freezeVisibleType: visibleType
             });
 
-            setWorldCupIdManageContext(data.worldCupId);
+            setWorldCupId(data.data);
+            setIsCreateWorldCup(false);
+
         },
+
         onError: (error) => {
             alert(error);
         }
@@ -91,7 +94,7 @@ const WorldCupManageForm = () => {
         };
 
         e.preventDefault();
-        setIsCreateWorldCup(false);
+
         mutation.mutate(newWorldCup);
     }
 

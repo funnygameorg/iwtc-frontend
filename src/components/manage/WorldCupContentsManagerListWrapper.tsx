@@ -5,6 +5,7 @@ import { createWorldCupContents, createWorldCupContentsType } from '@/services/M
 import { useMutation } from '@tanstack/react-query';
 import { getAccessToken } from '@/utils/TokenManager';
 import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageContext';
+import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
 
 
 
@@ -17,7 +18,7 @@ const WorldCupContentsManageListWrapper = () => {
 
     const { worldCupContentsManageContext, setWorldCupContentsManageContext } = useContext(WorldCupContentsManageContext);
     const { isCreateWorldCup } = useContext(WorldCupManageContext);
-
+    const { worldCupId, setWorldCupId } = useContext(WorldCupIdManageContext);
 
 
     // 월드컵을 우선적으로 만들지 않았을 때 노출
@@ -58,7 +59,7 @@ const WorldCupContentsManageListWrapper = () => {
         const token = getAccessToken();
 
         mutationWorldCupContents.mutate({
-            worldCupId: 1,
+            worldCupId: worldCupId,
             params: bindingNewWorldCupContents,
             token: token
         });
