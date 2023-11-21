@@ -1,11 +1,27 @@
 import YoutubePlayer from "@/components/youtubePlayer/YoutubePlayer";
+import { WorldCupContentsManageContext } from "@/hooks/WorldCupContentsManageContext";
 import exp from "constants";
 import Image from "next/image";
+import { useContext } from "react";
 
 
 
 
 const InternetVideoUrlCard = ({ index, contents }) => {
+
+
+    const { worldCupContentsManageContext, setWorldCupContentsManageContext } = useContext(WorldCupContentsManageContext);
+
+
+
+    // 해당 요소 삭제
+    const removeContents = (contentsName) => {
+        setWorldCupContentsManageContext(prev =>
+            prev.filter(contents => contents.contentsName !== contentsName)
+        )
+    }
+
+
 
     return (
         <div>
@@ -45,8 +61,11 @@ const InternetVideoUrlCard = ({ index, contents }) => {
 
                     <div className="sm:flex sm:flex-col sm:items-end">
                         <div>
-                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded">
-                                삭제/ 삭제 취소
+                            <button
+                                className="bg-red-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded"
+                                onClick={() => removeContents(contents.contentsName)}
+                            >
+                                삭제
                             </button>
                         </div>
                         <div>

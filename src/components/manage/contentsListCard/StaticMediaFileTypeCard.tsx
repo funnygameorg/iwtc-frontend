@@ -1,10 +1,21 @@
+import { WorldCupContentsManageContext } from "@/hooks/WorldCupContentsManageContext";
 import { read } from "fs";
 import Image from "next/image";
+import { useContext } from "react";
 
 const StaticMediaFileTypeCard = ({ index, contents }) => {
-    // const reader = new FileReader();
-    // const image = reader.readAsDataURL(contents.mediaPath);
-    console.log(contents.mediaPath);
+
+    const { worldCupContentsManageContext, setWorldCupContentsManageContext } = useContext(WorldCupContentsManageContext);
+
+    // 해당 요소 삭제
+    const removeContents = (contentsName) => {
+        setWorldCupContentsManageContext(prev =>
+            prev.filter(contents => contents.contentsName !== contentsName)
+        )
+    }
+
+
+
     return (
         <div>
             <div key={index} className="mb-4 p-4 border rounded-xl shadow-sm">
@@ -35,8 +46,11 @@ const StaticMediaFileTypeCard = ({ index, contents }) => {
 
                     <div className="sm:flex sm:flex-col sm:items-end">
                         <div>
-                            <button className="bg-red-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded">
-                                삭제/ 삭제 취소
+                            <button
+                                className="bg-red-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded"
+                                onClick={() => removeContents(contents.contentsName)}
+                            >
+                                삭제
                             </button>
                         </div>
                         <div>
