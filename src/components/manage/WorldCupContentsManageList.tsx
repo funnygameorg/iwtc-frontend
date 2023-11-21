@@ -8,6 +8,7 @@ import YoutubePlayer from '../youtubePlayer/YoutubePlayer';
 import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageContext';
 import InternetVideoUrlCard from './contentsListCard/InternetVideoUrlCard';
 import StaticMediaFileTypeCard from './contentsListCard/StaticMediaFileTypeCard';
+import { type } from 'os';
 
 
 
@@ -20,17 +21,6 @@ const WorldCupContentsManageList = () => {
 
     // 유튜브 영상 상태
     const [youtubeUrl, setYoutubeUrl] = useState('');
-
-
-    // 영상 컴포넌트 리로딩
-    const handleYoutubeUrl = (data: any) => {
-        console.log("유튭 업뎃", data);
-        setYoutubeUrl(data);
-    }
-
-
-
-
 
     // 컨텐츠 데이터 
     const [worldCupContents, setWorldCupContents] = useState({
@@ -74,12 +64,68 @@ const WorldCupContentsManageList = () => {
 
 
 
-    // 새로운 컨텐츠를 리스트 추가
+    /*
+        새로운 컨텐츠를 적용
+    */
 
     const { worldCupContentsManageContext, setWorldCupContentsManageContext } = useContext(WorldCupContentsManageContext);
 
 
+    // 비디오 형식 컨텐츠 데이터 검증
+    const verifyVideoTypeContents = ({ videoStartTime, videoPlayDuration }) => {
+        const size5AndOnlyNumberRegex = /^\d{5}$/;
+        if (!size5AndOnlyNumberRegex.test(videoStartTime)) {
+            alert("'영상 시작 시간'은 '00000'의 형식입니다. \n 예 : 10분 1초 -> 01001, 0분 30초 -> 00030");
+            throw Error();
+        }
+
+        if (!(3 <= videoPlayDuration && videoPlayDuration <= 5)) {
+            alert("반복 시간은 3~5초로 설정해주세요.");
+            throw Error();
+        }
+
+    }
+
+    // 파일 형식 컨텐츠 데이터 검증
+    const verifyFileTypeContents = ({ mediaPath, originalName }) => {
+
+        if (mediaPath === '' || originalName === '') {
+            alert("파일이 존재하지 않습니다.");
+            throw Error();
+        }
+    }
+
+    // 컨텐츠 데이터 검증 공통 파트
+    const verifyAllTypeContents = ({ contentsName, visibleType, fileType }) => {
+
+        if (contentsName === '') {
+            alert("컨텐츠 이름이 없습니다.");
+            throw Error();
+        }
+
+        if (!(visibleType === 'PUBLIC' || fileType === 'PRIVATE')) {
+            alert("공개 여부를 선택해주세요.");
+            throw Error();
+        }
+
+        if (!(fileType === 'video' || fileType === 'file')) {
+            alert("파일 타입이 존재하지 않음");
+            throw Error();
+        }
+    }
+
+    // 새로운 컨텐츠를 리스트 추가
     const applyNewContents = () => {
+
+        verifyAllTypeContents({ contentsName, visibleType, fileType });
+
+        if (fileType === 'video') {
+            verifyVideoTypeContents({ videoStartTime, videoPlayDuration });
+        }
+
+        if (fileType === 'file') {
+            verifyFileTypeContents({ mediaPath, originalName });
+        }
 
         const newContent = {
             contentsName,
@@ -92,7 +138,6 @@ const WorldCupContentsManageList = () => {
             videoPlayDuration
         };
 
-        console.log(newContent);
         setWorldCupContentsManageContext(prev => [...prev, newContent]);
     }
 
@@ -122,7 +167,7 @@ const WorldCupContentsManageList = () => {
     const handleMediaFileType = (value) => {
         setWorldCupContents({
             contentsName: '',
-            visibleType: '',
+            visibleType: 'PUBLIC',
             fileType: value,
             mediaPath: '',
             originalName: '',
@@ -228,14 +273,6 @@ const WorldCupContentsManageList = () => {
                             placeholder="유튜브 동영상 링크"
                             onChange={handleCreateWorldCupContents}
                         />
-                        <div className='ml-3'>
-                            <button
-                                className="bg-orange-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                                onClick={() => handleYoutubeUrl({ mediaPath })}
-                            >
-                                check
-                            </button>
-                        </div>
                     </div>
                 </div>
                 <div className='flex'>
@@ -318,7 +355,7 @@ const WorldCupContentsManageList = () => {
                 <div className="flex items-center space-x-4 ml-3">
 
                     <label
-                        className={`inline-flex items-center px-4 py-2 border rounded-md cursor-pointer ${selectedValue === 'PUBLIC' ? 'bg-blue-500 text-white' : 'bg-white'
+                        className={`inline-flex items-center px-4 py-2 border rounded-md cursor-pointer ${visibleType === 'PUBLIC' ? 'bg-blue-500 text-white' : 'bg-white'
                             }`}
                         onClick={() => handleVisibleType('PUBLIC')}
                     >
@@ -335,7 +372,7 @@ const WorldCupContentsManageList = () => {
                     </label>
 
                     <label
-                        className={`inline-flex items-center px-4 py-2 border rounded-md cursor-pointer ${selectedValue === 'PRIVATE' ? 'bg-blue-500 text-white' : 'bg-white'
+                        className={`inline-flex items-center px-4 py-2 border rounded-md cursor-pointer ${visibleType === 'PRIVATE' ? 'bg-blue-500 text-white' : 'bg-white'
                             }`}
                         onClick={() => handleVisibleType('PRIVATE')}
                     >
