@@ -1,20 +1,27 @@
+import YoutubePlayer from "@/components/youtubePlayer/YoutubePlayer";
 import exp from "constants";
 import Image from "next/image";
 
+
+
+
 const InternetVideoUrlCard = ({ index, contents }) => {
+
     return (
         <div>
             <div key={index} className="mb-4 p-4 border rounded-xl shadow-sm">
                 <div className='flex justify-between'>
                     <div className="flex min-w-0 gap-x-4">
-
+                        <div className="flex min-w-0 gap-x-4">
+                            <YoutubePlayer url={contents.mediaPath} componentType={'uploadList'} />
+                        </div>
                         <div>
                             <div className='flex-1 min-w-0'>
                                 <div className="mb-2">
                                     <strong>컨텐츠 이름:</strong> {contents.contentsName}
                                 </div>
                                 <div className="mb-2">
-                                    <strong>파일 경로: </strong>
+                                    <strong>영상 주소: </strong>
                                     <a
                                         href={contents.mediaPath}
                                         target="_blank"

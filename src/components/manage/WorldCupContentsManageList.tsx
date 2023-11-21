@@ -24,20 +24,8 @@ const WorldCupContentsManageList = () => {
 
     // 영상 컴포넌트 리로딩
     const handleYoutubeUrl = (data: any) => {
-        let url;
-
-        try {
-            url = new URL(data.mediaPath);
-        } catch (err) {
-            alert('영상 주소를 다시 확인해주세요.');
-        }
-
-        // URLSearchParams를 사용하여 매개변수 추출
-        const searchParams = new URLSearchParams(url.search);
-
-        // 'v' 매개변수의 값을 가져오기
-        const videoId = searchParams.get('v');
-        setYoutubeUrl(videoId)
+        console.log("유튭 업뎃", data);
+        setYoutubeUrl(data);
     }
 
 
@@ -272,13 +260,11 @@ const WorldCupContentsManageList = () => {
                     </div>
                 </div>
                 <div className='m-5'>
-                    <YoutubePlayer videoId={youtubeUrl} />
+                    <YoutubePlayer url={mediaPath} componentType={'uploadForm'} />
                 </div>
             </div >
         )
     }
-
-
 
 
 
