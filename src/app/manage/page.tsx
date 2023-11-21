@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import WorldCupManageForm from '@/components/manage/WorldCupManageForm';
 import WorldCupContentsManageListWrapper from '@/components/manage/WorldCupContentsManagerListWrapper';
 import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
+import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
 import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageContext';
 
 
@@ -16,26 +17,29 @@ const ManageForm = () => {
 
     const [worldCupContentsManageContext, setWorldCupContentsManageContext] = useState([]);
 
-    console.log("새로운 컨텐츠 리스트", worldCupContentsManageContext);
+    const [worldCupIdManageContext, setWorldCupIdManageContext] = useState(0);
 
     const [isCreateWorldCup, setIsCreateWorldCup] = useState("");
+
     return (
         <div>
-            <WorldCupContentsManageContext.Provider value={{ worldCupContentsManageContext, setWorldCupContentsManageContext }}>
-                <WorldCupManageContext.Provider value={{ isCreateWorldCup, setIsCreateWorldCup }}>
+            <WorldCupIdManageContext.Provider value={{ worldCupIdManageContext, setWorldCupIdManageContext }}>
+                <WorldCupContentsManageContext.Provider value={{ worldCupContentsManageContext, setWorldCupContentsManageContext }}>
+                    <WorldCupManageContext.Provider value={{ isCreateWorldCup, setIsCreateWorldCup }}>
 
-                    <div className='flex my-5'>
-                        <div className='flex-none m-5'>
-                            <WorldCupManageForm />
+                        <div className='flex my-5'>
+                            <div className='flex-none m-5'>
+                                <WorldCupManageForm />
+                            </div>
+
+                            <div className='flex-auto'>
+                                <WorldCupContentsManageListWrapper />
+                            </div>
                         </div>
 
-                        <div className='flex-auto'>
-                            <WorldCupContentsManageListWrapper />
-                        </div>
-                    </div>
-
-                </WorldCupManageContext.Provider>
-            </WorldCupContentsManageContext.Provider>
+                    </WorldCupManageContext.Provider>
+                </WorldCupContentsManageContext.Provider>
+            </WorldCupIdManageContext.Provider>
         </div>
     );
 };

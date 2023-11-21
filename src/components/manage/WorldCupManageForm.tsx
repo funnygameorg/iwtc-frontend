@@ -1,4 +1,5 @@
 'use client'
+import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
 import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
 import { createWorldCup } from '@/services/ManageWorldCupService';
 import { getAccessToken } from '@/utils/TokenManager';
@@ -15,11 +16,12 @@ import { isContext } from 'vm';
 */
 const WorldCupManageForm = () => {
     const { isCreateWorldCup, setIsCreateWorldCup } = useContext(WorldCupManageContext);
+    const { worldCupIdManageContext, setWorldCupIdManageContext } = useContext(WorldCupIdManageContext);
 
     const [worldCup, setValue] = useState({
         title: "",
         description: "",
-        visibleType: ""
+        visibleType: "PUBLIC"
     });
 
     const [freezeWorldCup, setFreezeWorldCup] = useState({
@@ -45,7 +47,7 @@ const WorldCupManageForm = () => {
 
     const mutation = useMutation(createWorldCup, {
 
-        onSuccess: () => {
+        onSuccess: (data) => {
 
             setFreezeWorldCup({
                 freezeTitle: title,
@@ -53,17 +55,31 @@ const WorldCupManageForm = () => {
                 freezeVisibleType: visibleType
             });
 
-            window.alert('성공');
+            setWorldCupIdManageContext(data.worldCupId);
         },
         onError: (error) => {
-
-            console.log('에러 ' + error);
+            alert(error);
         }
     });
 
 
 
     const handleCreateWorldCup = (e: any) => {
+
+        if (description.length > 100 || description === '') {
+            alert("월드컵 설명 1자 이상 100자 이하입니다.");
+            throw Error();
+        }
+
+        if (title === '') {
+            alert("제목을 입력해주세요.");
+            throw Error();
+        }
+
+        if (!(visibleType === 'PUBLIC' || visibleType === 'PRIVATE')) {
+            alert("노출 여부 선택해주세요.");
+            throw Error();
+        }
 
         const token = getAccessToken();
 
@@ -161,13 +177,14 @@ const WorldCupManageForm = () => {
                 <div className="mb-4">
                     <span className="text-gray-700 text-sm font-bold mb-2">노출 여부</span>
                     <div className="mt-2">
-                        <label className="inline-flex items-center">
+                        <label className="inline-flex items-center ">
                             <input
                                 type="radio"
                                 name="visibleType"
                                 value="PUBLIC"
                                 onChange={handleChange}
                                 className="form-radio"
+                                checked={visibleType === 'PUBLIC'}
                             />
                             <span className="ml-2">공개</span>
                         </label>
@@ -178,6 +195,7 @@ const WorldCupManageForm = () => {
                                 value="PRIVATE"
                                 onChange={handleChange}
                                 className="form-radio"
+                                checked={visibleType === 'PRIVATE'}
                             />
                             <span className="ml-2">비공개</span>
                         </label>
