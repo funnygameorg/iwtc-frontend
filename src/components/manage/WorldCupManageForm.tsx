@@ -1,6 +1,6 @@
 'use client'
 import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
-import { createWorldCup } from '@/services/WorldCupService';
+import { createWorldCup } from '@/services/ManageWorldCupService';
 import { getAccessToken } from '@/utils/TokenManager';
 import { useMutation } from '@tanstack/react-query';
 import React, { useContext, useEffect, useState } from 'react';

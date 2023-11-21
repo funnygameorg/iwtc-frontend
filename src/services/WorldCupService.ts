@@ -78,21 +78,3 @@ export const worldCupGameClear = async (param: any) => {
     console.log('response ===>', response);
     return response.data;
 };
-
-export const createWorldCup = async ({ title, description, visibleType, token }: any) => {
-
-    const headers = {
-        'Content-Type': 'application/json',
-        'access-token': `${token}`,
-    };
-    console.log("헤더 정보", headers);
-    const param = { title, description, visibleType };
-    const response = await axios.post(
-        `http://localhost:8080/api/world-cups/me`,
-        param,
-        { headers }
-    );
-    console.log('response ===>', response);
-    return response.data;
-
-}

@@ -158,15 +158,22 @@ const WorldCupContentsManageList = () => {
             const imageFile = e.target.files[0];
             const reader = new FileReader();
 
+
+            setWorldCupContents(prevWorldCupContents => ({
+                ...prevWorldCupContents,
+                originalName: imageFile.name,
+                absoluteName: imageFile.name
+            }));
+
             reader.addEventListener('load', (e: ProgressEvent<FileReader>) => {
                 if (!e || !e.target) return;
                 if (typeof e.target.result !== 'string' || !imgRef.current) return;
 
                 imgRef.current.src = e.target.result;
-
                 setWorldCupContents(prevWorldCupContents => ({
                     ...prevWorldCupContents,
-                    mediaPath: e.target.result
+                    mediaPath: e.target.result,
+
                 }));
 
             });

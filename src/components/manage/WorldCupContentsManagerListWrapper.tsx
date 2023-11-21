@@ -1,6 +1,10 @@
 import { useContext, useState } from 'react';
 import WorldCupContentsManageList from './WorldCupContentsManageList';
 import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
+import { createWorldCupContents, createWorldCupContentsType } from '@/services/ManageWorldCupService';
+import { useMutation } from '@tanstack/react-query';
+import { getAccessToken } from '@/utils/TokenManager';
+import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageContext';
 
 
 
@@ -11,9 +15,12 @@ import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
 */
 const WorldCupContentsManageListWrapper = () => {
 
-
+    const { worldCupContentsManageContext, setWorldCupContentsManageContext } = useContext(WorldCupContentsManageContext);
     const { isCreateWorldCup } = useContext(WorldCupManageContext);
 
+
+
+    // 월드컵을 우선적으로 만들지 않았을 때 노출
     const isNotCreateWorldCupLogo = () => {
         return (
             <div className="w-full h-full mb-4 p-4 border rounded shadow bg-gray-100">
@@ -22,6 +29,56 @@ const WorldCupContentsManageListWrapper = () => {
         );
     }
 
+
+
+
+
+    /**
+     * 수정된 월드컵 컨텐츠 서버에 전송
+     */
+    const transformToCreateWorldCupContentsType = (contextData: any): createWorldCupContentsType => {
+        return contextData.map(item => ({
+            contentsName: item.contentsName,
+            visibleType: item.visibleType,
+            createMediaFileRequest: {
+                fileType: item.fileType === 'file' ? 'STATIC_MEDIA_FILE' : 'INTERNET_VIDEO_URL',
+                mediaPath: item.mediaPath,
+                originalName: item.originalName,
+                absoluteName: item.absoluteName,
+                videoStartTime: item.videoStartTime,
+                videoPlayDuration: item.videoPlayDuration
+            }
+        }));
+    };
+
+    const createNewWorldCupContentsList = () => {
+
+        const bindingNewWorldCupContents = transformToCreateWorldCupContentsType(worldCupContentsManageContext);
+
+        const token = getAccessToken();
+
+        mutationWorldCupContents.mutate({
+            worldCupId: 1,
+            params: bindingNewWorldCupContents,
+            token: token
+        });
+    }
+
+    const mutationWorldCupContents = useMutation(createWorldCupContents, {
+
+        onSuccess: () => {
+            alert('성공');
+        },
+        onError: (error) => {
+            alert(error);
+        }
+    });
+
+
+
+
+
+    // 반환 컴포넌트
     return (
 
         <div>
@@ -38,6 +95,7 @@ const WorldCupContentsManageListWrapper = () => {
                                 <div>
                                     <button
                                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                        onClick={() => createNewWorldCupContentsList()}
                                     >
                                         이상형 업데이트 적용
                                     </button>
