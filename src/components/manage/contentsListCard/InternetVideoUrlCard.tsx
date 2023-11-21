@@ -68,10 +68,6 @@ const InternetVideoUrlCard = ({ index, contents }) => {
                                 삭제
                             </button>
                         </div>
-                        <div>
-                            <span className="h-4 w-4 bg-green-500 rounded-full inline-block mr-2"></span>
-                            변경 이상형
-                        </div>
                     </div>
 
                 </div>

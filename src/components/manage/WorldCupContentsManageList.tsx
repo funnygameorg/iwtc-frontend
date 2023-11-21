@@ -137,7 +137,7 @@ const WorldCupContentsManageList = () => {
             videoStartTime,
             videoPlayDuration
         };
-
+        handleMediaFileType('')
         setWorldCupContentsManageContext(prev => [...prev, newContent]);
     }
 
@@ -469,7 +469,7 @@ const WorldCupContentsManageList = () => {
 
     return (
         <div>
-            <div className="mt8">
+            <div className="mt8 mb-4">
                 <span className="h-4 w-4 bg-green-500 rounded-full inline-block mr-2">
                 </span>
                 <span>
