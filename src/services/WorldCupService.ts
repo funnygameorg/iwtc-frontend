@@ -19,7 +19,8 @@ export const worldCupAllList = async (
     size: number,
     sort: string,
     keyword?: string,
-    dateRange = 'ALL'
+    memberId?: number,
+    dateRange = 'ALL',
 ): Promise<WCListParent> => {
     const param = {
         page,
@@ -27,6 +28,7 @@ export const worldCupAllList = async (
         sort,
         keyword,
         dateRange,
+        memberId
     };
     const response = await ajaxGet('/world-cups', { params: param });
     return loadWCListData(response.data.data);
