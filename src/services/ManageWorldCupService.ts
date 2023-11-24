@@ -1,4 +1,7 @@
+import { to } from "@react-spring/web";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { ajaxGet } from "./BaseService";
 
 const createHeader = (token) => {
     return {
@@ -58,5 +61,26 @@ export const createWorldCupContents = async (
     console.log('response ===>', response);
 
     return response.data;
+
+}
+
+
+
+// 이상형 리스트 조회
+export const getMyWorldCupList = async (token: string) => {
+
+    const authHeaders = createHeader(token);
+
+    const response = await axios.get(
+        'http://localhost:8080/api/world-cups/me', {
+        headers: authHeaders,
+        timeout: 5000,
+    });
+
+    console.log('response ===>', response);
+
+    if (response) {
+        return response;
+    }
 
 }

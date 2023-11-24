@@ -15,7 +15,7 @@ export default async function HydratedWCList({ memberId }) {
     const queryClient = getQueryClient();
     await queryClient.prefetchInfiniteQuery(
         ['wclist', 'id', undefined, 'ALL'],
-        async () => await worldCupAllList(0, 20, 'id', undefined, memberId, 'ALL')
+        async () => await worldCupAllList(0, 20, 'id', undefined, undefined, 'ALL')
     );
     // queryClient.setQueryData(queryKey, (data) => ({
     //   ...data,

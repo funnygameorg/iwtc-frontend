@@ -1,28 +1,25 @@
 import HomeLoginForm from "@/components/Register/HomeLoginForm";
 import Sidebar from "@/components/common/sidebar";
 import HydratedWCList from "@/components/home/HydratedWCList";
+import MyWorldCupList from "@/components/myWorldcup/MyWorldCupList";
 
 /*
     월드컵 관리 페이지를 표현합니다.
 */
-const MyWorldCupList = ({ params }: { params: { id: number } }) => {
-    console.log("아이디", params.id);
+const Page = ({ params }: { params: { id: number } }) => {
     return (
-        <div className="flex">
-            <aside
-                id="logo-sidebar"
-                className="left-0 z-40 w-64 h-screen  transition-transform bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
-                aria-label="Sidebar"
-            >
-                <HomeLoginForm />
-                <Sidebar />
-            </aside>
+        <div>
+            <div className="m-5">
+                <p className="text-lg bold font-bold">
+                    ❤️ 월드컵 목록 ❤️
+                </p>
+            </div>
             <div>
-                <HydratedWCList memberId={params.id} />
+                <MyWorldCupList />
             </div>
         </div>
     );
 };
 
-export default MyWorldCupList;
+export default Page;
 
