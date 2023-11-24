@@ -43,9 +43,8 @@ const WorldCupContentsManageListWrapper = () => {
             visibleType: item.visibleType,
             createMediaFileRequest: {
                 fileType: item.fileType === 'file' ? 'STATIC_MEDIA_FILE' : 'INTERNET_VIDEO_URL',
-                mediaPath: item.mediaPath,
+                mediaData: item.mediaPath,
                 originalName: item.originalName,
-                absoluteName: item.absoluteName,
                 videoStartTime: item.videoStartTime,
                 videoPlayDuration: item.videoPlayDuration
             }
