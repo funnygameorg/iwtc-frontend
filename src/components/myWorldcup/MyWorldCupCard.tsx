@@ -24,7 +24,7 @@ const MyWorldCupCard = ({ myWorldCup }) => {
                     </h3>
                     <p className="break-all truncate max-w-[700px] text-gray-600">
                         {/* {myWorldCup.description} */}
-                        ABCDABCDABCDABCDABCD ABCDABCDABCDABCDABCDAB CDABCDABCDABCDABCD ABCDABCDABCDABCDABCD
+                        {myWorldCup.description}
                     </p>
                 </div>
                 <div>
