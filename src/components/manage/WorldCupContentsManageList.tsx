@@ -9,6 +9,7 @@ import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageCon
 import InternetVideoUrlCard from './contentsListCard/InternetVideoUrlCard';
 import StaticMediaFileTypeCard from './contentsListCard/StaticMediaFileTypeCard';
 import { type } from 'os';
+import ManageCardWrapper from './contentsListCard/ManageCardWrapper';
 
 
 
@@ -60,7 +61,7 @@ const WorldCupContentsManageList = () => {
 
     };
 
-    console.log(worldCupContents);
+
 
 
 
@@ -480,10 +481,11 @@ const WorldCupContentsManageList = () => {
             {applyContentsList.length !== 0 ?
                 (
                     applyContentsList.map((contents, index) => (
-                        contents.fileType === 'video' ?
-                            <InternetVideoUrlCard index={index} contents={contents} />
-                            :
-                            <StaticMediaFileTypeCard index={index} contents={contents} />
+                        <ManageCardWrapper contents={contents} index={index} />
+                        // contents.fileType === 'video' ?
+                        //     <InternetVideoUrlCard index={index} contents={contents} />
+                        //     :
+                        //     <StaticMediaFileTypeCard index={index} contents={contents} />
                     ))
                 )
                 :

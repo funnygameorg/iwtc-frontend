@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import WorldCupContentsManageList from './WorldCupContentsManageList';
 import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
 import { createWorldCupContents, createWorldCupContentsType } from '@/services/ManageWorldCupService';
@@ -11,14 +11,35 @@ import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
 
 
 
-/*
-    게임 컨텐츠 리스트 래핑 요소입니다.
-*/
-const WorldCupContentsManageListWrapper = () => {
+/**
+ * 게임 컨텐츠 리스트 래핑 요소입니다.
+ * @param initWorldCupGameContentsList 월드컵 게임수정 버튼으로 들어오면 기존 월드컵 컨텐츠가 들어온다.
+ * @returns 
+ */
+const WorldCupContentsManageListWrapper = (params) => {
 
     const { worldCupContentsManageContext, setWorldCupContentsManageContext } = useContext(WorldCupContentsManageContext);
     const { isCreateWorldCup } = useContext(WorldCupManageContext);
     const { worldCupId, setWorldCupId } = useContext(WorldCupIdManageContext);
+
+    useEffect(() => {
+        if (params.initWorldCupGameContentsList !== undefined) {
+            const contentsLst = params.initWorldCupGameContentsList.map(item => ({
+                contentsName: item.contentsName,
+                visibleType: item.visibleType,
+                createMediaFileRequest: {
+                    fileType: item.fileType === 'file' ? 'STATIC_MEDIA_FILE' : 'INTERNET_VIDEO_URL',
+                    mediaData: item.mediaPath,
+                    originalName: item.originalName,
+                    videoStartTime: item.videoStartTime,
+                    videoPlayDuration: item.videoPlayDuration
+                }
+            }));
+
+            setWorldCupContentsManageContext(contentsLst);
+        }
+    }, []);
+
 
 
     // 월드컵을 우선적으로 만들지 않았을 때 노출

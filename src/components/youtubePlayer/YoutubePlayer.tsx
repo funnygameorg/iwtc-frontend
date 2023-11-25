@@ -1,4 +1,4 @@
-import { Console } from 'console';
+
 import React from 'react';
 
 
@@ -46,9 +46,7 @@ const YoutubePlayer = ({ url, componentType }) => {
 
     const embedUrl = `https://www.youtube.com/embed/${videoId}`;
     const [width, height] = getPlayerSize(componentType);
-    if (componentType !== 'uploadForm') {
-        console.log(width, height);
-    }
+
     return (
         <div>
             <iframe

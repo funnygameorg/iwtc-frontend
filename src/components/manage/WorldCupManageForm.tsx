@@ -10,11 +10,12 @@ import { isContext } from 'vm';
 
 
 
-/*
-    게임 관리 폼에서 월드컵 게임에 관한 내용을 표현하는 폼
-
-*/
-const WorldCupManageForm = () => {
+/**
+ * 게임 관리 폼에서 월드컵 게임에 관한 내용을 표현하는 폼
+ * @param params - 월드컵 게임수정 버튼으로 들어오면 기존 월드컵의 내용이 들어온다.
+ * @returns 월드컵 게임 수정 컴포넌트
+ */
+const WorldCupManageForm = (params) => {
     const { isCreateWorldCup, setIsCreateWorldCup } = useContext(WorldCupManageContext);
     const { worldCupId, setWorldCupId } = useContext(WorldCupIdManageContext);
 
@@ -30,9 +31,20 @@ const WorldCupManageForm = () => {
         freezeVisibleType: ""
     });
 
+    useEffect(() => {
+
+        if (params.initWorldCupGame !== undefined) {
+            setValue({
+                title: params.initWorldCupGame.title,
+                description: params.initWorldCupGame.description,
+                visibleType: params.initWorldCupGame.visibleType
+            });
+        }
+    }, [params.initWorldCupGame]
+
+    );
+
     const { title, description, visibleType } = worldCup;
-
-
 
     const handleChange = (e: any) => {
 

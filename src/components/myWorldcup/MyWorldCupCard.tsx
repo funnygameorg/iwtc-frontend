@@ -1,4 +1,5 @@
 import exp from "constants";
+import Link from "next/link";
 
 const MyWorldCupCard = ({ myWorldCup }) => {
 
@@ -38,7 +39,9 @@ const MyWorldCupCard = ({ myWorldCup }) => {
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-3"
                         onClick={() => updateMyWorldCup(myWorldCup.id)}
                     >
-                        수정
+                        <Link href={`/manage/${myWorldCup.id}`}>
+                            수정
+                        </Link>
                     </button>
                     <button
                         className="bg-orange-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-3"
