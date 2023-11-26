@@ -1,7 +1,7 @@
 import YoutubePlayer from "@/components/youtubePlayer/YoutubePlayer";
 import { WorldCupContentsManageContext } from "@/hooks/WorldCupContentsManageContext";
 import { WorldCupIdManageContext } from "@/hooks/WorldCupIdManageContext";
-import { updateMyWorldCupContents } from "@/services/ManageWorldCupService";
+import { removeMyWorldCupContents, updateMyWorldCupContents } from "@/services/ManageWorldCupService";
 import { getAccessToken } from "@/utils/TokenManager";
 import exp from "constants";
 import Image from "next/image";
@@ -44,6 +44,8 @@ const InternetVideoUrlCard = ({ index, contents }) => {
 
     // 해당 요소 삭제
     const removeContents = (contentsName) => {
+        const accessToken = getAccessToken();
+        removeMyWorldCupContents(worldCupId, mediaData.contentsId, accessToken);
         setWorldCupContentsManageContext(prev =>
             prev.filter(contents => contents.contentsName !== contentsName)
         )
@@ -68,10 +70,10 @@ const InternetVideoUrlCard = ({ index, contents }) => {
             ...prevData,
             [name]: value
         }));
-
+        if (name === 'visibleType') {
+            forceUpdate({});
+        }
     };
-
-    console.log(mediaData);
 
     const applyUpdateContents = () => {
 
@@ -201,27 +203,29 @@ const InternetVideoUrlCard = ({ index, contents }) => {
                                 </span>
                             </div>
 
-                            <div className="mb-2">
-                                <strong>공개 여부:</strong>
-                                <span className="ml-1">
+                            <div className="flex">
+                                <div className="mt-0.4">
+                                    <strong>공개 여부:</strong>
+                                </div>
+                                <div className="ml-1 mb-2">
                                     {!isUpdateMode ?
-                                        <span>
+                                        <div>
                                             {mediaData.visibleType === 'PUBLIC' ? "공개" : "비공개"}
-                                        </span>
+                                        </div>
                                         :
-                                        <span>
-                                            <input
-                                                id="textInput"
-                                                type="text"
-                                                className="p-1 border rounded-xl"
-                                                placeholder="공개 여부"
-                                                name='visibleType'
-                                                onChange={handleMediaData}
+                                        <div>
+                                            <select
+                                                name="visibleType"
                                                 value={mediaData.visibleType}
-                                            />
-                                        </span>
+                                                onChange={handleMediaData}
+                                                className="p-1 border rounded-xl"
+                                            >
+                                                <option value="PUBLIC">공개</option>
+                                                <option value="PRIVATE">비공개</option>
+                                            </select>
+                                        </div>
                                     }
-                                </span>
+                                </div>
                             </div>
 
                         </div>
@@ -232,15 +236,6 @@ const InternetVideoUrlCard = ({ index, contents }) => {
 
                     <div className="sm:flex sm:flex-col sm:items-end">
                         <div>
-                            {!isUpdateMode ?
-                                <button
-                                    className="bg-red-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded"
-                                    onClick={() => removeContents(contents.contentsName)}
-                                >
-                                    삭제
-                                </button> :
-                                <></>
-                            }
                             <div>
                                 {!isUpdateMode ?
                                     < button
@@ -250,14 +245,27 @@ const InternetVideoUrlCard = ({ index, contents }) => {
                                         수정
                                     </button>
                                     :
-                                    <button
-                                        className="bg-blue-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded"
-                                        onClick={() => applyUpdateContents()}
-                                    >
-                                        적용
-                                    </button>
+                                    <div className="sm:flex-col">
+                                        <div>
+                                            <button
+                                                className="bg-green-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded"
+                                                onClick={() => applyUpdateContents()}
+                                            >
+                                                적용하기
+                                            </button>
+                                        </div>
+                                    </div>
                                 }
                             </div>
+                            {!isUpdateMode ?
+                                <button
+                                    className="bg-red-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded"
+                                    onClick={() => removeContents(contents.contentsName)}
+                                >
+                                    삭제
+                                </button> :
+                                <></>
+                            }
 
                         </div>
                     </div>

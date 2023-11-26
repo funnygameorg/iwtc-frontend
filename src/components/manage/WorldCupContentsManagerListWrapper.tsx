@@ -20,8 +20,15 @@ const WorldCupContentsManageListWrapper = (params) => {
 
 
     const { worldCupContentsManageContext, setWorldCupContentsManageContext } = useContext(WorldCupContentsManageContext);
+
     const { isCreateWorldCup } = useContext(WorldCupManageContext);
+
     const { worldCupId, setWorldCupId } = useContext(WorldCupIdManageContext);
+
+    const [createdContentsNames, setCreatedContentsNames] = useState([]);
+
+
+
 
     useEffect(() => {
         if (params.initWorldCupGameContentsList) {
@@ -77,9 +84,15 @@ const WorldCupContentsManageListWrapper = (params) => {
 
 
     const createNewWorldCupContentsList = () => {
+        console.log("데이터 전 ", worldCupContentsManageContext);
+        const newContentsList = worldCupContentsManageContext.filter((item) => item.id === undefined);
 
-        const bindingNewWorldCupContents = transformToCreateWorldCupContentsType(worldCupContentsManageContext);
+        const bindingNewWorldCupContents = transformToCreateWorldCupContentsType(newContentsList);
 
+        if (bindingNewWorldCupContents.length === 0) {
+            alert("새로운 컨텐츠가 없습니다.");
+            return;
+        }
         const token = getAccessToken();
 
         mutationWorldCupContents.mutate({
@@ -95,6 +108,7 @@ const WorldCupContentsManageListWrapper = (params) => {
 
         onSuccess: () => {
             alert('성공');
+            window.location.reload();
         },
         onError: (error) => {
             alert(error);
@@ -102,7 +116,7 @@ const WorldCupContentsManageListWrapper = (params) => {
     });
 
 
-
+    const getSizeNewContents = (newWorldCupContents) => newWorldCupContents.filter((item) => item.id === undefined).length;
 
 
     // 반환 컴포넌트
@@ -114,17 +128,17 @@ const WorldCupContentsManageListWrapper = (params) => {
                 <h1 className="text-lg font-semibold" style={{ marginLeft: '2%' }}>
                     ❤️ 이상형 리스트 ❤️
                 </h1>
-                <div className="ml-auto" style={{ marginRight: '2%' }}>
 
+                <div className="ml-auto" style={{ marginRight: '2%' }}>
                     {
                         isCreateWorldCup === false ?
                             <>
                                 <div>
                                     <button
-                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                        className={`${getSizeNewContents(worldCupContentsManageContext) ? "bg-blue-500" : "bg-gray-500"} hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
                                         onClick={() => createNewWorldCupContentsList()}
                                     >
-                                        이상형 컨텐츠 적용
+                                        새로운 컨텐츠 생성 적용 [{getSizeNewContents(worldCupContentsManageContext)}개]
                                     </button>
                                 </div>
                             </>

@@ -28,7 +28,7 @@ const WorldCupManageForm = (params) => {
     const [freezeWorldCup, setFreezeWorldCup] = useState({
         freezeTitle: "",
         freezeDescription: "",
-        freezeVisibleType: ""
+        freezeVisibleType: "PUBLIC"
     });
 
     useEffect(() => {
@@ -39,6 +39,11 @@ const WorldCupManageForm = (params) => {
                 description: params.initWorldCupGame.description,
                 visibleType: params.initWorldCupGame.visibleType
             });
+            setFreezeWorldCup({
+                freezeTitle: params.initWorldCupGame.title,
+                freezeDescription: params.initWorldCupGame.description,
+                freezeVisibleType: params.initWorldCupGame.visibleType
+            })
         }
     }, [params.initWorldCupGame]
 
@@ -111,18 +116,19 @@ const WorldCupManageForm = (params) => {
     }
 
 
-    // 월드컵 업데이트를 한 후의 상태와 다르거나 처음 월드컵 상태(blank)일 때만 업데이트 버튼이 활성화된다.
-    const isNotUpdateWorldCupState = (freezeWorldCup: any, worldCup: any) => {
+
+    const updatableWorldCupState = (freezeWorldCup: any, worldCup: any) => {
 
         const equalsUpdateWorldCup = freezeWorldCup.freezeTitle === worldCup.title &&
             freezeWorldCup.freezeDescription === worldCup.description &&
             freezeWorldCup.freezeVisibleType === worldCup.visibleType;
 
-        const blankWorldCup = freezeWorldCup.freezeTitle !== "" &&
-            freezeWorldCup.freezeDescription !== "" &&
-            freezeWorldCup.freezeVisibleType !== "";
+        const blankWorldCup = freezeWorldCup.freezeTitle === "" &&
+            freezeWorldCup.freezeDescription === "" &&
+            freezeWorldCup.freezeVisibleType === "";
 
-        return equalsUpdateWorldCup && blankWorldCup;
+        return !blankWorldCup && !equalsUpdateWorldCup;
+
     }
 
 
@@ -190,7 +196,7 @@ const WorldCupManageForm = (params) => {
                 </div>
 
                 <div className="mb-4">
-                    <span className="text-gray-700 text-sm font-bold mb-2">노출 여부</span>
+                    <span className="text-gray-700 text-sm font-bold mb-2">공개 여부</span>
                     <div className="mt-2">
                         <label className="inline-flex items-center ">
                             <input
@@ -217,7 +223,7 @@ const WorldCupManageForm = (params) => {
                     </div>
                 </div>
 
-                {isNotUpdateWorldCupState(freezeWorldCup, worldCup) ? disabledUpdateButton() : enableUpdateButton()}
+                {updatableWorldCupState(freezeWorldCup, worldCup) ? enableUpdateButton() : disabledUpdateButton()}
 
             </div>
         </div>

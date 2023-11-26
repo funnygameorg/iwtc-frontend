@@ -145,3 +145,26 @@ export const updateMyWorldCupContents = async (worldCupId: number, contentsId: n
     }
 
 }
+
+
+
+// 이상형 컨텐츠 1건 삭제
+export const removeMyWorldCupContents = async (worldCupId: number, contentsId: number, token: string) => {
+
+    const authHeaders = createHeader(token);
+
+    const response = await axios.delete(
+        `http://localhost:8080/api/world-cups/me/${worldCupId}/contents/${contentsId}`,
+        {
+            headers: authHeaders,
+            timeout: 5000
+        }
+    );
+
+    console.log('response ===>', response);
+
+    if (response) {
+        return response;
+    }
+
+}

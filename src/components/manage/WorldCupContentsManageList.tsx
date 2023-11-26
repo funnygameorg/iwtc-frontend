@@ -114,6 +114,10 @@ const WorldCupContentsManageList = () => {
         }
     }
 
+
+
+
+
     // 새로운 컨텐츠를 리스트 추가
     const applyNewContents = () => {
 
@@ -469,13 +473,7 @@ const WorldCupContentsManageList = () => {
 
     return (
         <div>
-            <div className="mt8 mb-4">
-                <span className="h-4 w-4 bg-green-500 rounded-full inline-block mr-2">
-                </span>
-                <span>
-                    새로운 이상형 컨텐츠 {applyContentsList.length}개
-                </span>
-            </div>
+
             {createWorldCupComponent()}
             {applyContentsList.length !== 0 ?
                 (
