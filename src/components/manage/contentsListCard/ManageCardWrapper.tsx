@@ -13,6 +13,7 @@ const ManageCardWrapper = ({ contents, index }) => {
     // ByServer를 우선적용하고 없다면 ByClient를 적용한다.
     const syncFormatMediaData = (contentsByClient, contentsByServer) => {
         return {
+            contentsId: contentsByClient?.id || undefined,
             contentsName: contentsByClient.contentsName,
             videoStartTime: contentsByServer?.videoStartTime || contentsByClient.videoStartTime,
             videoPlayDuration: contentsByServer?.videoPlayDuration || contentsByClient.videoPlayDuration,
@@ -22,7 +23,6 @@ const ManageCardWrapper = ({ contents, index }) => {
             mediaFileId: contentsByServer?.mediaFileId
         };
     }
-
 
     const [mediaData, setMediaData] = useState('');
 

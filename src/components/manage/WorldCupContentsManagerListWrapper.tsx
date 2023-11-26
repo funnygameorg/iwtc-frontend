@@ -18,13 +18,15 @@ import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
  */
 const WorldCupContentsManageListWrapper = (params) => {
 
+
     const { worldCupContentsManageContext, setWorldCupContentsManageContext } = useContext(WorldCupContentsManageContext);
     const { isCreateWorldCup } = useContext(WorldCupManageContext);
     const { worldCupId, setWorldCupId } = useContext(WorldCupIdManageContext);
 
     useEffect(() => {
-        if (params.initWorldCupGameContentsList !== undefined) {
+        if (params.initWorldCupGameContentsList) {
             const contentsLst = params.initWorldCupGameContentsList.map(item => ({
+                contentsId: item.id,
                 contentsName: item.contentsName,
                 visibleType: item.visibleType,
                 createMediaFileRequest: {
@@ -42,6 +44,8 @@ const WorldCupContentsManageListWrapper = (params) => {
 
 
 
+
+
     // 월드컵을 우선적으로 만들지 않았을 때 노출
     const isNotCreateWorldCupLogo = () => {
         return (
@@ -50,7 +54,6 @@ const WorldCupContentsManageListWrapper = (params) => {
             </div >
         );
     }
-
 
 
 
@@ -72,6 +75,7 @@ const WorldCupContentsManageListWrapper = (params) => {
         }));
     };
 
+
     const createNewWorldCupContentsList = () => {
 
         const bindingNewWorldCupContents = transformToCreateWorldCupContentsType(worldCupContentsManageContext);
@@ -84,6 +88,8 @@ const WorldCupContentsManageListWrapper = (params) => {
             token: token
         });
     }
+
+
 
     const mutationWorldCupContents = useMutation(createWorldCupContents, {
 

@@ -1,4 +1,8 @@
 import { WorldCupContentsManageContext } from "@/hooks/WorldCupContentsManageContext";
+import { WorldCupIdManageContext } from "@/hooks/WorldCupIdManageContext";
+import { WorldCupManageContext } from "@/hooks/WorldCupManageContext";
+import { updateMyWorldCupContents } from "@/services/ManageWorldCupService";
+import { getAccessToken } from "@/utils/TokenManager";
 import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
 
@@ -6,18 +10,40 @@ const StaticMediaFileTypeCard = ({ index, contents }) => {
 
     const { worldCupContentsManageContext, setWorldCupContentsManageContext } = useContext(WorldCupContentsManageContext);
 
+    const { worldCupId, setWorldCupId } = useContext(WorldCupIdManageContext);
+
+
     const [image, setImage] = useState("");
+
+    const [mediaData, setMediaData] = useState({});
 
     const [isUpdateMode, setIsUpdateMode] = useState(false);
 
-
     useEffect(
         () => {
+            setMediaData({
+                contentsId: contents.contentsId,
+                contentsName: contents.contentsName,
+                originalName: contents.originalName,
+                visibleType: contents.visibleType,
+                mediaData: contents.mediaData,
+                videoStartTime: contents.videoStartTime,
+                videoPlayDuration: contents.videoPlayDuration,
+            });
             setImage(contents.mediaData);
         }, [contents.mediaData]
     );
 
+    const handleMediaData = (e: any) => {
 
+        const { name, value } = e.target;
+
+        setMediaData(prevData => ({
+            ...prevData,
+            [name]: value
+        }));
+
+    };
 
     const removeContents = (contentsName) => {
         setWorldCupContentsManageContext(prev =>
@@ -25,27 +51,52 @@ const StaticMediaFileTypeCard = ({ index, contents }) => {
         )
     }
 
+
+
     const updateContentsMode = () => {
         setIsUpdateMode(true);
     }
 
     const applyUpdateContents = () => {
+
+        const requestBody = {
+            contentsName: mediaData.contentsName,
+            originalName: mediaData.originalName || '',
+            mediaData: image,
+            videoStartTime: "0",
+            videoPlayDuration: 0,
+            visibleType: mediaData.visibleType
+        };
+
+        const accessToken = getAccessToken();
+
+        updateMyWorldCupContents(
+            worldCupId,
+            mediaData.contentsId,
+            requestBody,
+            accessToken
+        );
+
         setIsUpdateMode(false);
+
     }
 
-
     const changeImage = (e) => {
+
         const imageFile = e.target.files[0];
         const reader = new FileReader();
 
-        reader.onloadend = function (e) {
+        reader.addEventListener('load', (e: ProgressEvent<FileReader>) => {
             setImage(e.target.result);
-        }
+        });
 
         reader.readAsDataURL(imageFile);
 
+        setMediaData(prevData => ({
+            ...prevData,
+            originalName: imageFile.name,
+        }));
     }
-    console.log(image)
 
 
     return (
@@ -68,7 +119,7 @@ const StaticMediaFileTypeCard = ({ index, contents }) => {
                                     <strong>컨텐츠 이름:</strong>
                                     <span className="ml-2">
                                         {!isUpdateMode ?
-                                            <span>{contents.contentsName}</span>
+                                            <span>{mediaData.contentsName}</span>
                                             :
                                             <span>
                                                 <input
@@ -77,7 +128,8 @@ const StaticMediaFileTypeCard = ({ index, contents }) => {
                                                     className="p-1 border rounded-xl"
                                                     placeholder="컨텐츠 이름"
                                                     name='contentsName'
-                                                    value={contents.contentsName}
+                                                    onChange={handleMediaData}
+                                                    value={mediaData.contentsName}
                                                 />
                                             </span>
                                         }
@@ -89,7 +141,7 @@ const StaticMediaFileTypeCard = ({ index, contents }) => {
                                     <span className="ml-2">
                                         {!isUpdateMode ?
                                             <span>
-                                                {contents.visibleType === 'PUBLIC' ? "공개" : "비공개"}
+                                                {mediaData.visibleType === 'PUBLIC' ? "공개" : "비공개"}
                                             </span>
                                             :
                                             <span>
@@ -98,8 +150,9 @@ const StaticMediaFileTypeCard = ({ index, contents }) => {
                                                     type="text"
                                                     className="p-1 border rounded-xl"
                                                     placeholder="공개 여부"
-                                                    name='contentsName'
-                                                    value={contents.contentsName}
+                                                    name='visibleType'
+                                                    value={mediaData.visibleType}
+                                                    onChange={handleMediaData}
                                                 />
                                             </span>
                                         }
@@ -135,7 +188,7 @@ const StaticMediaFileTypeCard = ({ index, contents }) => {
                             {!isUpdateMode ?
                                 <button
                                     className="bg-red-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded"
-                                    onClick={() => removeContents(contents.contentsName)}
+                                    onClick={() => removeContents(mediaData.contentsName)}
                                 >
                                     삭제
                                 </button>

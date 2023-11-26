@@ -1,5 +1,3 @@
-import { to } from "@react-spring/web";
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { ajaxGet } from "./BaseService";
 
@@ -114,6 +112,31 @@ export const getMyWorldCupContentsList = async (worldCupId: number, token: strin
         headers: authHeaders,
         timeout: 5000,
     });
+
+    console.log('response ===>', response);
+
+    if (response) {
+        return response;
+    }
+
+}
+
+
+
+// 이상형 컨텐츠 1건 수정
+export const updateMyWorldCupContents = async (worldCupId: number, contentsId: number, params: any, token: string) => {
+
+    console.log(params);
+    const authHeaders = createHeader(token);
+
+    const response = await axios.put(
+        `http://localhost:8080/api/world-cups/me/${worldCupId}/contents/${contentsId}`,
+        params,
+        {
+            headers: authHeaders,
+            timeout: 5000
+        }
+    );
 
     console.log('response ===>', response);
 

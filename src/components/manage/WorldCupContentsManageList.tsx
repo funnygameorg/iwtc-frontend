@@ -1,6 +1,5 @@
 "use client";
 import React, { ChangeEvent, useContext, useRef, useState } from 'react';
-import dummyManageContentsState, { ManageContentsItemType } from './dummyContentsList';
 import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
@@ -482,10 +481,6 @@ const WorldCupContentsManageList = () => {
                 (
                     applyContentsList.map((contents, index) => (
                         <ManageCardWrapper contents={contents} index={index} />
-                        // contents.fileType === 'video' ?
-                        //     <InternetVideoUrlCard index={index} contents={contents} />
-                        //     :
-                        //     <StaticMediaFileTypeCard index={index} contents={contents} />
                     ))
                 )
                 :
