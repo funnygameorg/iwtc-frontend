@@ -169,70 +169,71 @@ const Page = ({ params }: { params: { id: number } }) => {
     if (!isPlay) {
         return <RoundPopup roundList={roundList} setSelectRound={setSelectRound} />;
     }
-
-    return (
-        <>
-            <div className="grid h-screen place-items-center box-border">
-                <div className="relative flex p-4 text-black shadow" style={{ width: '1600px', height: '100%' }}>
-                    <div className="absolute mx-auto left-0 right-0 text-center z-10">
-                        <h1 className="text-white text-3xl">{roundList?.data?.worldCupTitle}</h1>
-                        <h1 className="text-white text-3xl">{selectRound === 2 ? '결승' : selectRound + '강'}</h1>
-                    </div>
-                    {/* <div className="flex items-start relative" onClick={() => handleClick()}> */}
-                    <animated.div
-                        className={'flex items-start relative'}
-                        style={{
-                            ...left,
-                        }}
-                        onClick={() => handleSelection(1)}
-                    >
-                        <Image
-                            className="h-full w-full"
-                            src={gameList[0].imgUrl}
-                            width={'750'}
-                            height={'500'}
-                            alt={gameList[0].name}
-                        />
-                    </animated.div>
-                    {/* <div className="fixed bottom-0 left-0 bg-white p-4 text-white"> */}
-                    <h2 className="absolute text-white text-3xl  bottom-10 left-10">{gameList[0].name}</h2>
-                    {/* </div> */}
-                    {/* </div> */}
-                    {/* <div className="grid place-items-center "> */}
-                    <div className="flex items-center justify-center">
-                        <div className="absolute">
-                            <div className="absolute px-12 py-6 bg-gradient-to-r from-blue-400 via-red-500 to-yellow-500 text-white font-black text-6xl rounded-full shadow-xl opacity-75 transform scale-y-1 animate-pulse infinite">
-                                VS
-                            </div>
-                            <div className="px-12 py-6 bg-gradient-to-l from-green-400 via-purple-500 to-pink-500 text-white font-black text-6xl rounded-full shadow-xl animate-spin-slow animate-bounce infinite">
-                                VS
+    if (gameList) {
+        return (
+            <>
+                <div className="grid h-screen place-items-center box-border">
+                    <div className="relative flex p-4 text-black shadow" style={{ width: '1600px', height: '100%' }}>
+                        <div className="absolute mx-auto left-0 right-0 text-center z-10">
+                            <h1 className="text-white text-3xl">{roundList?.data?.worldCupTitle}</h1>
+                            <h1 className="text-white text-3xl">{selectRound === 2 ? '결승' : selectRound + '강'}</h1>
+                        </div>
+                        {/* <div className="flex items-start relative" onClick={() => handleClick()}> */}
+                        <animated.div
+                            className={'flex items-start relative'}
+                            style={{
+                                ...left,
+                            }}
+                            onClick={() => handleSelection(1)}
+                        >
+                            <Image
+                                className="h-full w-full"
+                                src={gameList[0]?.imgUrl}
+                                width={'750'}
+                                height={'500'}
+                                alt={gameList[0]?.name}
+                            />
+                        </animated.div>
+                        {/* <div className="fixed bottom-0 left-0 bg-white p-4 text-white"> */}
+                        <h2 className="absolute text-white text-3xl  bottom-10 left-10">{gameList[0]?.name}</h2>
+                        {/* </div> */}
+                        {/* </div> */}
+                        {/* <div className="grid place-items-center "> */}
+                        <div className="flex items-center justify-center">
+                            <div className="absolute">
+                                <div className="absolute px-12 py-6 bg-gradient-to-r from-blue-400 via-red-500 to-yellow-500 text-white font-black text-6xl rounded-full shadow-xl opacity-75 transform scale-y-1 animate-pulse infinite">
+                                    VS
+                                </div>
+                                <div className="px-12 py-6 bg-gradient-to-l from-green-400 via-purple-500 to-pink-500 text-white font-black text-6xl rounded-full shadow-xl animate-spin-slow animate-bounce infinite">
+                                    VS
+                                </div>
                             </div>
                         </div>
+                        {/* <span className='text-white'>VS</span> */}
+                        {/* <div className="flex items-end mx-auto left-0 right-0" onClick={() => handleSelection(0)}> */}
+                        <animated.div
+                            className={'flex items-end mx-auto left-0 right-0'}
+                            style={{
+                                ...light,
+                            }}
+                            onClick={() => handleSelection(0)}
+                        >
+                            <Image
+                                className="h-full w-full"
+                                src={gameList[1]?.imgUrl}
+                                width={'750'}
+                                height={'500'}
+                                alt={gameList[1]?.name}
+                            />
+                            <h2 className="absolute text-white text-3xl  bottom-10 right-10">{gameList[1]?.name}</h2>
+                        </animated.div>
+                        {/* </div> */}
                     </div>
-                    {/* <span className='text-white'>VS</span> */}
-                    {/* <div className="flex items-end mx-auto left-0 right-0" onClick={() => handleSelection(0)}> */}
-                    <animated.div
-                        className={'flex items-end mx-auto left-0 right-0'}
-                        style={{
-                            ...light,
-                        }}
-                        onClick={() => handleSelection(0)}
-                    >
-                        <Image
-                            className="h-full w-full"
-                            src={gameList[1].imgUrl}
-                            width={'750'}
-                            height={'500'}
-                            alt={gameList[1].name}
-                        />
-                        <h2 className="absolute text-white text-3xl  bottom-10 right-10">{gameList[1].name}</h2>
-                    </animated.div>
-                    {/* </div> */}
                 </div>
-            </div>
-            {/* <div className="grid place-items-center box-border h-32 w-32 p-4 border-4">GamePage</div> */}
-        </>
-    );
+                {/* <div className="grid place-items-center box-border h-32 w-32 p-4 border-4">GamePage</div> */}
+            </>
+        );
+    }
 };
 
 export default Page;
