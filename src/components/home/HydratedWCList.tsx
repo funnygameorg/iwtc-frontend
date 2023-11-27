@@ -5,6 +5,7 @@ import WorldCup from './worldcup/WorldCupWrapper';
 import RankSelect from '../button/RankSelect';
 import SearchBar from '../search';
 import Order from '../dropdown/Order';
+import { mappingMediaFile2 } from '@/utils/common';
 
 export default async function HydratedWCList() {
     const queryClient = getQueryClient();
@@ -17,7 +18,8 @@ export default async function HydratedWCList() {
     //   pageParams: [],
     // }));
     const dehydratedState = JSON.parse(JSON.stringify(dehydrate(queryClient)));
-    // console.log("dehydratedState",dehydratedState.queries[0].state.data.pages);
+    const newlist = await mappingMediaFile2(dehydratedState.queries[0].state.data.pages[0].list);
+    dehydratedState.queries[0].state.data.pages[0].list = newlist;
     dehydratedState.queries[0].state.data.pageParams[0] = 0;
     return (
         <Hydrate state={dehydratedState}>

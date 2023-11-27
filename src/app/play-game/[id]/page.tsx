@@ -4,9 +4,10 @@ import Image from 'next/image';
 import { useQueryGetWorldCupGameRound, worldCupGamePlay } from '@/services/WorldCupService';
 import RoundPopup from '@/components/popup/RoundPopup';
 import { useMutation } from '@tanstack/react-query';
-import { getEncodedArray } from '@/utils/common';
+import { getEncodedArray, mappingMediaFile } from '@/utils/common';
 import { useRouter } from 'next/navigation';
 import { animated, useSpring } from '@react-spring/web';
+import { getMediaFileAPI } from '@/services/EtcService';
 
 const Page = ({ params }: { params: { id: number } }) => {
     const router = useRouter();
@@ -24,6 +25,32 @@ const Page = ({ params }: { params: { id: number } }) => {
         thirdWinnerContentsId: 0,
         fourthWinnerContentsId: 0,
     });
+    // console.log('gameList', gameList);
+    // const mappingMediaFile = async (test: any) => {
+    //     const promises = test.map(async (item: any) => {
+    //         getMediaFileAPI(item.mediaFileId)); // 각 mediaFileId에 대해 API를 호출하는 Promise 배열 생성
+    //     const responses = await Promise.all(promises); // 모든 Promise가 완료될 때까지 기다림
+    //     console.log('asdasdasdasd', responses);
+
+    //     return responses; // API 응답 값들을 배열로 반환
+    // };
+
+    // const mappingMediaFile = async (gameList: any) => {
+    //     const promises = gameList.map(async (item: any) => {
+    //         try {
+    //             const response = await getMediaFileAPI(item.mediaFileId); // API 호출
+    //             item.imgUrl = response.data.mediaData;
+    //             return item; // 응답을 객체에 추가
+    //         } catch (error) {
+    //             console.error(`API 호출 중 오류 발생: ${error}`);
+    //             item.apiResponse = 'API 호출 에러'; // 에러 발생 시 처리
+    //         }
+    //     });
+
+    //     const newGameList = await Promise.all(promises);
+    //     return newGameList;
+    // };
+
     const handleAnimationRest = () => {
         console.log('Animation finished.');
         // 여기에 원하는 작업을 추가할 수 있습니다.
@@ -53,9 +80,10 @@ const Page = ({ params }: { params: { id: number } }) => {
     };
 
     const getGame: any = useMutation(worldCupGamePlay, {
-        onSuccess: (data: any) => {
+        onSuccess: async (data: any) => {
             setIsPlay(true);
-            setGameList(data.data.contentsList);
+            const list = await mappingMediaFile(data.data.contentsList);
+            setGameList(list);
         },
     });
 
@@ -160,7 +188,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                     >
                         <Image
                             className="h-full w-full"
-                            src={gameList[0].filePath}
+                            src={gameList[0].imgUrl}
                             width={'750'}
                             height={'500'}
                             alt={gameList[0].name}
@@ -192,7 +220,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                     >
                         <Image
                             className="h-full w-full"
-                            src={gameList[1].filePath}
+                            src={gameList[1].imgUrl}
                             width={'750'}
                             height={'500'}
                             alt={gameList[1].name}

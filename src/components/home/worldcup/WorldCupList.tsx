@@ -3,7 +3,15 @@ import Link from 'next/link';
 import React, { useEffect } from 'react';
 
 const WorldCupList = ({ wcList }: any) => {
-    const { gameTitle, reftContentName, reftImgPath, rightContentName, rightImgPath, description, contentNum } = wcList;
+    const {
+        gameTitle,
+        reftContentName,
+        reftImgMediaFileNo,
+        rightContentName,
+        rightImgMediaFileNo,
+        description,
+        contentNum,
+    } = wcList;
 
     return (
         <div className="p-4 max-w-sm">
@@ -13,7 +21,7 @@ const WorldCupList = ({ wcList }: any) => {
                         <div className="flex-1">
                             <Image
                                 className="w-full h-52"
-                                src={reftImgPath}
+                                src={reftImgMediaFileNo}
                                 width={'50'}
                                 height={'10'}
                                 alt={reftContentName}
@@ -22,7 +30,7 @@ const WorldCupList = ({ wcList }: any) => {
                         <div className="flex-1">
                             <Image
                                 className="w-full h-52"
-                                src={rightImgPath}
+                                src={rightImgMediaFileNo}
                                 width={'50'}
                                 height={'10'}
                                 alt={rightContentName}

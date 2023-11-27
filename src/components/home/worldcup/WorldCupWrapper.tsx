@@ -7,6 +7,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import SearchBar from '@/components/search';
 import RankSelect from '@/components/button/RankSelect';
 import Order from '@/components/dropdown/Order';
+import { mappingMediaFile, mappingMediaFile2 } from '@/utils/common';
 
 const WorldCupWrapper = () => {
     const [keyword, setKeyword] = useState<undefined | string>(undefined);
@@ -16,7 +17,10 @@ const WorldCupWrapper = () => {
     const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery(
         ['wclist', order, keyword, rank],
         async ({ pageParam = 0 }) => {
-            return await worldCupAllList(pageParam, 20, order, keyword, rank);
+            const response = await worldCupAllList(pageParam, 20, order, keyword, rank);
+            const newlist = await mappingMediaFile2(response.list);
+            response.list = newlist;
+            return response;
         },
         {
             getNextPageParam: (lastPage, allPages) => {
