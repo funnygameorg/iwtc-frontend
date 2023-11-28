@@ -5,16 +5,15 @@ export const getKeyByValue = (obj: any, value: string) => {
     return false;
 };
 
-export const getEncodedArray = (myArray) => {
-    const encodedArray = myArray.map((element) => {
-        return encodeURIComponent(element);
-    });
-    console.log('encodedArray', encodedArray);
-    return encodedArray;
-};
+// export const getEncodedArray = (myArray) => {
+//     const encodedArray = myArray.map((element) => {
+//         return encodeURIComponent(element);
+//     });
+//     console.log('encodedArray', encodedArray);
+//     return encodedArray;
+// };
 
 export const mappingMediaFile = async (gameList: any) => {
-    console.log('gameList', gameList);
     const promises = gameList.map(async (item: any) => {
         try {
             const response = await getMediaFileAPI(item.mediaFileId); // API 호출
@@ -22,7 +21,8 @@ export const mappingMediaFile = async (gameList: any) => {
             return item; // 응답을 객체에 추가
         } catch (error) {
             console.error(`API 호출 중 오류 발생: ${error}`);
-            item.apiResponse = 'API 호출 에러'; // 에러 발생 시 처리
+            item.imgUrl = '/images/default.png'; // 에러 발생 시 처리
+            return item;
         }
     });
 
@@ -31,7 +31,6 @@ export const mappingMediaFile = async (gameList: any) => {
 };
 
 export const mappingMediaFile2 = async (gameList: any) => {
-    console.log('gameList', gameList);
     const promises = gameList.map(async (item: any) => {
         try {
             const results = await Promise.allSettled([

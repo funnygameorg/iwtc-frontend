@@ -4,10 +4,9 @@ import Image from 'next/image';
 import { useQueryGetWorldCupGameRound, worldCupGamePlay } from '@/services/WorldCupService';
 import RoundPopup from '@/components/popup/RoundPopup';
 import { useMutation } from '@tanstack/react-query';
-import { getEncodedArray, mappingMediaFile } from '@/utils/common';
+import { mappingMediaFile } from '@/utils/common';
 import { useRouter } from 'next/navigation';
 import { animated, useSpring } from '@react-spring/web';
-import { getMediaFileAPI } from '@/services/EtcService';
 
 const Page = ({ params }: { params: { id: number } }) => {
     const router = useRouter();
