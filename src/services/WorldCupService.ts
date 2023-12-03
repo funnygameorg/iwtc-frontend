@@ -75,3 +75,18 @@ export const worldCupGameClear = async (param: any) => {
     console.log('response ===>', response);
     return response.data;
 };
+
+//게임의 모든 컨텐츠 조회 (랭크 정렬)
+export const useQueryGetWorldCupGameResultRankList = (worldcupId: number) => {
+    console.log('AllRankList', worldcupId);
+    return useQuery<any, Error>(['AllRankList'], () => worldCuplGameResultRankList(worldcupId), {
+        retry: 0,
+        refetchOnWindowFocus: false,
+        staleTime: 1000,
+    });
+};
+
+export const worldCuplGameResultRankList = async (worldcupId: number) => {
+    const response = await ajaxGet(`/world-cups/${worldcupId}/game-result-contents`);
+    return response.data;
+};
