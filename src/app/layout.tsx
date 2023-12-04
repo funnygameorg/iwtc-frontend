@@ -2,9 +2,9 @@ import '../styles/globals.css';
 // import "tw-elements-react/dist/css/tw-elements-react.min.css";
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import Header from '@/components/common/Header';
 import RouteHandler from '@/components/RouteHandler';
 import Providers from '@/hooks/Provider';
+import Header from '@/components/common/Header';
 
 const inter = Inter({ subsets: ['latin'] });
 
