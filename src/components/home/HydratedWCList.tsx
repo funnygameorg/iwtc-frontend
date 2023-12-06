@@ -19,8 +19,12 @@ export default async function HydratedWCList() {
     // }));
     const dehydratedState = JSON.parse(JSON.stringify(dehydrate(queryClient)));
     const newlist = await mappingMediaFile2(dehydratedState.queries[0]?.state.data.pages[0].list);
-    dehydratedState.queries[0].state.data.pages[0].list = newlist;
-    dehydratedState.queries[0].state.data.pageParams[0] = 0;
+    if (dehydratedState.queries[0]) {
+        dehydratedState.queries[0].state.data.pages[0].list = newlist;
+        dehydratedState.queries[0].state.data.pageParams[0] = 0;
+    }
+    // dehydratedState.queries[0].state.data.pages[0].list = newlist;
+    // dehydratedState.queries[0].state.data.pageParams[0] = 0;
     return (
         <Hydrate state={dehydratedState}>
             <WorldCup />
