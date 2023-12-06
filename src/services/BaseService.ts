@@ -10,7 +10,7 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(
-    (config: AxiosRequestConfig) => {
+    (config: any) => {
         return config;
     },
     (error: any) => {

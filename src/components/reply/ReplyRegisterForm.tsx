@@ -14,8 +14,7 @@ const ReplyRegisterForm = ({ worldcupId, contentsId }: IProps) => {
     const { mutate: replyRegister } = useMutation(worldCupGameReplyRegister, {
         onSuccess: async (data) => {
             // router.push('/sign-in');
-            console.log('게임종료 API 성공 ===>', data);
-            queryClient.invalidateQueries('worldCupReplyList', { refetchInactive: true });
+            // queryClient.invalidateQueries<any>('worldCupReplyList', { refetchInactive: true });
             // const mappingLsit = await mappingMediaFile(data.data);
             // setRankList(mappingLsit);
         },

@@ -17,10 +17,12 @@ const WorldCupWrapper = () => {
     const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery(
         ['wclist', order, keyword, rank],
         async ({ pageParam = 0 }) => {
-            const response = await worldCupAllList(pageParam, 20, order, keyword, rank);
-            const newlist = await mappingMediaFile2(response.list);
-            response.list = newlist;
-            return response;
+            const response: any = await worldCupAllList(pageParam, 20, order, keyword, rank);
+            if (response) {
+                const newlist = await mappingMediaFile2(response.list);
+                response.list = newlist;
+                return response;
+            }
         },
         {
             getNextPageParam: (lastPage, allPages) => {

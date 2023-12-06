@@ -1,4 +1,4 @@
-import { getPassedTimeMessage } from '@/utils/time';
+import { getPassedTimeMessage } from '@/utils/Time';
 import moment from 'moment';
 import React, { useState } from 'react';
 import ReplyPopup from './ReplyPopup';

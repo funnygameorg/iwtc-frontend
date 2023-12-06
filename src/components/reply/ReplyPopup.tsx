@@ -20,7 +20,7 @@ const ReplyPopup = ({ commentId, isPopup }: IProps) => {
         ],
     });
 
-    const customStyles = {
+    const customStyles: any = {
         position: 'absolute',
         inset: '0px auto auto 0px',
         margin: '0px',

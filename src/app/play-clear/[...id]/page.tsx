@@ -8,7 +8,7 @@ import { mappingMediaFile } from '@/utils/common';
 import { useMutation } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 
-const page = ({ params }: { params: { id: any } }) => {
+const Page = ({ params }: { params: { id: any } }) => {
     const [rankList, setRankList] = useState<any>();
     const { id } = params;
     const { data: reply, isSuccess: replyIsSuccess } = useQueryGetReplyList(id[0], 0);
@@ -100,4 +100,4 @@ const page = ({ params }: { params: { id: any } }) => {
     }
 };
 
-export default page;
+export default Page;

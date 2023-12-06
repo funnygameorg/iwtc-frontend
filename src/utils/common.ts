@@ -14,42 +14,46 @@ export const getKeyByValue = (obj: any, value: string) => {
 // };
 
 export const mappingMediaFile = async (gameList: any) => {
-    const promises = gameList.map(async (item: any) => {
-        try {
-            const response = await getMediaFileAPI(item.mediaFileId); // API 호출
-            item.imgUrl = response.data.mediaData;
-            return item; // 응답을 객체에 추가
-        } catch (error) {
-            console.error(`API 호출 중 오류 발생: ${error}`);
-            item.imgUrl = '/images/default.png'; // 에러 발생 시 처리
-            return item;
-        }
-    });
+    if (gameList) {
+        const promises = gameList.map(async (item: any) => {
+            try {
+                const response = await getMediaFileAPI(item.mediaFileId); // API 호출
+                item.imgUrl = response.data.mediaData;
+                return item; // 응답을 객체에 추가
+            } catch (error) {
+                console.error(`API 호출 중 오류 발생: ${error}`);
+                item.imgUrl = '/images/default.png'; // 에러 발생 시 처리
+                return item;
+            }
+        });
 
-    const newGameList = await Promise.all(promises);
-    return newGameList;
+        const newGameList = await Promise.all(promises);
+        return newGameList;
+    }
 };
 
 export const mappingMediaFile2 = async (gameList: any) => {
-    const promises = gameList.map(async (item: any) => {
-        try {
-            const results = await Promise.allSettled([
-                getMediaFileAPI(item.reftImgMediaFileNo),
-                getMediaFileAPI(item.rightImgMediaFileNo),
-            ]);
+    if (gameList) {
+        const promises = gameList.map(async (item: any) => {
+            try {
+                const results = await Promise.allSettled([
+                    getMediaFileAPI(item.reftImgMediaFileNo),
+                    getMediaFileAPI(item.rightImgMediaFileNo),
+                ]);
 
-            const successfulResults = results.filter((result) => result.status === 'fulfilled');
-            const [response1, response2] = successfulResults.map((result: any) => result.value);
-            item.reftImgMediaFileNo = response1 ? response1.data.mediaData : '/images/default.png';
-            item.rightImgMediaFileNo = response2 ? response2.data.mediaData : '/images/default.png';
+                const successfulResults = results.filter((result) => result.status === 'fulfilled');
+                const [response1, response2] = successfulResults.map((result: any) => result.value);
+                item.reftImgMediaFileNo = response1 ? response1.data.mediaData : '/images/default.png';
+                item.rightImgMediaFileNo = response2 ? response2.data.mediaData : '/images/default.png';
 
-            return item; // 응답을 객체에 추가
-        } catch (error) {
-            console.error(`API 호출 중 오류 발생: ${error}`);
-            return { ...item }; // 에러 발생 시 처리 및 수정된 객체 반환
-        }
-    });
+                return item; // 응답을 객체에 추가
+            } catch (error) {
+                console.error(`API 호출 중 오류 발생: ${error}`);
+                return { ...item }; // 에러 발생 시 처리 및 수정된 객체 반환
+            }
+        });
 
-    const newGameList = await Promise.all(promises);
-    return newGameList;
+        const newGameList = await Promise.all(promises);
+        return newGameList;
+    }
 };
