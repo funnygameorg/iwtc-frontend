@@ -8,7 +8,7 @@ import { mappingMediaFile } from '@/utils/common';
 import { useRouter } from 'next/navigation';
 import { animated, useSpring } from '@react-spring/web';
 
-const page = ({ params }: { params: { id: number } }) => {
+const Page = ({ params }: { params: { id: number } }) => {
     const router = useRouter();
 
     const { id } = params;
@@ -235,4 +235,4 @@ const page = ({ params }: { params: { id: number } }) => {
     }
 };
 
-export default page;
+export default Page;
