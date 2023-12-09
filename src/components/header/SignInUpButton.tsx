@@ -32,21 +32,21 @@ const SignInUpButton = () => {
     };
 
     //TODO: 컴포넌트화
-    if (getUserInfo()) {
-        return (
-            <div onClick={() => onClickHandler(true)}>
-                <a
-                    href="#"
-                    className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
-                    onClick={(e) => {
-                        e.preventDefault();
-                    }}
-                >
-                    {'Logout'}
-                </a>
-            </div>
-        );
-    }
+    // if (getUserInfo()) {
+    //     return (
+    //         <div onClick={() => onClickHandler(true)}>
+    //             <a
+    //                 href="#"
+    //                 className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
+    //                 onClick={(e) => {
+    //                     e.preventDefault();
+    //                 }}
+    //             >
+    //                 {'Logout'}
+    //             </a>
+    //         </div>
+    //     );
+    // }
 
     // TODO: 로그인정보 확인
     return (
