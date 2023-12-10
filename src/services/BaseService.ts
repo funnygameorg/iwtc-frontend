@@ -3,7 +3,7 @@ import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 import { newAccessToken } from './MemberService';
 
 const instance = axios.create({
-    baseURL: `${BASE_URL}/api/`,
+    baseURL: `${BASE_URL}api/`,
     timeout: 5000,
     headers: {
         Accept: '*/*',
