@@ -21,7 +21,7 @@ export const userSignOut = async () => {
         'access-token': `${getAccessToken()}`,
     };
 
-    const response = await ajaxGet(`${BASE_URL}/api/members/sign-out`, {
+    const response = await ajaxGet(`${BASE_URL}api/members/sign-out`, {
         headers: headers,
         timeout: 5000,
     });
@@ -36,7 +36,7 @@ export const userMeSummary = async (token: string) => {
         'access-token': `${token}`,
     };
     // try {
-    const response = await ajaxGet(`${BASE_URL}/api/members/me/summary`, {
+    const response = await ajaxGet(`${BASE_URL}api/members/me/summary`, {
         headers: headers,
         timeout: 5000,
     });
@@ -58,7 +58,7 @@ export const newAccessToken = async () => {
         'refresh-token': `${accessToken}`,
     };
     const param = {};
-    const response = await ajaxPost(`${BASE_URL}/api/new-access-token`, null, {
+    const response = await ajaxPost(`${BASE_URL}api/new-access-token`, null, {
         headers: headers,
         timeout: 5000,
     });
