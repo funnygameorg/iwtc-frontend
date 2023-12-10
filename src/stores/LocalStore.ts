@@ -9,11 +9,13 @@ export const setAuthToken = (token: string) => {
 };
 
 export const getAuthToken = () => {
-    const authToken = window.localStorage.getItem('authtoken');
-    if (authToken) {
-        return authToken;
-    } else {
-        return null;
+    if (typeof window !== 'undefined') {
+        const authToken = window.localStorage.getItem('authtoken');
+        if (authToken) {
+            return authToken;
+        } else {
+            return null;
+        }
     }
 };
 
@@ -26,11 +28,13 @@ export const setUserInfo = (userInfo: userInfo) => {
 };
 
 export const getUserInfo = () => {
-    const userInfo = window.localStorage.getItem('userInfo');
-    if (userInfo) {
-        return JSON.parse(userInfo);
-    } else {
-        return null;
+    if (typeof window !== 'undefined') {
+        const userInfo = window.localStorage.getItem('userInfo');
+        if (userInfo) {
+            return JSON.parse(userInfo);
+        } else {
+            return null;
+        }
     }
 };
 
