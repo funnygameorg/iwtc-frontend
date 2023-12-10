@@ -3,8 +3,9 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev -p 8080",
-        "build": "next build",
+        "dev": "env-cmd -f .env.development next dev",
+        "build:prod": "env-cmd -f .env.production next build",
+        "build": "env-cmd -f .env.production next build",
         "start": "next start -p 8080",
         "lint": "next lint"
     },
@@ -15,6 +16,7 @@
         "@tanstack/react-query": "^4.36.1",
         "@tanstack/react-query-devtools": "^4.36.1",
         "axios": "^1.5.1",
+        "env-cmd": "^10.1.0",
         "moment": "^2.29.4",
         "next": "13.5.4",
         "react": "^18",
