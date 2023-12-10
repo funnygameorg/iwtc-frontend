@@ -1,7 +1,7 @@
 import { BASE_URL } from '@/consts';
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 import { newAccessToken } from './MemberService';
-// 테스트
+
 const instance = axios.create({
     baseURL: `${BASE_URL}api/`,
     timeout: 5000,
