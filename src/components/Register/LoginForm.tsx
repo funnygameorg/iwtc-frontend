@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { setToken } from '@/utils/TokenManager';
 import { useRouter } from 'next/navigation';
 import { setUserInfo } from '@/stores/LocalStore';
+import { useAuth } from '../AuthProvider';
 interface FormTypes {
     username: string;
     password: string;
@@ -16,6 +17,7 @@ interface FormTypes {
 
 const LoginForm = () => {
     const router = useRouter();
+    const { login } = useAuth();
 
     const {
         register,
@@ -37,10 +39,16 @@ const LoginForm = () => {
 
             const userInfo = await userMeSummary(accessToken);
             setUserInfo(userInfo.data);
+            login();
             router.push('/');
         },
-        onError: (error) => {
-            console.log('에러', error);
+        onError: (error: any) => {
+            if (error.response.data) {
+                const { errorCode, message } = error.response.data;
+                if (errorCode === 5003) {
+                    window.alert(message);
+                }
+            }
         },
     });
 

@@ -25,6 +25,6 @@ export const getAccessToken = () => {
     return cookies.get('ACCESS_TOKEN');
 };
 
-// const getRefreshToken = () => {
-//   return cookies.get(REFRESH_TOKEN);
-// };
+export const getRefreshToken = () => {
+    return cookies.get('REFRESH_TOKEN');
+};

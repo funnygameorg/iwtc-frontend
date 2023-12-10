@@ -1,5 +1,7 @@
+'use client';
 import { BASE_URL } from '@/consts';
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
+import { newAccessToken } from './MemberService';
 
 const instance = axios.create({
     baseURL: `${BASE_URL}/api/`,
@@ -33,6 +35,15 @@ instance.interceptors.response.use(
         }
     },
     async (error: any) => {
+        console.log('response error', error);
+        if (error.response.status === 401) {
+            const newToken = await newAccessToken();
+            console.log('newToken', newToken);
+            return;
+        }
+        // if (typeof window !== 'undefined') {
+        //     window.alert('다시 시도해주세요!');
+        // }
         return Promise.reject(error);
     }
 );
@@ -48,7 +59,10 @@ export const ajaxGet = async <T = any>(subUrl: string, params?: any): Promise<Ax
     return instance.get(subUrl, params);
 };
 
-export const ajaxPost = async <T = any>(subUrl: string, params?: any): Promise<AxiosResponse<T>> => {
+export const ajaxPost = async <T = any>(subUrl: string, params?: any, headers?: any): Promise<AxiosResponse<T>> => {
+    if (headers) {
+        return instance.post(subUrl, params, headers);
+    }
     return instance.post(subUrl, params);
 };
 

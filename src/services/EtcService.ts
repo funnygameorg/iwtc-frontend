@@ -10,6 +10,11 @@ import { ajaxGet } from './BaseService';
 // };
 
 export const getMediaFileAPI = async (mediaFileId: number) => {
-    const response = await ajaxGet(`/media-files/${mediaFileId}`);
-    return response.data;
+    if (!mediaFileId) return;
+    try {
+        const response = await ajaxGet(`/media-files/${mediaFileId}`);
+        return response.data;
+    } catch (e) {
+        console.log('E');
+    }
 };

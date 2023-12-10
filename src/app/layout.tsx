@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google';
 import RouteHandler from '@/components/RouteHandler';
 import Providers from '@/hooks/Provider';
 import Header from '@/components/common/Header';
+import { AuthProvider } from '@/components/AuthProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,10 +19,12 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <html lang="en">
             <body className={inter.className} suppressHydrationWarning={true}>
                 <Providers>
-                    {/* TODO: 공통 header적용 */}
-                    <Header />
-                    <RouteHandler />
-                    {children}
+                    <AuthProvider>
+                        {/* TODO: 공통 header적용 */}
+                        <Header />
+                        <RouteHandler />
+                        {children}
+                    </AuthProvider>
                 </Providers>
             </body>
         </html>

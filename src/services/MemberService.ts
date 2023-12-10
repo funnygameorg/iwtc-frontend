@@ -1,7 +1,8 @@
 import { SignUpInfo, SignInInfo } from '@/interfaces/models/login/MemberData';
 import { ajaxGet, ajaxPost } from './BaseService';
 import axios from 'axios';
-import { getAccessToken } from '@/utils/TokenManager';
+import { getAccessToken, getRefreshToken } from '@/utils/TokenManager';
+import { BASE_URL } from '@/consts';
 
 //TODO: type 설정
 export const userSignUp = async (param: SignUpInfo) => {
@@ -20,7 +21,7 @@ export const userSignOut = async () => {
         'access-token': `${getAccessToken()}`,
     };
 
-    const response = await axios.get('http://localhost:8080/api/members/sign-out', {
+    const response = await ajaxGet(`${BASE_URL}/api/members/sign-out`, {
         headers: headers,
         timeout: 5000,
     });
@@ -34,7 +35,30 @@ export const userMeSummary = async (token: string) => {
         'Content-Type': 'application/json',
         'access-token': `${token}`,
     };
-    const response = await axios.get('http://localhost:8080/api/members/me/summary', {
+    // try {
+    const response = await ajaxGet(`${BASE_URL}/api/members/me/summary`, {
+        headers: headers,
+        timeout: 5000,
+    });
+    if (response) {
+        return response.data;
+    }
+    // } catch (e) {
+    //     console.log('eeee', e);
+    // }
+};
+
+export const newAccessToken = async () => {
+    const refreshToken = getRefreshToken();
+    const accessToken = getAccessToken();
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'access-token': `${refreshToken}`,
+        'refresh-token': `${accessToken}`,
+    };
+    const param = {};
+    const response = await ajaxPost(`${BASE_URL}/api/new-access-token`, null, {
         headers: headers,
         timeout: 5000,
     });

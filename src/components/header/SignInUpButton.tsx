@@ -1,14 +1,16 @@
 'use client';
-import { userSignOut } from '@/services/MemberService';
+import { userMeSummary, userSignOut } from '@/services/MemberService';
 import { getAccessToken } from '@/utils/TokenManager';
 import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserInfo, localStorageClear } from '@/stores/LocalStore';
+import { useAuth } from '../AuthProvider';
 
 const SignInUpButton = () => {
     const router = useRouter();
+    const { isLoggedIn, logout } = useAuth();
 
     // const { mutate } = useMutation(userSignOut2, {
     //     onSuccess: (data) => {
@@ -25,6 +27,8 @@ const SignInUpButton = () => {
             const response = await userSignOut();
             if (response) {
                 localStorageClear();
+                logout();
+                window.alert('로그아웃 하셨습니다.');
             }
         } else {
             router.push('/sign-in');
@@ -32,21 +36,21 @@ const SignInUpButton = () => {
     };
 
     //TODO: 컴포넌트화
-    // if (getUserInfo()) {
-    //     return (
-    //         <div onClick={() => onClickHandler(true)}>
-    //             <a
-    //                 href="#"
-    //                 className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
-    //                 onClick={(e) => {
-    //                     e.preventDefault();
-    //                 }}
-    //             >
-    //                 {'Logout'}
-    //             </a>
-    //         </div>
-    //     );
-    // }
+    if (isLoggedIn) {
+        return (
+            <div onClick={() => onClickHandler(true)}>
+                <a
+                    href="#"
+                    className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
+                    onClick={(e) => {
+                        e.preventDefault();
+                    }}
+                >
+                    {'Logout'}
+                </a>
+            </div>
+        );
+    }
 
     // TODO: 로그인정보 확인
     return (

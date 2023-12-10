@@ -8,6 +8,7 @@ import { userMeSummary, userSignIn } from '@/services/MemberService';
 import Link from 'next/link';
 import { getUserInfo, setUserInfo } from '@/stores/LocalStore';
 import { setToken } from '@/utils/TokenManager';
+import { useAuth } from '../AuthProvider';
 
 interface FormTypes {
     username: string;
@@ -24,6 +25,7 @@ const HomeLoginForm = () => {
     } = useForm<FormTypes>({
         resolver: getLoginFormSchema(),
     });
+    const { isLoggedIn, login } = useAuth();
 
     const { mutate } = useMutation(userSignIn, {
         onSuccess: async (data) => {
@@ -32,6 +34,7 @@ const HomeLoginForm = () => {
             setToken('ACCESS_TOKEN', token);
             const userInfo = await userMeSummary(token);
             setUserInfo(userInfo.data);
+            login();
         },
         onError: (error) => {
             console.log('에러', error);
@@ -53,19 +56,19 @@ const HomeLoginForm = () => {
         };
         mutate(loginParam);
     };
-    // if (getUserInfo()) {
-    //     const { serviceId, nickname } = getUserInfo();
-    //     return (
-    //         <div className="p-4 h-32">
-    //             <span className="grid gap-y-2 mb-6 mr-1" style={{ width: '8.6rem' }}>
-    //                 아이디: {serviceId}
-    //             </span>
-    //             <span className="grid gap-y-2 mb-6 mr-1" style={{ width: '8.6rem' }}>
-    //                 닉네임: {nickname}
-    //             </span>
-    //         </div>
-    //     );
-    // }
+    if (isLoggedIn) {
+        const { serviceId, nickname } = getUserInfo();
+        return (
+            <div className="p-4 h-32">
+                <span className="grid gap-y-2 mb-6 mr-1" style={{ width: '8.6rem' }}>
+                    아이디: {serviceId}
+                </span>
+                <span className="grid gap-y-2 mb-6 mr-1" style={{ width: '8.6rem' }}>
+                    닉네임: {nickname}
+                </span>
+            </div>
+        );
+    }
 
     return (
         <>
