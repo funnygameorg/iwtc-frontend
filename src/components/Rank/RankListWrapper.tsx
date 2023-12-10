@@ -7,7 +7,6 @@ interface IProps {
 
 const RankListWrapper = ({ contentsId }: IProps) => {
     const { data: allRankList, isSuccess: allRankIsSuccess } = useQueryGetWorldCupGameResultRankList(contentsId);
-    console.log('datadata allRankList', allRankList);
     return (
         <div className="block bg-gray-300 h-1/5 mt-12">
             <ul>

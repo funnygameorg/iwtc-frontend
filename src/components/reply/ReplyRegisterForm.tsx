@@ -23,10 +23,6 @@ const ReplyRegisterForm = ({ worldcupId, contentsId }: IProps) => {
         },
     });
 
-    useEffect(() => {
-        console.log('text', text);
-    }, [text]);
-
     const onClickRegister = () => {
         const params = {
             worldcupId: worldcupId,

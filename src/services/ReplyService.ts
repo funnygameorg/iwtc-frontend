@@ -19,7 +19,6 @@ export const worldCupGameReplyList = async (worldcupId: number, offset: number) 
         offset,
     };
     const response = await ajaxGet(`/world-cups/${worldcupId}/comments`, { params: params });
-    console.log('round ===>', response);
     return response.data;
 };
 
@@ -29,6 +28,5 @@ export const worldCupGameReplyRegister = async ({ worldcupId, contentsId, body, 
         nickname,
     };
     const response = await ajaxPost(`/world-cups/${worldcupId}/contents/${contentsId}/comments`, params);
-    console.log('round ===>', response);
     return response.data;
 };

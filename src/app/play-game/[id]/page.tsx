@@ -123,7 +123,6 @@ const Page = ({ params }: { params: { id: number } }) => {
                 secondWinnerContentsId: loseConetentId,
             };
             // setRankContents(updatedRankContents);
-            console.log('last click ===>', updatedRankContents);
             router.push(
                 `/play-clear/${id}/${updatedRankContents.firstWinnerContentsId}/${updatedRankContents.secondWinnerContentsId}/${updatedRankContents.thirdWinnerContentsId}/${updatedRankContents.fourthWinnerContentsId}`
             );

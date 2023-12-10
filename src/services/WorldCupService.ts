@@ -30,7 +30,6 @@ export const worldCupAllList = async (
 };
 
 export const useQueryGetWorldCupGameRound = (worldcupId: number) => {
-    console.log('worldcupId', worldcupId);
     return useQuery<any, Error>(['wcRounds'], () => worldCupGameRound(worldcupId), {
         retry: 0,
         refetchOnWindowFocus: false,
@@ -40,7 +39,6 @@ export const useQueryGetWorldCupGameRound = (worldcupId: number) => {
 
 export const worldCupGameRound = async (worldcupId: number) => {
     const response = await ajaxGet(`/world-cups/${worldcupId}/available-rounds`);
-    console.log('round ===>', response);
     return response.data;
 };
 
@@ -55,9 +53,7 @@ export const worldCupGamePlay = async ({
         sliceContents,
         excludeContentsIds,
     };
-    console.log('param', param);
     const response = await ajaxGet(`/world-cups/${worldcupId}/contents`, { params: param });
-    console.log('response ====>', response);
     return response.data;
 };
 
@@ -72,13 +68,11 @@ export const worldCupGameClear = async (param: any) => {
     };
     const numberworldcupId = Number(worldcupId);
     const response = await ajaxPost(`/world-cups/${worldcupId}/clear`, params);
-    console.log('response ===>', response);
     return response.data;
 };
 
 //게임의 모든 컨텐츠 조회 (랭크 정렬)
 export const useQueryGetWorldCupGameResultRankList = (worldcupId: number) => {
-    console.log('AllRankList', worldcupId);
     return useQuery<any, Error>(['AllRankList'], () => worldCuplGameResultRankList(worldcupId), {
         retry: 0,
         refetchOnWindowFocus: false,

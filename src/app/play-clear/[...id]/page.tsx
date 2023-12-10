@@ -13,7 +13,6 @@ const Page = ({ params }: { params: { id: any } }) => {
     const { id } = params;
     const { data: reply, isSuccess: replyIsSuccess } = useQueryGetReplyList(id[0], 0);
     const { data: allRankList, isSuccess: allRankIsSuccess } = useQueryGetWorldCupGameResultRankList(id[0]);
-    console.log('data2222', allRankList);
 
     const { mutate, isLoading, error, isSuccess } = useMutation(worldCupGameClear, {
         onSuccess: async (data) => {
