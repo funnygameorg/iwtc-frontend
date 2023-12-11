@@ -6,6 +6,7 @@ import ValidateMessage from '../ValidateMessage';
 import { useMutation } from '@tanstack/react-query';
 import { userSignUp } from '@/services/MemberService';
 import { useRouter } from 'next/navigation';
+import { BASE_URL } from '@/consts';
 
 type FormTypes = {
     username: string;

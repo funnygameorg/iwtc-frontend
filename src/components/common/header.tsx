@@ -1,10 +1,29 @@
+'use client'
 import Link from 'next/link';
 import React from 'react';
 import SignInUpButton from '../header/SignInUpButton';
+import { getUserInfo } from '@/stores/LocalStore';
+import { useInView } from '@react-spring/web';
+
 
 const Header = () => {
 
-  return (
+    const userInfo = getUserInfo()
+
+    const userId = userInfo != null ? userInfo.id : '';
+
+
+    const handleLoginBaseService = (e) => {
+        if (userId === '') {
+            e.preventDefault(); // 링크의 기본 동작을 방지합니다.
+            alert("로그인이 필요한 서비스입니다.");
+        }
+        // memberId가 있는 경우, 링크의 기본 동작을 계속 진행합니다.
+    };
+
+
+
+    return (
         <nav className="flex items-center justify-between flex-wrap bg-teal-500 p-6">
             <div className="flex items-center flex-shrink-0 text-white mr-6">
                 <svg
@@ -29,25 +48,22 @@ const Header = () => {
                 </button>
             </div>
             <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-                <div className="text-sm lg:flex-grow">
-                    <a
-                        href="#responsive-header"
+                <div className="text-lg lg:flex-grow">
+                    <Link
+                        href="/manage"
                         className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
+                        onClick={handleLoginBaseService}
                     >
-                        어떤것을
-                    </a>
-                    <a
-                        href="#responsive-header"
+                        월드컵 만들기
+                    </Link>
+
+                    <Link
+                        href={`/members/${userId}/games`}
                         className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
+                        onClick={handleLoginBaseService}
                     >
-                        추가할지
-                    </a>
-                    <a
-                        href="#responsive-header"
-                        className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white"
-                    >
-                        생각
-                    </a>
+                        자신의 월드컵 목록
+                    </Link>
                 </div>
                 {/* TODO: 로그인 완료 시 번경 */}
                 <SignInUpButton />

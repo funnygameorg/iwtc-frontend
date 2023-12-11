@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { ajaxGet, ajaxPost } from './BaseService';
 import { WCListParent, loadWCListData } from '@/interfaces/models/world-cup/WcListData';
 import Error from 'next/error';
+import { getAccessToken } from '@/utils/TokenManager';
+import axios from 'axios';
 
 // export const useQueryGetWorldCupAllList = (page: number, size: number, sort: number) => {
 //     return useQuery<any, Error>(['WorldCupList', page, size, sort], () => worldCupAllList(page, size, sort), {
@@ -16,6 +18,7 @@ export const worldCupAllList = async (
     size: number,
     sort: string,
     keyword?: string,
+    // memberId?: number,
     dateRange = 'ALL'
 ): Promise<WCListParent> => {
     const param = {
@@ -24,6 +27,7 @@ export const worldCupAllList = async (
         sort,
         keyword,
         dateRange,
+        // memberId,
     };
     const response = await ajaxGet('/world-cups', { params: param });
     return loadWCListData(response.data.data);
