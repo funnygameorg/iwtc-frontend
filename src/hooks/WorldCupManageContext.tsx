@@ -1,4 +1,4 @@
-'use client'
-import { createContext } from "react";
+'use client';
+import { createContext } from 'react';
 
-export const WorldCupManageContext = createContext("");
+export const WorldCupManageContext: any = createContext('');

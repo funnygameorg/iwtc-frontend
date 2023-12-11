@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
 import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
 import { createWorldCup } from '@/services/ManageWorldCupService';
@@ -7,80 +7,66 @@ import { useMutation } from '@tanstack/react-query';
 import React, { useContext, useEffect, useState } from 'react';
 import { isContext } from 'vm';
 
-
-
-
 /*
     게임 관리 폼에서 월드컵 게임에 관한 내용을 표현하는 폼
 
 */
 const WorldCupManageForm = () => {
-    const { isCreateWorldCup, setIsCreateWorldCup } = useContext(WorldCupManageContext);
-    const { worldCupId, setWorldCupId } = useContext(WorldCupIdManageContext);
+    const { isCreateWorldCup, setIsCreateWorldCup }: any = useContext(WorldCupManageContext);
+    const { worldCupId, setWorldCupId }: any = useContext(WorldCupIdManageContext);
 
     const [worldCup, setValue] = useState({
-        title: "",
-        description: "",
-        visibleType: "PUBLIC"
+        title: '',
+        description: '',
+        visibleType: 'PUBLIC',
     });
 
     const [freezeWorldCup, setFreezeWorldCup] = useState({
-        freezeTitle: "",
-        freezeDescription: "",
-        freezeVisibleType: ""
+        freezeTitle: '',
+        freezeDescription: '',
+        freezeVisibleType: '',
     });
 
     const { title, description, visibleType } = worldCup;
 
-
-
     const handleChange = (e: any) => {
-
         const { name, value } = e.target;
-        setValue(prevWorldCup => ({
+        setValue((prevWorldCup) => ({
             ...prevWorldCup,
-            [name]: value
+            [name]: value,
         }));
-
     };
 
-
     const mutation = useMutation(createWorldCup, {
-
         onSuccess: (data) => {
-
             setFreezeWorldCup({
                 freezeTitle: title,
                 freezeDescription: description,
-                freezeVisibleType: visibleType
+                freezeVisibleType: visibleType,
             });
 
             setWorldCupId(data.data);
             setIsCreateWorldCup(false);
-
         },
 
         onError: (error) => {
             alert(error);
-        }
+        },
     });
 
-
-
     const handleCreateWorldCup = (e: any) => {
-
         if (description.length > 100 || description === '') {
-            alert("월드컵 설명 1자 이상 100자 이하입니다.");
+            alert('월드컵 설명 1자 이상 100자 이하입니다.');
             throw Error();
         }
 
         if (title === '') {
-            alert("제목을 입력해주세요.");
+            alert('제목을 입력해주세요.');
             throw Error();
         }
 
         if (!(visibleType === 'PUBLIC' || visibleType === 'PRIVATE')) {
-            alert("노출 여부 선택해주세요.");
+            alert('노출 여부 선택해주세요.');
             throw Error();
         }
 
@@ -90,45 +76,38 @@ const WorldCupManageForm = () => {
             title,
             description,
             visibleType,
-            token
+            token,
         };
 
         e.preventDefault();
 
         mutation.mutate(newWorldCup);
-    }
-
+    };
 
     // 월드컵 업데이트를 한 후의 상태와 다르거나 처음 월드컵 상태(blank)일 때만 업데이트 버튼이 활성화된다.
     const isNotUpdateWorldCupState = (freezeWorldCup: any, worldCup: any) => {
-
-        const equalsUpdateWorldCup = freezeWorldCup.freezeTitle === worldCup.title &&
+        const equalsUpdateWorldCup =
+            freezeWorldCup.freezeTitle === worldCup.title &&
             freezeWorldCup.freezeDescription === worldCup.description &&
             freezeWorldCup.freezeVisibleType === worldCup.visibleType;
 
-        const blankWorldCup = freezeWorldCup.freezeTitle !== "" &&
-            freezeWorldCup.freezeDescription !== "" &&
-            freezeWorldCup.freezeVisibleType !== "";
+        const blankWorldCup =
+            freezeWorldCup.freezeTitle !== '' &&
+            freezeWorldCup.freezeDescription !== '' &&
+            freezeWorldCup.freezeVisibleType !== '';
 
         return equalsUpdateWorldCup && blankWorldCup;
-    }
-
-
-
+    };
 
     const disabledUpdateButton = () => {
         return (
             <div className="flex justify-end">
-                <button
-                    className="bg-gray-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                >
+                <button className="bg-gray-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                     새로운 월드컵 반영 완료
                 </button>
             </div>
-        )
-    }
-
-
+        );
+    };
 
     const enableUpdateButton = () => {
         return (
@@ -140,24 +119,20 @@ const WorldCupManageForm = () => {
                     월드컵 생성/수정
                 </button>
             </div>
-        )
-    }
-
-
-
+        );
+    };
 
     return (
         <div className="p-6 max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden">
             <div>
                 <div className="mb-4">
-
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
                         월드컵 제목
                     </label>
                     <input
                         type="text"
                         id="title"
-                        name='title'
+                        name="title"
                         value={title}
                         onChange={handleChange}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -206,7 +181,6 @@ const WorldCupManageForm = () => {
                 </div>
 
                 {isNotUpdateWorldCupState(freezeWorldCup, worldCup) ? disabledUpdateButton() : enableUpdateButton()}
-
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
-'use client'
+'use client';
 
-import { createContext } from "react";
+import { createContext } from 'react';
 
-export const WorldCupIdManageContext = createContext(0);
+export const WorldCupIdManageContext: any = createContext(0);

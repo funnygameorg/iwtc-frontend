@@ -1,10 +1,8 @@
 import { Console } from 'console';
 import React from 'react';
 
-
-
 // 플레이어 사용 위치에 따라 플레이어 크기 선택
-const getPlayerSize = (componentType) => {
+const getPlayerSize = (componentType: any) => {
     const uploadComponentWidth = 560;
     const uploadComponentHeight = 315;
 
@@ -18,13 +16,10 @@ const getPlayerSize = (componentType) => {
     } else {
         alert('sorry..');
     }
-}
-
-
+};
 
 // 유튜브 URL로 비디오 ID 획득
-const getVideoIdByYoutubeUrl = (data) => {
-
+const getVideoIdByYoutubeUrl = (data: any) => {
     let url;
     try {
         url = new URL(data);
@@ -32,34 +27,22 @@ const getVideoIdByYoutubeUrl = (data) => {
         const searchParams = new URLSearchParams(url.search);
 
         return searchParams.get('v');
-    } catch (err) {
+    } catch (err) {}
+};
 
-    }
-}
-
-
-
-
-const YoutubePlayer = ({ url, componentType }) => {
-
+const YoutubePlayer = ({ url, componentType }: any) => {
     const videoId = getVideoIdByYoutubeUrl(url);
 
     const embedUrl = `https://www.youtube.com/embed/${videoId}`;
-    const [width, height] = getPlayerSize(componentType);
+    const [width, height]: any = getPlayerSize(componentType);
     if (componentType !== 'uploadForm') {
         console.log(width, height);
     }
     return (
         <div>
-            <iframe
-                width={width}
-                height={height}
-                src={embedUrl}
-                title="YouTube Video Player"
-                allowFullScreen
-            ></iframe>
+            <iframe width={width} height={height} src={embedUrl} title="YouTube Video Player" allowFullScreen></iframe>
         </div>
     );
-}
+};
 
 export default YoutubePlayer;
