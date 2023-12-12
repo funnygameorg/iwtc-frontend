@@ -36,8 +36,8 @@ instance.interceptors.response.use(
     async (error: any) => {
         console.log('response error', error);
         if (error.response.status === 401) {
-            // const newToken = await newAccessToken();
-            // console.log('newToken', newToken);
+            const newToken = await newAccessToken();
+            console.log('newToken', newToken);
             return;
         }
         // if (typeof window !== 'undefined') {
