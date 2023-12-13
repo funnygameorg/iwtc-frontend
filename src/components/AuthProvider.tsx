@@ -22,9 +22,7 @@ export const AuthProvider = ({ children }: any) => {
     }, []);
 
     useEffect(() => {
-        if (getAccessToken()) {
-            console.log('rendering 2');
-
+        if (getAccessToken() && getUserInfo()) {
             loginCheck();
         }
     }, []);

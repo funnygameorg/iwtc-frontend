@@ -51,14 +51,14 @@ export const userMeSummary = async (token: string) => {
 export const newAccessToken = async () => {
     const refreshToken = getRefreshToken();
     const accessToken = getAccessToken();
-
+    const params = {
+        accessToken,
+        refreshToken,
+    };
     const headers = {
         'Content-Type': 'application/json',
-        'access-token': `${refreshToken}`,
-        'refresh-token': `${accessToken}`,
     };
-    const param = {};
-    const response = await ajaxPost(`/new-access-token`, null, {
+    const response = await ajaxPost(`/new-access-token`, params, {
         headers: headers,
         timeout: 5000,
     });

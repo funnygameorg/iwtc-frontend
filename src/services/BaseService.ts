@@ -1,6 +1,8 @@
 import { BASE_URL } from '@/consts';
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
-import { newAccessToken } from './MemberService';
+import { newAccessToken, userSignOut } from './MemberService';
+import { localStorageClear } from '@/stores/LocalStore';
+import { setToken } from '@/utils/TokenManager';
 
 const instance = axios.create({
     baseURL: `${BASE_URL}api/`,
@@ -37,7 +39,23 @@ instance.interceptors.response.use(
         console.log('response error', error);
         if (error.response.status === 401) {
             const newToken = await newAccessToken();
-            console.log('newToken', newToken);
+            if (newToken.code === 1010101) {
+                const response = await userSignOut();
+                if (response) {
+                    localStorageClear();
+                    // logout();
+                    window.alert('로그인이 만료되었습니다. 다시 로그인을 해주세요.');
+                }
+            } else {
+                const { newAccessToken, refreshToken } = newToken.data;
+                // // ACCESS_TOKEN 저장
+                setToken('ACCESS_TOKEN', newAccessToken);
+                setToken('REFRESH_TOKEN', refreshToken);
+                error.config.headers['access-token'] = `${newAccessToken}`;
+                return axios.request(error.config);
+                // const userInfo = await userMeSummary(token);
+                // setUserInfo(userInfo.data);
+            }
             return;
         }
         // if (typeof window !== 'undefined') {

@@ -30,8 +30,11 @@ const HomeLoginForm = () => {
     const { mutate } = useMutation(userSignIn, {
         onSuccess: async (data) => {
             const token = data.headers['access-token'];
+            const refreshToken = data.headers['refresh-token'];
+
             // ACCESS_TOKEN 저장
             setToken('ACCESS_TOKEN', token);
+            setToken('REFRESH_TOKEN', refreshToken);
             const userInfo = await userMeSummary(token);
             setUserInfo(userInfo.data);
             login();
