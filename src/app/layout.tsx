@@ -6,6 +6,7 @@ import RouteHandler from '@/components/RouteHandler';
 import Providers from '@/hooks/Provider';
 import { AuthProvider } from '@/components/AuthProvider';
 import Header from '@/components/common/Header';
+import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,18 +17,23 @@ export const metadata: Metadata = {
 // 이전 버전의 _app 파일의 역할을 대신함
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <html lang="en">
-            <body className={inter.className} suppressHydrationWarning={true}>
-                <Providers>
-                    <AuthProvider>
-                        {/* TODO: 공통 header적용 */}
-                        <Header />
-                        <RouteHandler />
-                        {children}
-                    </AuthProvider>
-                </Providers>
-            </body>
-        </html>
+        <>
+            <html lang="en">
+                <head>
+                    <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+                </head>
+                <body className={inter.className} suppressHydrationWarning={true}>
+                    <Providers>
+                        <AuthProvider>
+                            {/* TODO: 공통 header적용 */}
+                            <Header />
+                            <RouteHandler />
+                            {children}
+                        </AuthProvider>
+                    </Providers>
+                </body>
+            </html>
+        </>
     );
 };
 
