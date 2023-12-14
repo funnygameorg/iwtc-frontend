@@ -19,9 +19,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <>
             <html lang="en">
-                <head>
+                {/* <head>
                     <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
-                </head>
+                </head> */}
                 <body className={inter.className} suppressHydrationWarning={true}>
                     <Providers>
                         <AuthProvider>
