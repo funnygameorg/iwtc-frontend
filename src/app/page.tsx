@@ -6,15 +6,6 @@ const Home = () => {
     return (
         <div>
             <div className="flex">
-                <aside
-                    id="logo-sidebar"
-                    className="left-0 z-40 w-64 h-screen  transition-transform bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
-                    aria-label="Sidebar"
-                >
-                    <HomeLoginForm />
-                    <Sidebar />
-                </aside>
-
                 <div>
                     <HydratedWCList />
                 </div>
