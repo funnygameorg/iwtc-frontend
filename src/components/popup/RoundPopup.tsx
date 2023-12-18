@@ -24,9 +24,8 @@ const RoundPopup = ({ roundList, setSelectRound }: IProps) => {
                 id="crypto-modal"
                 tabIndex={-1}
                 aria-hidden="true"
-                className={`${
-                    isOnPopup ? '' : 'hidden'
-                } grid place-items-center fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full`}
+                className={`${isOnPopup ? '' : 'hidden'
+                    } grid place-items-center fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full`}
             >
                 <div className="relative w-full max-w-md max-h-full">
                     {/* <!-- Modal content --> */}
@@ -73,21 +72,11 @@ const RoundPopup = ({ roundList, setSelectRound }: IProps) => {
                                             className="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white"
                                         >
                                             <span className="flex-1 ml-3 whitespace-nowrap">{item}강</span>
-                                            <span className="inline-flex items-center justify-center px-2 py-0.5 ml-3 text-xs font-medium text-gray-500 bg-gray-200 rounded dark:bg-gray-700 dark:text-gray-400">
-                                                Popular
-                                            </span>
                                         </a>
                                     </li>
                                 ))}
                             </ul>
-                            <div>
-                                <a
-                                    href="#"
-                                    className="inline-flex items-center text-xs font-normal text-gray-500 hover:underline dark:text-gray-400"
-                                >
-                                    Why do I need to connect with my wallet?
-                                </a>
-                            </div>
+
                         </div>
                     </div>
                 </div>
