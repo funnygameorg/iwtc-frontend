@@ -1,9 +1,7 @@
-import { to } from '@react-spring/web';
-import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { ajaxGet, ajaxPost } from './BaseService';
+import { ajaxGet } from './BaseService';
 
-const createHeader = (token: any) => {
+const createHeader = (token) => {
     return {
         'Content-Type': 'application/json',
         'access-token': `${token}`,
@@ -16,7 +14,7 @@ export const createWorldCup = async ({ title, description, visibleType, token }:
 
     const param = { title, description, visibleType };
     console.log('월드컵 생성 시 요청값 ', authHeaders, param);
-    const response = await ajaxPost(`/world-cups/me`, param, { headers: authHeaders });
+    const response = await axios.post(`http://localhost:8080/api/world-cups/me`, param, { headers: authHeaders });
     console.log('response ===>', response);
     return response.data;
 };
@@ -46,8 +44,8 @@ export const createWorldCupContents = async ({
 }) => {
     const authHeaders = createHeader(token);
 
-    const response = await ajaxPost(
-        `/world-cups/me/${worldCupId}/contents`,
+    const response = await axios.post(
+        `http://localhost:8080/api/world-cups/me/${worldCupId}/contents`,
         { data: params },
         { headers: authHeaders }
     );
@@ -61,7 +59,7 @@ export const createWorldCupContents = async ({
 export const getMyWorldCupList = async (token: string) => {
     const authHeaders = createHeader(token);
 
-    const response = await ajaxGet('/world-cups/me', {
+    const response = await axios.get('http://localhost:8080/api/world-cups/me', {
         headers: authHeaders,
         timeout: 5000,
     });
@@ -77,7 +75,7 @@ export const getMyWorldCupList = async (token: string) => {
 export const getMyWorldCup = async (worldCupId: number, token: string) => {
     const authHeaders = createHeader(token);
 
-    const response = await axios.get(`/world-cups/me/${worldCupId}`, {
+    const response = await axios.get(`http://localhost:8080/api/world-cups/me/${worldCupId}`, {
         headers: authHeaders,
         timeout: 5000,
     });
@@ -93,10 +91,50 @@ export const getMyWorldCup = async (worldCupId: number, token: string) => {
 export const getMyWorldCupContentsList = async (worldCupId: number, token: string) => {
     const authHeaders = createHeader(token);
 
-    const response = await axios.get(`/world-cups/me/${worldCupId}/manage-contents`, {
+    const response = await axios.get(`http://localhost:8080/api/world-cups/me/${worldCupId}/manage-contents`, {
         headers: authHeaders,
         timeout: 5000,
     });
+
+    console.log('response ===>', response);
+
+    if (response) {
+        return response;
+    }
+};
+
+// 이상형 컨텐츠 1건 수정
+export const updateMyWorldCupContents = async (worldCupId: number, contentsId: number, params: any, token: string) => {
+    console.log(params);
+    const authHeaders = createHeader(token);
+
+    const response = await axios.put(
+        `http://localhost:8080/api/world-cups/me/${worldCupId}/contents/${contentsId}`,
+        params,
+        {
+            headers: authHeaders,
+            timeout: 5000,
+        }
+    );
+
+    console.log('response ===>', response);
+
+    if (response) {
+        return response;
+    }
+};
+
+// 이상형 컨텐츠 1건 삭제
+export const removeMyWorldCupContents = async (worldCupId: number, contentsId: number, token: string) => {
+    const authHeaders = createHeader(token);
+
+    const response = await axios.delete(
+        `http://localhost:8080/api/world-cups/me/${worldCupId}/contents/${contentsId}`,
+        {
+            headers: authHeaders,
+            timeout: 5000,
+        }
+    );
 
     console.log('response ===>', response);
 
