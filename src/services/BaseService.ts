@@ -83,10 +83,14 @@ export const ajaxPost = async <T = any>(subUrl: string, params?: any, headers?: 
     return instance.post(subUrl, params);
 };
 
-export const ajaxPut = async <T = any>(subUrl: string, params: any): Promise<AxiosResponse<T>> => {
-    return instance.put(subUrl, params);
+export const ajaxPut = async <T = any>(subUrl: string, params: any, headers?: any): Promise<AxiosResponse<T>> => {
+    return instance.put(subUrl, params, headers);
 };
 
-export const ajaxDelete = async <T = any>(subUrl: string, params: any): Promise<AxiosResponse<T>> => {
-    return instance.delete(subUrl, params);
+export const ajaxDelete = async <T = any>(
+    subUrl: string,
+    params: any = {}, // 기본값으로 빈 객체 설정
+    headers?: any
+): Promise<AxiosResponse<T>> => {
+    return instance.delete(subUrl, { data: params, headers: headers });
 };
