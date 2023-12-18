@@ -1,4 +1,3 @@
-import { Console } from 'console';
 import React from 'react';
 
 // 플레이어 사용 위치에 따라 플레이어 크기 선택
@@ -35,9 +34,7 @@ const YoutubePlayer = ({ url, componentType }: any) => {
 
     const embedUrl = `https://www.youtube.com/embed/${videoId}`;
     const [width, height]: any = getPlayerSize(componentType);
-    if (componentType !== 'uploadForm') {
-        console.log(width, height);
-    }
+
     return (
         <div>
             <iframe width={width} height={height} src={embedUrl} title="YouTube Video Player" allowFullScreen></iframe>

@@ -72,3 +72,35 @@ export const getMyWorldCupList = async (token: string) => {
         return response;
     }
 };
+
+// 이상형 리스트 조회
+export const getMyWorldCup = async (worldCupId: number, token: string) => {
+    const authHeaders = createHeader(token);
+
+    const response = await axios.get(`/world-cups/me/${worldCupId}`, {
+        headers: authHeaders,
+        timeout: 5000,
+    });
+
+    console.log('response ===>', response);
+
+    if (response) {
+        return response;
+    }
+};
+
+// 이상형 컨텐츠 리스트 조회
+export const getMyWorldCupContentsList = async (worldCupId: number, token: string) => {
+    const authHeaders = createHeader(token);
+
+    const response = await axios.get(`/world-cups/me/${worldCupId}/manage-contents`, {
+        headers: authHeaders,
+        timeout: 5000,
+    });
+
+    console.log('response ===>', response);
+
+    if (response) {
+        return response;
+    }
+};

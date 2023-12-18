@@ -7,13 +7,14 @@ import { useMutation } from '@tanstack/react-query';
 import React, { useContext, useEffect, useState } from 'react';
 import { isContext } from 'vm';
 
-/*
-    게임 관리 폼에서 월드컵 게임에 관한 내용을 표현하는 폼
-
-*/
-const WorldCupManageForm = () => {
-    const { isCreateWorldCup, setIsCreateWorldCup }: any = useContext(WorldCupManageContext);
-    const { worldCupId, setWorldCupId }: any = useContext(WorldCupIdManageContext);
+/**
+ * 게임 관리 폼에서 월드컵 게임에 관한 내용을 표현하는 폼
+ * @param params - 월드컵 게임수정 버튼으로 들어오면 기존 월드컵의 내용이 들어온다.
+ * @returns 월드컵 게임 수정 컴포넌트
+ */
+const WorldCupManageForm = (params) => {
+    const { isCreateWorldCup, setIsCreateWorldCup } = useContext(WorldCupManageContext);
+    const { worldCupId, setWorldCupId } = useContext(WorldCupIdManageContext);
 
     const [worldCup, setValue] = useState({
         title: '',
@@ -24,8 +25,23 @@ const WorldCupManageForm = () => {
     const [freezeWorldCup, setFreezeWorldCup] = useState({
         freezeTitle: '',
         freezeDescription: '',
-        freezeVisibleType: '',
+        freezeVisibleType: 'PUBLIC',
     });
+
+    useEffect(() => {
+        if (params.initWorldCupGame !== undefined) {
+            setValue({
+                title: params.initWorldCupGame.title,
+                description: params.initWorldCupGame.description,
+                visibleType: params.initWorldCupGame.visibleType,
+            });
+            setFreezeWorldCup({
+                freezeTitle: params.initWorldCupGame.title,
+                freezeDescription: params.initWorldCupGame.description,
+                freezeVisibleType: params.initWorldCupGame.visibleType,
+            });
+        }
+    }, [params.initWorldCupGame]);
 
     const { title, description, visibleType } = worldCup;
 
@@ -84,19 +100,18 @@ const WorldCupManageForm = () => {
         mutation.mutate(newWorldCup);
     };
 
-    // 월드컵 업데이트를 한 후의 상태와 다르거나 처음 월드컵 상태(blank)일 때만 업데이트 버튼이 활성화된다.
-    const isNotUpdateWorldCupState = (freezeWorldCup: any, worldCup: any) => {
+    const updatableWorldCupState = (freezeWorldCup: any, worldCup: any) => {
         const equalsUpdateWorldCup =
             freezeWorldCup.freezeTitle === worldCup.title &&
             freezeWorldCup.freezeDescription === worldCup.description &&
             freezeWorldCup.freezeVisibleType === worldCup.visibleType;
 
         const blankWorldCup =
-            freezeWorldCup.freezeTitle !== '' &&
-            freezeWorldCup.freezeDescription !== '' &&
-            freezeWorldCup.freezeVisibleType !== '';
+            freezeWorldCup.freezeTitle === '' &&
+            freezeWorldCup.freezeDescription === '' &&
+            freezeWorldCup.freezeVisibleType === '';
 
-        return equalsUpdateWorldCup && blankWorldCup;
+        return !blankWorldCup && !equalsUpdateWorldCup;
     };
 
     const disabledUpdateButton = () => {
@@ -153,7 +168,7 @@ const WorldCupManageForm = () => {
                 </div>
 
                 <div className="mb-4">
-                    <span className="text-gray-700 text-sm font-bold mb-2">노출 여부</span>
+                    <span className="text-gray-700 text-sm font-bold mb-2">공개 여부</span>
                     <div className="mt-2">
                         <label className="inline-flex items-center ">
                             <input
@@ -180,7 +195,7 @@ const WorldCupManageForm = () => {
                     </div>
                 </div>
 
-                {isNotUpdateWorldCupState(freezeWorldCup, worldCup) ? disabledUpdateButton() : enableUpdateButton()}
+                {updatableWorldCupState(freezeWorldCup, worldCup) ? enableUpdateButton() : disabledUpdateButton()}
             </div>
         </div>
     );

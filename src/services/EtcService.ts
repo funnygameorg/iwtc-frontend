@@ -18,3 +18,12 @@ export const getMediaFileAPI = async (mediaFileId: number) => {
         console.log('E');
     }
 };
+
+export const getMediaFile = async (mediaFileId: number) => {
+    const response = await ajaxGet(`/media-files/${mediaFileId}`, { timeout: 20000 });
+
+    // console.log("조회 데이터", response?.data.data.mediaData);
+    if (response) {
+        return response;
+    }
+};
