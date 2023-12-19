@@ -12,9 +12,9 @@ import { isContext } from 'vm';
  * @param params - 월드컵 게임수정 버튼으로 들어오면 기존 월드컵의 내용이 들어온다.
  * @returns 월드컵 게임 수정 컴포넌트
  */
-const WorldCupManageForm = (params) => {
-    const { isCreateWorldCup, setIsCreateWorldCup } = useContext(WorldCupManageContext);
-    const { worldCupId, setWorldCupId } = useContext(WorldCupIdManageContext);
+const WorldCupManageForm = (params: any) => {
+    const { isCreateWorldCup, setIsCreateWorldCup }: any = useContext(WorldCupManageContext);
+    const { worldCupId, setWorldCupId }: any = useContext(WorldCupIdManageContext);
 
     const [worldCup, setValue] = useState({
         title: '',

@@ -11,7 +11,7 @@ import { getAccessToken } from '@/utils/TokenManager';
 /*
     월드컵 관리 페이지를 표현합니다.
 */
-const ManageForm = (params) => {
+const ManageForm = (params: any) => {
     // 월드컵 데이터
     const [worldCupManageContext, setWorldCupManageContext] = useState('');
     console.log('월드컵 아이디', worldCupManageContext);
@@ -22,13 +22,13 @@ const ManageForm = (params) => {
     const [worldCupId, setWorldCupId] = useState(0);
 
     // 월드컵이 현재 생성 상태인가?
-    const [isCreateWorldCup, setIsCreateWorldCup] = useState('');
+    const [isCreateWorldCup, setIsCreateWorldCup] = useState<any>('');
 
     useEffect(() => {
         // 월드컵 게임 상태 저장
         const fetchMyWorldCup = async () => {
             try {
-                const myWorldCup = await getMyWorldCup(worldCupId, accessToken);
+                const myWorldCup: any = await getMyWorldCup(worldCupId, accessToken);
 
                 setWorldCupManageContext(myWorldCup.data.data);
             } catch (error) {
@@ -39,7 +39,7 @@ const ManageForm = (params) => {
         // 월드컵 게임 컨텐츠 리스트 상태 저장
         const fetchMyWorldCupContents = async () => {
             try {
-                const myWorldCupContents = await getMyWorldCupContentsList(worldCupId, accessToken);
+                const myWorldCupContents: any = await getMyWorldCupContentsList(worldCupId, accessToken);
 
                 setWorldCupContentsManageContext(myWorldCupContents.data.data);
             } catch (error) {

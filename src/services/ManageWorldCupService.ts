@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ajaxDelete, ajaxGet, ajaxPost, ajaxPut } from './BaseService';
 
-const createHeader = (token) => {
+const createHeader = (token: any) => {
     return {
         'Content-Type': 'application/json',
         'access-token': `${token}`,

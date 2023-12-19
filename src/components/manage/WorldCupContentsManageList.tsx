@@ -56,11 +56,11 @@ const WorldCupContentsManageList = () => {
         새로운 컨텐츠를 적용
     */
 
-    const { worldCupContentsManageContext, setWorldCupContentsManageContext } =
+    const { worldCupContentsManageContext, setWorldCupContentsManageContext }: any =
         useContext(WorldCupContentsManageContext);
 
     // 비디오 형식 컨텐츠 데이터 검증
-    const verifyVideoTypeContents = ({ videoStartTime, videoPlayDuration }) => {
+    const verifyVideoTypeContents = ({ videoStartTime, videoPlayDuration }: any) => {
         const size5AndOnlyNumberRegex = /^\d{5}$/;
         if (!size5AndOnlyNumberRegex.test(videoStartTime)) {
             alert("'영상 시작 시간'은 '00000'의 형식입니다. \n 예 : 10분 1초 -> 01001, 0분 30초 -> 00030");
@@ -74,7 +74,7 @@ const WorldCupContentsManageList = () => {
     };
 
     // 파일 형식 컨텐츠 데이터 검증
-    const verifyFileTypeContents = ({ mediaPath, originalName }) => {
+    const verifyFileTypeContents = ({ mediaPath, originalName }: any) => {
         if (mediaPath === '' || originalName === '') {
             alert('파일이 존재하지 않습니다.');
             throw Error();
@@ -82,7 +82,7 @@ const WorldCupContentsManageList = () => {
     };
 
     // 컨텐츠 데이터 검증 공통 파트
-    const verifyAllTypeContents = ({ contentsName, visibleType, fileType }) => {
+    const verifyAllTypeContents = ({ contentsName, visibleType, fileType }: any) => {
         if (contentsName === '') {
             alert('컨텐츠 이름이 없습니다.');
             throw Error();
@@ -122,13 +122,13 @@ const WorldCupContentsManageList = () => {
             videoPlayDuration,
         };
         handleMediaFileType('');
-        setWorldCupContentsManageContext((prev) => [...prev, newContent]);
+        setWorldCupContentsManageContext((prev: any) => [...prev, newContent]);
     };
 
     // 공개 여부 상태
     const [selectedValue, setSelectedValue] = useState('option1');
 
-    const handleVisibleType = (value) => {
+    const handleVisibleType = (value: any) => {
         setWorldCupContents((prevWorldCupContents) => ({
             ...prevWorldCupContents,
             visibleType: value,
@@ -140,7 +140,7 @@ const WorldCupContentsManageList = () => {
     // 생성하기 원하는 이상형의 미디어파일 타입 상태
     const [mediaFileType, setMediaFileType] = useState('');
 
-    const handleMediaFileType = (value) => {
+    const handleMediaFileType = (value: any) => {
         setWorldCupContents({
             contentsName: '',
             visibleType: 'PUBLIC',
@@ -153,7 +153,7 @@ const WorldCupContentsManageList = () => {
         });
         setIsImageLoaded(false);
         if (imgRef.current) {
-            imgRef.current.src = null;
+            imgRef.current.src = '';
         }
         setYoutubeUrl('');
         setMediaFileType(value);
@@ -184,9 +184,9 @@ const WorldCupContentsManageList = () => {
                 if (typeof e.target.result !== 'string' || !imgRef.current) return;
 
                 imgRef.current.src = e.target.result;
-                setWorldCupContents((prevWorldCupContents) => ({
+                setWorldCupContents((prevWorldCupContents: any) => ({
                     ...prevWorldCupContents,
-                    mediaPath: e.target.result,
+                    mediaPath: e?.target?.result,
                 }));
             });
 
@@ -402,7 +402,9 @@ const WorldCupContentsManageList = () => {
         <div>
             {createWorldCupComponent()}
             {applyContentsList.length !== 0 ? (
-                applyContentsList.map((contents, index) => <ManageCardWrapper contents={contents} index={index} />)
+                applyContentsList.map((contents: any, index: number) => (
+                    <ManageCardWrapper key={index} contents={contents} index={index} />
+                ))
             ) : (
                 <div></div>
             )}

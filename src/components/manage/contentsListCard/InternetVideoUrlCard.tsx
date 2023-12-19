@@ -7,16 +7,16 @@ import exp from 'constants';
 import Image from 'next/image';
 import { useContext, useEffect, useState } from 'react';
 
-const InternetVideoUrlCard = ({ index, contents }) => {
-    const { worldCupContentsManageContext, setWorldCupContentsManageContext } =
+const InternetVideoUrlCard = ({ index, contents }: any) => {
+    const { worldCupContentsManageContext, setWorldCupContentsManageContext }: any =
         useContext(WorldCupContentsManageContext);
 
     // 유튜브 영상 플레이어에 제공한다.
     const [youtubeUrl, setYoutubeUrl] = useState('');
 
-    const { worldCupId, setWorldCupId } = useContext(WorldCupIdManageContext);
+    const { worldCupId, setWorldCupId }: any = useContext(WorldCupIdManageContext);
 
-    const [mediaData, setMediaData] = useState({});
+    const [mediaData, setMediaData] = useState<any>({});
 
     const [isUpdateMode, setIsUpdateMode] = useState(false);
 
@@ -35,10 +35,12 @@ const InternetVideoUrlCard = ({ index, contents }) => {
     }, []);
 
     // 해당 요소 삭제
-    const removeContents = (contentsName) => {
+    const removeContents = (contentsName: any) => {
         const accessToken = getAccessToken();
         removeMyWorldCupContents(worldCupId, mediaData.contentsId, accessToken);
-        setWorldCupContentsManageContext((prev) => prev.filter((contents) => contents.contentsName !== contentsName));
+        setWorldCupContentsManageContext((prev: any) =>
+            prev.filter((contents: any) => contents.contentsName !== contentsName)
+        );
     };
 
     // 해당 요소 수정
@@ -46,19 +48,19 @@ const InternetVideoUrlCard = ({ index, contents }) => {
         setIsUpdateMode(true);
     };
 
-    const changeVideo = (e) => {
+    const changeVideo = (e: any) => {
         setYoutubeUrl(e.target.value);
     };
 
     const handleMediaData = (e: any) => {
         const { name, value } = e.target;
 
-        setMediaData((prevData) => ({
+        setMediaData((prevData: any) => ({
             ...prevData,
             [name]: value,
         }));
         if (name === 'visibleType') {
-            forceUpdate({});
+            // forceUpdate({}); //TODO: forceUpdate 사용처 확인
         }
     };
 

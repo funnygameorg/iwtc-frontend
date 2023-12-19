@@ -6,15 +6,15 @@ import { getAccessToken } from '@/utils/TokenManager';
 import Image from 'next/image';
 import { useContext, useEffect, useState } from 'react';
 
-const StaticMediaFileTypeCard = ({ index, contents }) => {
-    const { worldCupContentsManageContext, setWorldCupContentsManageContext } =
+const StaticMediaFileTypeCard = ({ index, contents }: any) => {
+    const { worldCupContentsManageContext, setWorldCupContentsManageContext }: any =
         useContext(WorldCupContentsManageContext);
 
-    const { worldCupId, setWorldCupId } = useContext(WorldCupIdManageContext);
+    const { worldCupId, setWorldCupId }: any = useContext(WorldCupIdManageContext);
 
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState<any>('');
 
-    const [mediaData, setMediaData] = useState({});
+    const [mediaData, setMediaData] = useState<any>({});
 
     const [isUpdateMode, setIsUpdateMode] = useState(false);
 
@@ -34,18 +34,20 @@ const StaticMediaFileTypeCard = ({ index, contents }) => {
     const handleMediaData = (e: any) => {
         const { name, value } = e.target;
 
-        setMediaData((prevData) => ({
+        setMediaData((prevData: any) => ({
             ...prevData,
             [name]: value,
         }));
     };
 
     // 해당 요소 삭제
-    const removeContents = (contentsName) => {
+    const removeContents = (contentsName: any) => {
         const accessToken = getAccessToken();
         console.log(worldCupId, mediaData.contentsId);
         removeMyWorldCupContents(worldCupId, mediaData.contentsId, accessToken);
-        setWorldCupContentsManageContext((prev) => prev.filter((contents) => contents.contentsName !== contentsName));
+        setWorldCupContentsManageContext((prev: any) =>
+            prev.filter((contents: any) => contents.contentsName !== contentsName)
+        );
     };
 
     const updateContentsMode = () => {
@@ -69,17 +71,17 @@ const StaticMediaFileTypeCard = ({ index, contents }) => {
         setIsUpdateMode(false);
     };
 
-    const changeImage = (e) => {
+    const changeImage = (e: any) => {
         const imageFile = e.target.files[0];
         const reader = new FileReader();
 
         reader.addEventListener('load', (e: ProgressEvent<FileReader>) => {
-            setImage(e.target.result);
+            setImage(e?.target?.result);
         });
 
         reader.readAsDataURL(imageFile);
 
-        setMediaData((prevData) => ({
+        setMediaData((prevData: any) => ({
             ...prevData,
             originalName: imageFile.name,
         }));

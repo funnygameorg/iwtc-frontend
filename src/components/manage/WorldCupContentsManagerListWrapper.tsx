@@ -12,19 +12,19 @@ import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
  * @param initWorldCupGameContentsList 월드컵 게임수정 버튼으로 들어오면 기존 월드컵 컨텐츠가 들어온다.
  * @returns
  */
-const WorldCupContentsManageListWrapper = (params) => {
-    const { worldCupContentsManageContext, setWorldCupContentsManageContext } =
+const WorldCupContentsManageListWrapper = (params: any) => {
+    const { worldCupContentsManageContext, setWorldCupContentsManageContext }: any =
         useContext(WorldCupContentsManageContext);
 
-    const { isCreateWorldCup } = useContext(WorldCupManageContext);
+    const { isCreateWorldCup }: any = useContext(WorldCupManageContext);
 
-    const { worldCupId, setWorldCupId } = useContext(WorldCupIdManageContext);
+    const { worldCupId, setWorldCupId }: any = useContext(WorldCupIdManageContext);
 
     const [createdContentsNames, setCreatedContentsNames] = useState([]);
 
     useEffect(() => {
         if (params.initWorldCupGameContentsList) {
-            const contentsLst = params.initWorldCupGameContentsList.map((item) => ({
+            const contentsLst = params.initWorldCupGameContentsList.map((item: any) => ({
                 contentsId: item.id,
                 contentsName: item.contentsName,
                 visibleType: item.visibleType,
@@ -54,7 +54,7 @@ const WorldCupContentsManageListWrapper = (params) => {
      * 수정된 월드컵 컨텐츠 서버에 전송
      */
     const transformToCreateWorldCupContentsType = (contextData: any): createWorldCupContentsType => {
-        return contextData.map((item) => ({
+        return contextData.map((item: any) => ({
             contentsName: item.contentsName,
             visibleType: item.visibleType,
             createMediaFileRequest: {
@@ -69,7 +69,7 @@ const WorldCupContentsManageListWrapper = (params) => {
 
     const createNewWorldCupContentsList = () => {
         console.log('데이터 전 ', worldCupContentsManageContext);
-        const newContentsList = worldCupContentsManageContext.filter((item) => item.id === undefined);
+        const newContentsList = worldCupContentsManageContext.filter((item: any) => item.id === undefined);
 
         const bindingNewWorldCupContents = transformToCreateWorldCupContentsType(newContentsList);
 
@@ -96,8 +96,8 @@ const WorldCupContentsManageListWrapper = (params) => {
         },
     });
 
-    const getSizeNewContents = (newWorldCupContents) =>
-        newWorldCupContents.filter((item) => item.id === undefined).length;
+    const getSizeNewContents = (newWorldCupContents: any) =>
+        newWorldCupContents.filter((item: any) => item.id === undefined).length;
 
     // 반환 컴포넌트
     return (
