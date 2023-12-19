@@ -1,247 +1,54 @@
-import YoutubePlayer from '@/components/youtubePlayer/YoutubePlayer';
-import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageContext';
-import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
-import { removeMyWorldCupContents, updateMyWorldCupContents } from '@/services/ManageWorldCupService';
-import { getAccessToken } from '@/utils/TokenManager';
-import exp from 'constants';
-import Image from 'next/image';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import InternetVideoUrlCard from './InternetVideoUrlCard';
+import StaticMediaFileTypeCard from './StaticMediaFileTypeCard';
+import { getMediaFile } from '@/services/EtcService';
 
-const InternetVideoUrlCard = ({ index, contents }) => {
-    const { worldCupContentsManageContext, setWorldCupContentsManageContext } =
-        useContext(WorldCupContentsManageContext);
-
-    // 유튜브 영상 플레이어에 제공한다.
-    const [youtubeUrl, setYoutubeUrl] = useState('');
-
-    const { worldCupId, setWorldCupId } = useContext(WorldCupIdManageContext);
-
-    const [mediaData, setMediaData] = useState({});
-
-    const [isUpdateMode, setIsUpdateMode] = useState(false);
-
-    useEffect(() => {
-        setYoutubeUrl(contents.mediaData);
-
-        setMediaData({
-            contentsId: contents.contentsId,
-            contentsName: contents.contentsName,
-            originalName: contents.originalName,
-            visibleType: contents.visibleType,
-            mediaData: contents.mediaData,
-            videoStartTime: contents.videoStartTime,
-            videoPlayDuration: contents.videoPlayDuration,
-        });
-    }, []);
-
-    // 해당 요소 삭제
-    const removeContents = (contentsName) => {
-        const accessToken = getAccessToken();
-        removeMyWorldCupContents(worldCupId, mediaData.contentsId, accessToken);
-        setWorldCupContentsManageContext((prev) => prev.filter((contents) => contents.contentsName !== contentsName));
+const ManageCardWrapper = ({ contents, index }) => {
+    // DB에서 가져온 데이터 양식과 새로 추가된 컨텐츠의 데이터 양식이 다르다.
+    // 하위 컴포넌트에 뿌려주기 위해 포맷을 통일시킨다.
+    // ByServer를 우선적용하고 없다면 ByClient를 적용한다.
+    const syncFormatMediaData = (contentsByClient, contentsByServer) => {
+        return {
+            contentsId: contentsByClient?.id || undefined,
+            contentsName: contentsByClient.contentsName,
+            videoStartTime: contentsByServer?.videoStartTime || contentsByClient.videoStartTime,
+            videoPlayDuration: contentsByServer?.videoPlayDuration || contentsByClient.videoPlayDuration,
+            visibleType: contentsByServer?.visibleType || contentsByClient.visibleType,
+            fileType: contentsByServer?.fileType || contentsByClient.filType,
+            mediaData: contentsByServer?.mediaData || contentsByClient.mediaPath,
+            mediaFileId: contentsByServer?.mediaFileId,
+        };
     };
 
-    // 해당 요소 수정
-    const updateContentsMode = () => {
-        setIsUpdateMode(true);
-    };
+    const [mediaData, setMediaData] = useState('');
 
-    const changeVideo = (e) => {
-        setYoutubeUrl(e.target.value);
-    };
+    // 월드컵 게임 상태 저장
+    const fetchMediaFile = async () => {
+        try {
+            const data = await getMediaFile(contents.mediaFileId);
+            const getMediaFileData = data?.data.data;
 
-    const handleMediaData = (e: any) => {
-        const { name, value } = e.target;
-
-        setMediaData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-        if (name === 'visibleType') {
-            forceUpdate({});
+            setMediaData(syncFormatMediaData(contents, getMediaFileData));
+        } catch (error) {
+            console.error('월드컵 정보 가져오기 실패:', error);
         }
     };
 
-    const applyUpdateContents = () => {
-        const requestBody = {
-            contentsName: mediaData.contentsName,
-            originalName: '',
-            mediaData: youtubeUrl,
-            videoStartTime: mediaData.videoStartTime,
-            videoPlayDuration: mediaData.videoPlayDuration,
-            visibleType: mediaData.visibleType,
-        };
-
-        const accessToken = getAccessToken();
-        console.log('전송 데이터', requestBody);
-
-        updateMyWorldCupContents(worldCupId, mediaData.contentsId, requestBody, accessToken);
-
-        setIsUpdateMode(false);
-    };
+    useEffect(() => {
+        if (contents.mediaFileId !== undefined) {
+            fetchMediaFile();
+        } else {
+            setMediaData(syncFormatMediaData(contents, undefined));
+        }
+    }, []);
 
     return (
-        <div>
-            <div key={index} className="mb-4 p-4 border rounded-xl shadow-sm">
-                <div className="flex justify-between">
-                    <div className="flex min-w-0 gap-x-4">
-                        <div className="flex min-w-0 gap-x-4">
-                            <YoutubePlayer url={youtubeUrl} componentType={'uploadList'} />
-                        </div>
-
-                        <div className="flex-1">
-                            <div className="mb-2">
-                                <strong>컨텐츠 이름:</strong>
-                                <span className="ml-1">
-                                    {!isUpdateMode ? (
-                                        <span>{mediaData.contentsName}</span>
-                                    ) : (
-                                        <span>
-                                            <input
-                                                id="textInput"
-                                                type="text"
-                                                className="p-1 border rounded-xl"
-                                                placeholder="이상형 이름"
-                                                name="contentsName"
-                                                value={mediaData.contentsName}
-                                                onChange={handleMediaData}
-                                            />
-                                        </span>
-                                    )}
-                                </span>
-                            </div>
-                            <div className="mb-2">
-                                <strong>영상 주소: </strong>
-                                <span className="ml-1">
-                                    {!isUpdateMode ? (
-                                        <a
-                                            href={youtubeUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-blue-500 hover:underline"
-                                        >
-                                            {youtubeUrl}
-                                        </a>
-                                    ) : (
-                                        <input
-                                            id="textInput"
-                                            type="text"
-                                            className="p-1 border rounded-xl"
-                                            placeholder="YouTube URL"
-                                            name="youtubeUrl"
-                                            onChange={changeVideo}
-                                            value={youtubeUrl}
-                                        />
-                                    )}
-                                </span>
-                            </div>
-
-                            <div className="mb-2">
-                                <strong>영상 시작 시간:</strong>
-                                <span className="ml-1">
-                                    {!isUpdateMode ? (
-                                        <span>{mediaData.videoStartTime}</span>
-                                    ) : (
-                                        <span>
-                                            <input
-                                                id="textInput"
-                                                type="text"
-                                                className="p-1 border rounded-xl"
-                                                placeholder="ex 00100"
-                                                name="videoStartTime"
-                                                onChange={handleMediaData}
-                                                value={mediaData.videoStartTime}
-                                            />
-                                        </span>
-                                    )}
-                                </span>
-                            </div>
-
-                            <div className="mb-2">
-                                <strong>반복 시간:</strong>
-                                <span className="ml-1">
-                                    {!isUpdateMode ? (
-                                        <span>{mediaData.videoPlayDuration}</span>
-                                    ) : (
-                                        <span>
-                                            <input
-                                                id="textInput"
-                                                type="text"
-                                                className="p-1 border rounded-xl"
-                                                placeholder="3 ~ 5"
-                                                name="videoPlayDuration"
-                                                onChange={handleMediaData}
-                                                value={mediaData.videoPlayDuration}
-                                            />
-                                        </span>
-                                    )}
-                                </span>
-                            </div>
-
-                            <div className="flex">
-                                <div className="mt-0.4">
-                                    <strong>공개 여부:</strong>
-                                </div>
-                                <div className="ml-1 mb-2">
-                                    {!isUpdateMode ? (
-                                        <div>{mediaData.visibleType === 'PUBLIC' ? '공개' : '비공개'}</div>
-                                    ) : (
-                                        <div>
-                                            <select
-                                                name="visibleType"
-                                                value={mediaData.visibleType}
-                                                onChange={handleMediaData}
-                                                className="p-1 border rounded-xl"
-                                            >
-                                                <option value="PUBLIC">공개</option>
-                                                <option value="PRIVATE">비공개</option>
-                                            </select>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="sm:flex sm:flex-col sm:items-end">
-                        <div>
-                            <div>
-                                {!isUpdateMode ? (
-                                    <button
-                                        className="bg-green-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded"
-                                        onClick={() => updateContentsMode()}
-                                    >
-                                        수정
-                                    </button>
-                                ) : (
-                                    <div className="sm:flex-col">
-                                        <div>
-                                            <button
-                                                className="bg-green-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded"
-                                                onClick={() => applyUpdateContents()}
-                                            >
-                                                적용하기
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                            {!isUpdateMode ? (
-                                <button
-                                    className="bg-red-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded"
-                                    onClick={() => removeContents(contents.contentsName)}
-                                >
-                                    삭제
-                                </button>
-                            ) : (
-                                <></>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        // 데이터 문자열에 "https://www.youtube.com/"를 포함한다면 유튜브 타입 데이터를 의미한다.
+        mediaData.mediaData && mediaData.mediaData.includes('https://www.youtube.com/') ? (
+            <InternetVideoUrlCard index={index} contents={mediaData} />
+        ) : (
+            <StaticMediaFileTypeCard index={index} contents={mediaData} />
+        )
     );
 };
-
-export default InternetVideoUrlCard;
+export default ManageCardWrapper;
