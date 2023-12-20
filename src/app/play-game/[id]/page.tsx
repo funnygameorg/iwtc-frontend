@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import { mappingMediaFile } from '@/utils/common';
 import { useRouter } from 'next/navigation';
 import { animated, useSpring } from '@react-spring/web';
+import CustomYoutubePlayer from '@/components/youtubePlayer/CustomYoutubePlayer';
 
 const Page = ({ params }: { params: { id: number } }) => {
     const router = useRouter();
@@ -49,7 +50,6 @@ const Page = ({ params }: { params: { id: number } }) => {
     //     const newGameList = await Promise.all(promises);
     //     return newGameList;
     // };
-
     const handleAnimationRest = () => {
         console.log('Animation finished.');
         // 여기에 원하는 작업을 추가할 수 있습니다.
@@ -184,13 +184,25 @@ const Page = ({ params }: { params: { id: number } }) => {
                             }}
                             onClick={() => handleSelection(1)}
                         >
-                            <Image
-                                className="h-full w-full"
-                                src={gameList[0]?.imgUrl}
-                                width={'750'}
-                                height={'500'}
-                                alt={gameList[0]?.name}
-                            />
+                            {gameList[0]?.fileType === 'INTERNET_VIDEO_URL' ? (
+                                <div
+                                    className="flex items-center justify-center h-screen"
+                                    onClick={() => handleSelection(1)}
+                                >
+                                    <CustomYoutubePlayer
+                                        videoUrl={gameList[0]?.imgUrl}
+                                        time={gameList[0]?.internetMovieStartPlayTime}
+                                    />
+                                </div>
+                            ) : (
+                                <Image
+                                    className="h-full w-full"
+                                    src={gameList[0]?.imgUrl}
+                                    width={'750'}
+                                    height={'500'}
+                                    alt={gameList[0]?.name}
+                                />
+                            )}
                         </animated.div>
                         {/* <div className="fixed bottom-0 left-0 bg-white p-4 text-white"> */}
                         <h2 className="absolute text-white text-3xl  bottom-10 left-10">{gameList[0]?.name}</h2>
@@ -216,13 +228,25 @@ const Page = ({ params }: { params: { id: number } }) => {
                             }}
                             onClick={() => handleSelection(0)}
                         >
-                            <Image
-                                className="h-full w-full"
-                                src={gameList[1]?.imgUrl}
-                                width={'750'}
-                                height={'500'}
-                                alt={gameList[1]?.name}
-                            />
+                            {gameList[1]?.fileType === 'INTERNET_VIDEO_URL' ? (
+                                <div
+                                    className="flex items-center justify-center h-screen"
+                                    onClick={() => handleSelection(0)}
+                                >
+                                    <CustomYoutubePlayer
+                                        videoUrl={gameList[1]?.imgUrl}
+                                        time={gameList[1]?.internetMovieStartPlayTime}
+                                    />
+                                </div>
+                            ) : (
+                                <Image
+                                    className="h-full w-full"
+                                    src={gameList[1]?.imgUrl}
+                                    width={'750'}
+                                    height={'500'}
+                                    alt={gameList[1]?.name}
+                                />
+                            )}
                             <h2 className="absolute text-white text-3xl  bottom-10 right-10">{gameList[1]?.name}</h2>
                         </animated.div>
                         {/* </div> */}
