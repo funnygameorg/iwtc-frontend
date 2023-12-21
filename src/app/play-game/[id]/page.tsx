@@ -82,6 +82,7 @@ const Page = ({ params }: { params: { id: number } }) => {
         onSuccess: async (data: any) => {
             setIsPlay(true);
             const list = await mappingMediaFile(data.data.contentsList);
+            console.log("listlistlist",list);
             setGameList(list);
         },
     });
@@ -192,6 +193,8 @@ const Page = ({ params }: { params: { id: number } }) => {
                                     <CustomYoutubePlayer
                                         videoUrl={gameList[0]?.imgUrl}
                                         time={gameList[0]?.internetMovieStartPlayTime}
+                                        width={'750'}
+                                        height={'500'}
                                     />
                                 </div>
                             ) : (
@@ -236,6 +239,8 @@ const Page = ({ params }: { params: { id: number } }) => {
                                     <CustomYoutubePlayer
                                         videoUrl={gameList[1]?.imgUrl}
                                         time={gameList[1]?.internetMovieStartPlayTime}
+                                        width={'750'}
+                                        height={'500'}
                                     />
                                 </div>
                             ) : (
