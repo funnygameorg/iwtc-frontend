@@ -43,22 +43,21 @@ const Page = ({ params }: { params: { id: any } }) => {
                                 <ul>
                                     {rankList.map((items: any) => {
                                         if (items.rank !== 1) {
-                                          return items.fileType === 'INTERNET_VIDEO_URL' ?
-                                      (
-                                      <li className="w-full h-full flex justify-center items-center">
-                                        <CustomYoutubePlayer 
-                                          videoUrl={items.imgUrl}
-                                          time={items.videoStartTime}
-                                          width={'100%'}
-                                          height={'100%'}
-                                          isAutoPlay={false}
-                                        />
-                                      </li>
-                                      ):
-                                             (
+                                            return items.fileType === 'INTERNET_VIDEO_URL' ? (
                                                 <li className="text-center" key={items.contentsId}>
                                                     <span>{items.rank}등</span>
-                                                      {/* <Image src={items.imgUrl} alt={items.contentsName} className="mb-2"/> */}
+                                                    <CustomYoutubePlayer
+                                                        videoUrl={items.imgUrl}
+                                                        time={items.videoStartTime}
+                                                        width={'100%'}
+                                                        height={'100%'}
+                                                        isAutoPlay={false}
+                                                    />
+                                                </li>
+                                            ) : (
+                                                <li className="text-center" key={items.contentsId}>
+                                                    <span>{items.rank}등</span>
+                                                    {/* <Image src={items.imgUrl} alt={items.contentsName} className="mb-2"/> */}
                                                     <img src={items.imgUrl} alt={items.contentsName} className="mb-2" />
                                                 </li>
                                             );
@@ -69,26 +68,23 @@ const Page = ({ params }: { params: { id: any } }) => {
                             <ul className="w-full bg-gray-300 ">
                                 {rankList.map((items: any) => {
                                     if (items.rank === 1) {
-                                      return items.fileType === 'INTERNET_VIDEO_URL' ?
-                                      (
-                                      <li className="w-full h-full flex justify-center items-center">
-                                        <CustomYoutubePlayer 
-                                          videoUrl={items.imgUrl}
-                                          time={items.videoStartTime}
-                                          width={'100%'}
-                                          height={'100%'}
-                                        />
-                                      </li>
-                                      )
-                                        :
-                                         (
+                                        return items.fileType === 'INTERNET_VIDEO_URL' ? (
+                                            <li className="w-full h-full flex justify-center items-center">
+                                                <CustomYoutubePlayer
+                                                    videoUrl={items.imgUrl}
+                                                    time={items.videoStartTime}
+                                                    width={'600'}
+                                                    height={'400'}
+                                                />
+                                            </li>
+                                        ) : (
                                             <>
                                                 <li className="w-full h-full flex justify-center items-center">
                                                     {/* <span>{items.rank}</span> */}
                                                     <img src={items.imgUrl} alt={items.contentsId} className="h-5/6" />
                                                 </li>
                                             </>
-                                        )
+                                        );
                                     }
                                 })}
                             </ul>
