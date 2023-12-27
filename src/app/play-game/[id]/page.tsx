@@ -175,12 +175,11 @@ const Page = ({ params }: { params: { id: number } }) => {
     if (gameList) {
         const wcTitle = roundList?.data?.worldCupTitle;
         const nameLength = wcTitle ? wcTitle.length : 0;
-        const calculatedWidth = `${nameLength * 10 + 100}px`; // 예시로 간단한 계산을 적용했습니다.
-
+        const calculatedWidth = `${nameLength * 2}rem`; // 예시로 간단한 계산을 적용했습니다.
         return (
             <>
-                <div className="grid h-screen place-items-center box-border">
-                    <div className="relative flex p-4 text-black shadow" style={{ width: '1600px', height: '100%' }}>
+                <div className="grid h-full flex  place-items-center box-border" style={{ height: '1000px' }}>
+                    <div className="relative flex p-4 text-black shadow " style={{ width: '1600px', height: '800px' }}>
                         <div
                             className="absolute mx-auto left-0 right-0 text-center z-10 bg-gray-100 rounded-md shadow-md "
                             style={{ width: calculatedWidth }}
@@ -200,7 +199,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                         >
                             {gameList[0]?.fileType === 'INTERNET_VIDEO_URL' ? (
                                 <div
-                                    className="flex items-center justify-center h-screen"
+                                    className="flex items-center justify-center h-full"
                                     onClick={() => handleSelection(1)}
                                 >
                                     <CustomYoutubePlayer
@@ -208,6 +207,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                                         time={gameList[0]?.internetMovieStartPlayTime}
                                         width={'750'}
                                         height={'500'}
+                                        playDuration={gameList[0]?.videoPlayDuration}
                                     />
                                 </div>
                             ) : (
@@ -251,7 +251,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                         >
                             {gameList[1]?.fileType === 'INTERNET_VIDEO_URL' ? (
                                 <div
-                                    className="flex items-center justify-center h-screen"
+                                    className="flex items-center justify-center h-full"
                                     onClick={() => handleSelection(0)}
                                 >
                                     <CustomYoutubePlayer
@@ -259,6 +259,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                                         time={gameList[1]?.internetMovieStartPlayTime}
                                         width={'750'}
                                         height={'500'}
+                                        playDuration={gameList[1]?.videoPlayDuration}
                                     />
                                 </div>
                             ) : (

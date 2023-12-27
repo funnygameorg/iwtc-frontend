@@ -25,45 +25,46 @@ const WorldCupList = ({ wcList }: any) => {
                 <Link href={`/play-game/${contentNum}`}>
                     <div className="flex">
                         <div className="flex-1">
-                          {reftFileType === 'INTERNET_VIDEO_URL' ? 
-                          <div className="flex items-center justify-center h-full">
-                              <CustomYoutubePlayer 
-                                  videoUrl={reftImgMediaFileNo}
-                                  time={reftVideoStartTime}
-                                  width={'100%'}
-                                  height={'100%'}
-                              />
-                          </div>
-                            :
-                            <Image
-                                className="w-full h-52"
-                                src={reftImgMediaFileNo}
-                                width={'50'}
-                                height={'10'}
-                                alt={reftContentName ? reftContentName :"제공예정"}
-                            />
-                          }
-                        
+                            {reftFileType === 'INTERNET_VIDEO_URL' ? (
+                                <div className="flex items-center justify-center h-full">
+                                    <CustomYoutubePlayer
+                                        videoUrl={reftImgMediaFileNo}
+                                        time={reftVideoStartTime}
+                                        width={'100%'}
+                                        height={'100%'}
+                                        playDuration={reftVideoPlayDuration}
+                                    />
+                                </div>
+                            ) : (
+                                <Image
+                                    className="w-full h-52"
+                                    src={reftImgMediaFileNo}
+                                    width={'50'}
+                                    height={'10'}
+                                    alt={reftContentName ? reftContentName : '제공예정'}
+                                />
+                            )}
                         </div>
                         <div className="flex-1">
-                        {rightFileType === 'INTERNET_VIDEO_URL' ? 
-                            <div className="flex items-center justify-center h-full">
-                              <CustomYoutubePlayer 
-                                  videoUrl={rightImgMediaFileNo}
-                                  time={rightVideoStartTime}
-                                  width={'100%'}
-                                  height={'100%'}
-                              />
-                            </div>
-                            :
-                            <Image
-                                className="w-full h-52"
-                                src={rightImgMediaFileNo}
-                                width={'50'}
-                                height={'10'}
-                                alt={rightContentName ? rightContentName : '제공예정'}
-                            />
-                        }
+                            {rightFileType === 'INTERNET_VIDEO_URL' ? (
+                                <div className="flex items-center justify-center h-full">
+                                    <CustomYoutubePlayer
+                                        videoUrl={rightImgMediaFileNo}
+                                        time={rightVideoStartTime}
+                                        width={'100%'}
+                                        height={'100%'}
+                                        playDuration={rightVideoPlayDuration}
+                                    />
+                                </div>
+                            ) : (
+                                <Image
+                                    className="w-full h-52"
+                                    src={rightImgMediaFileNo}
+                                    width={'50'}
+                                    height={'10'}
+                                    alt={rightContentName ? rightContentName : '제공예정'}
+                                />
+                            )}
                         </div>
                     </div>
                 </Link>
