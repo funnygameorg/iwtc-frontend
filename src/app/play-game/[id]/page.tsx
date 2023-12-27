@@ -82,7 +82,6 @@ const Page = ({ params }: { params: { id: number } }) => {
         onSuccess: async (data: any) => {
             setIsPlay(true);
             const list = await mappingMediaFile(data.data.contentsList);
-            console.log("listlistlist",list);
             setGameList(list);
         },
     });
@@ -104,7 +103,7 @@ const Page = ({ params }: { params: { id: number } }) => {
             handleRightImageClick(400, 2000);
         }
         const loseConetentId = gameList[index].contentsId;
-        const winContentId = gameList[index === 1 ? 0 : index].contentsId;
+        const winContentId = gameList[index === 1 ? 0 : 1].contentsId;
         // selectRound가 2이면 결승
         setSaveClickContents(saveClickContents.concat(loseConetentId));
         if (selectRound === 4) {
@@ -174,8 +173,10 @@ const Page = ({ params }: { params: { id: number } }) => {
                 <div className="grid h-screen place-items-center box-border">
                     <div className="relative flex p-4 text-black shadow" style={{ width: '1600px', height: '100%' }}>
                         <div className="absolute mx-auto left-0 right-0 text-center z-10">
-                            <h1 className="text-white text-3xl">{roundList?.data?.worldCupTitle}</h1>
-                            <h1 className="text-white text-3xl">{selectRound === 2 ? '결승' : selectRound + '강'}</h1>
+                            <h1 className="text-indigo-700 text-3xl">{roundList?.data?.worldCupTitle}</h1>
+                            <h1 className="text-indigo-700 text-3xl">
+                                {selectRound === 2 ? '결승' : selectRound + '강'}
+                            </h1>
                         </div>
                         {/* <div className="flex items-start relative" onClick={() => handleClick()}> */}
                         <animated.div
@@ -208,7 +209,9 @@ const Page = ({ params }: { params: { id: number } }) => {
                             )}
                         </animated.div>
                         {/* <div className="fixed bottom-0 left-0 bg-white p-4 text-white"> */}
-                        <h2 className="absolute text-white text-3xl  bottom-10 left-10">{gameList[0]?.name}</h2>
+                        <h2 className="absolute text-indigo-700 text-3xl  bottom-10 left-10 z-50">
+                            {gameList[0]?.name}
+                        </h2>
                         {/* </div> */}
                         {/* </div> */}
                         {/* <div className="grid place-items-center "> */}
@@ -252,7 +255,9 @@ const Page = ({ params }: { params: { id: number } }) => {
                                     alt={gameList[1]?.name}
                                 />
                             )}
-                            <h2 className="absolute text-white text-3xl  bottom-10 right-10">{gameList[1]?.name}</h2>
+                            <h2 className="absolute text-indigo-700 text-3xl  bottom-10 right-10 ">
+                                {gameList[1]?.name}
+                            </h2>
                         </animated.div>
                         {/* </div> */}
                     </div>
