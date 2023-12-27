@@ -52,6 +52,7 @@ const Page = ({ params }: { params: { id: any } }) => {
                                                         width={'100%'}
                                                         height={'100%'}
                                                         isAutoPlay={false}
+                                                        playDuration={items.videoPlayDuration}
                                                     />
                                                 </li>
                                             ) : (
@@ -75,6 +76,7 @@ const Page = ({ params }: { params: { id: any } }) => {
                                                     time={items.videoStartTime}
                                                     width={'600'}
                                                     height={'400'}
+                                                    playDuration={items.videoPlayDuration}
                                                 />
                                             </li>
                                         ) : (

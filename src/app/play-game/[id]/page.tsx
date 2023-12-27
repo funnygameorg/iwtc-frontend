@@ -207,6 +207,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                                         time={gameList[0]?.internetMovieStartPlayTime}
                                         width={'750'}
                                         height={'500'}
+                                        playDuration={gameList[0]?.videoPlayDuration}
                                     />
                                 </div>
                             ) : (
@@ -258,6 +259,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                                         time={gameList[1]?.internetMovieStartPlayTime}
                                         width={'750'}
                                         height={'500'}
+                                        playDuration={gameList[1]?.videoPlayDuration}
                                     />
                                 </div>
                             ) : (
