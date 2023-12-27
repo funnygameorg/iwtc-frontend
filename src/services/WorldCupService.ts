@@ -63,7 +63,9 @@ export const worldCupGamePlay = async ({
 
 export const worldCupGameClear = async (param: any) => {
     const [worldcupId, firstWinnerContentsId, secondWinnerContentsId, thirdWinnerContentsId, fourthWinnerContentsId] =
-        param;
+      param.map((value: any) => value === '0' ? undefined : value);;
+
+
     const params = {
         firstWinnerContentsId,
         secondWinnerContentsId,
