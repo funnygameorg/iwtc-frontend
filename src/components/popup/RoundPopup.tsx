@@ -17,6 +17,8 @@ const RoundPopup = ({ roundList, setSelectRound }: IProps) => {
         setIsOnPopup(false);
     };
 
+    console.log('roundList', roundList);
+
     return (
         <>
             {/* <!-- Main modal --> */}
@@ -24,8 +26,9 @@ const RoundPopup = ({ roundList, setSelectRound }: IProps) => {
                 id="crypto-modal"
                 tabIndex={-1}
                 aria-hidden="true"
-                className={`${isOnPopup ? '' : 'hidden'
-                    } grid place-items-center fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full`}
+                className={`${
+                    isOnPopup ? '' : 'hidden'
+                } grid place-items-center fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full`}
             >
                 <div className="relative w-full max-w-md max-h-full">
                     {/* <!-- Modal content --> */}
@@ -65,18 +68,18 @@ const RoundPopup = ({ roundList, setSelectRound }: IProps) => {
                                 아래 중 하나를 선택하세요.
                             </p>
                             <ul className="my-4 space-y-3">
-                                {roundList?.data.rounds.map((item: number, idx: number) => (
-                                    <li key={idx} onClick={() => selectRound(item)}>
-                                        <a
-                                            href="#"
-                                            className="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white"
-                                        >
-                                            <span className="flex-1 ml-3 whitespace-nowrap">{item}강</span>
-                                        </a>
-                                    </li>
-                                ))}
+                                {roundList?.data.rounds.map((item: number, idx: number) => {
+                                    if (item !== 2) {
+                                        return (
+                                            <li key={idx} onClick={() => selectRound(item)}>
+                                                <a className="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
+                                                    <span className="flex-1 ml-3 whitespace-nowrap">{item}강</span>
+                                                </a>
+                                            </li>
+                                        );
+                                    }
+                                })}
                             </ul>
-
                         </div>
                     </div>
                 </div>
