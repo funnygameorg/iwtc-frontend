@@ -168,11 +168,18 @@ const Page = ({ params }: { params: { id: number } }) => {
         return <RoundPopup roundList={roundList} setSelectRound={setSelectRound} />;
     }
     if (gameList) {
+        const wcTitle = roundList?.data?.worldCupTitle;
+        const nameLength = wcTitle ? wcTitle.length : 0;
+        const calculatedWidth = `${nameLength * 10 + 100}px`; // 예시로 간단한 계산을 적용했습니다.
+
         return (
             <>
                 <div className="grid h-screen place-items-center box-border">
                     <div className="relative flex p-4 text-black shadow" style={{ width: '1600px', height: '100%' }}>
-                        <div className="absolute mx-auto left-0 right-0 text-center z-10">
+                        <div
+                            className="absolute mx-auto left-0 right-0 text-center z-10 bg-gray-100 rounded-md shadow-md "
+                            style={{ width: calculatedWidth }}
+                        >
                             <h1 className="text-indigo-700 text-3xl">{roundList?.data?.worldCupTitle}</h1>
                             <h1 className="text-indigo-700 text-3xl">
                                 {selectRound === 2 ? '결승' : selectRound + '강'}
@@ -209,7 +216,10 @@ const Page = ({ params }: { params: { id: number } }) => {
                             )}
                         </animated.div>
                         {/* <div className="fixed bottom-0 left-0 bg-white p-4 text-white"> */}
-                        <h2 className="absolute text-indigo-700 text-3xl  bottom-10 left-10 z-50">
+                        <h2
+                            className="absolute text-indigo-700 text-3xl  bottom-10 left-10 z-50 bg-gray-100 rounded-md shadow-md"
+                            style={{ width: 'auto' }}
+                        >
                             {gameList[0]?.name}
                         </h2>
                         {/* </div> */}
@@ -255,7 +265,10 @@ const Page = ({ params }: { params: { id: number } }) => {
                                     alt={gameList[1]?.name}
                                 />
                             )}
-                            <h2 className="absolute text-indigo-700 text-3xl  bottom-10 right-10 ">
+                            <h2
+                                className="absolute text-indigo-700 text-3xl  bottom-10 right-10 bg-gray-100 rounded-md shadow-md "
+                                style={{ width: 'auto' }}
+                            >
                                 {gameList[1]?.name}
                             </h2>
                         </animated.div>
