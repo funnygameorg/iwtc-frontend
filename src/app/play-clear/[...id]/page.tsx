@@ -7,6 +7,7 @@ import { useQueryGetReplyList, worldCupGameReplyRegister } from '@/services/Repl
 import { mappingMediaFile } from '@/utils/common';
 import { useMutation } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
+import CustomYoutubePlayer from '@/components/youtubePlayer/CustomYoutubePlayer';
 
 const Page = ({ params }: { params: { id: any } }) => {
     const [rankList, setRankList] = useState<any>();
@@ -27,7 +28,6 @@ const Page = ({ params }: { params: { id: any } }) => {
     useEffect(() => {
         mutate(id);
     }, []);
-
     // 게임 종료 API 응답값에 컨텐츠 ID를 내가 보내는데 응답값에 ID에 대한 게임 이름 데이터 내려줘야함
     if (isSuccess && rankList) {
         return (
@@ -43,9 +43,21 @@ const Page = ({ params }: { params: { id: any } }) => {
                                 <ul>
                                     {rankList.map((items: any) => {
                                         if (items.rank !== 1) {
-                                            return (
+                                            return items.fileType === 'INTERNET_VIDEO_URL' ? (
                                                 <li className="text-center" key={items.contentsId}>
                                                     <span>{items.rank}등</span>
+                                                    <CustomYoutubePlayer
+                                                        videoUrl={items.imgUrl}
+                                                        time={items.videoStartTime}
+                                                        width={'100%'}
+                                                        height={'100%'}
+                                                        isAutoPlay={false}
+                                                    />
+                                                </li>
+                                            ) : (
+                                                <li className="text-center" key={items.contentsId}>
+                                                    <span>{items.rank}등</span>
+                                                    {/* <Image src={items.imgUrl} alt={items.contentsName} className="mb-2"/> */}
                                                     <img src={items.imgUrl} alt={items.contentsName} className="mb-2" />
                                                 </li>
                                             );
@@ -56,7 +68,16 @@ const Page = ({ params }: { params: { id: any } }) => {
                             <ul className="w-full bg-gray-300 ">
                                 {rankList.map((items: any) => {
                                     if (items.rank === 1) {
-                                        return (
+                                        return items.fileType === 'INTERNET_VIDEO_URL' ? (
+                                            <li className="w-full h-full flex justify-center items-center">
+                                                <CustomYoutubePlayer
+                                                    videoUrl={items.imgUrl}
+                                                    time={items.videoStartTime}
+                                                    width={'600'}
+                                                    height={'400'}
+                                                />
+                                            </li>
+                                        ) : (
                                             <>
                                                 <li className="w-full h-full flex justify-center items-center">
                                                     {/* <span>{items.rank}</span> */}

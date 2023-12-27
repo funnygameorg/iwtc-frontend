@@ -4,9 +4,12 @@ import YouTube from 'react-youtube';
 interface IProps {
     videoUrl: string;
     time: string;
+    width: string;
+    height: string;
+    isAutoPlay?: boolean
 }
 
-const CustomYoutubePlayer = ({ videoUrl, time }: IProps) => {
+const CustomYoutubePlayer = ({ videoUrl, time, width, height, isAutoPlay = true }: IProps) => {
     const getVideoIdByYoutubeUrl = (data: any): any => {
         let url;
         try {
@@ -33,10 +36,10 @@ const CustomYoutubePlayer = ({ videoUrl, time }: IProps) => {
             iframeClassName="vod-box"
             videoId={getVideoIdByYoutubeUrl(videoUrl)}
             opts={{
-                width: '750',
-                height: '500',
+                width: width,
+                height: height,
                 playerVars: {
-                    autoplay: 1, //자동재생 O
+                    autoplay: isAutoPlay ? 1 : 0, //자동재생 O
                     // rel: 0, //관련 동영상 표시하지 않음 (근데 별로 쓸모 없는듯..)
                     // modestbranding: 1, // 컨트롤 바에 youtube 로고를 표시하지 않음,
                     start: convertTimeToSeconds(time),
