@@ -25,6 +25,7 @@ const Page = ({ params }: { params: { id: number } }) => {
         thirdWinnerContentsId: 0,
         fourthWinnerContentsId: 0,
     });
+    const [isSwapping, setIsSwapping] = useState<boolean>(false);
     // console.log('gameList', gameList);
     // const mappingMediaFile = async (test: any) => {
     //     const promises = test.map(async (item: any) => {
@@ -97,6 +98,8 @@ const Page = ({ params }: { params: { id: number } }) => {
     }, []);
 
     const handleSelection = async (index: number) => {
+        if (isSwapping) return;
+        setIsSwapping(true);
         if (index === 1) {
             handleLeftImageClick(400, 2000);
         } else {
@@ -135,6 +138,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                 handleRightImageClick(0, 0);
                 handleLeftImageClick(0, 0);
                 setSelectRound((prev) => prev / 2);
+                setIsSwapping(false);
             }, 1000);
             return;
         }
@@ -143,6 +147,7 @@ const Page = ({ params }: { params: { id: number } }) => {
             handleLeftImageClick(0, 0);
             const newGameList = gameList.slice(2);
             setGameList(newGameList);
+            setIsSwapping(false);
         }, 1000);
         // useSpringAnimation(0, 0);
         //클릭한 아이템은 저장!
