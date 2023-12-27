@@ -38,7 +38,7 @@ const Page = ({ params }: { params: { id: any } }) => {
                         {/* 여기에 왼쪽 영역 컨텐츠를 넣으세요 */}
                         <h1 className="text-2xl font-bold mb-4 text-center">월드컵 우승</h1>
                         <div className="flex">
-                            <div className="w-1/4 bg-gray-300 p-2 h-5/6 flex flex-col justify-center items-center">
+                            <div className="w-1/4 bg-gray-100 rounded-md shadow-md p-2 h-5/6 flex flex-col justify-center items-center">
                                 {/* 세로로 이미지 4개 배치 */}
                                 <ul>
                                     {rankList.map((items: any) => {
@@ -65,7 +65,7 @@ const Page = ({ params }: { params: { id: any } }) => {
                                     })}
                                 </ul>
                             </div>
-                            <ul className="w-full bg-gray-300 ">
+                            <ul className="w-full bg-gray-100 rounded-md shadow-md ">
                                 {rankList.map((items: any) => {
                                     if (items.rank === 1) {
                                         return items.fileType === 'INTERNET_VIDEO_URL' ? (
@@ -79,7 +79,7 @@ const Page = ({ params }: { params: { id: any } }) => {
                                             </li>
                                         ) : (
                                             <>
-                                                <li className="w-full h-full flex justify-center items-center">
+                                                <li className="w-full h-full flex justify-center items-center ">
                                                     {/* <span>{items.rank}</span> */}
                                                     <img src={items.imgUrl} alt={items.contentsId} className="h-5/6" />
                                                 </li>
@@ -93,26 +93,33 @@ const Page = ({ params }: { params: { id: any } }) => {
                         <RankListWrapper contentsId={id[0]} />
                     </div>
 
-                    <div className="w-4/12 p-4 bg-gray-200">
+                    <div className="w-4/12 p-4 bg-blue-200" style={{ height: '100%' }}>
                         {/* 여기에 오른쪽 영역 컨텐츠를 넣으세요 */}
                         <h1 className="text-2xl font-bold mb-4 text-center">채팅</h1>
-                        <section className="bg-white dark:bg-gray-900 py-8 lg:py-16 antialiased">
-                            <div className="max-w-2xl mx-auto px-4">
-                                <div className="flex justify-between items-center mb-6">
-                                    <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
-                                        댓글 ({reply.data.length})
-                                    </h2>
+                        <div className="h-full flex flex-col">
+                            <section
+                                className="bg-gray-100 rounded-md shadow-md py-8 antialiased h-full"
+                                // style={{ height: 'auto' }}
+                            >
+                                <div className="max-w-2xl mx-auto px-4">
+                                    <div className="flex justify-between items-center mb-6">
+                                        <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
+                                            댓글 ({reply.data.length})
+                                        </h2>
+                                    </div>
+                                    {reply.data.map((items: any, idx: number) => {
+                                        return <ReplyList key={idx} replyData={items} />;
+                                    })}
                                 </div>
-                                {reply.data.map((items: any, idx: number) => {
-                                    return <ReplyList key={idx} replyData={items} />;
-                                })}
+                            </section>
+                            <div>
+                                <ReplyRegisterForm worldcupId={id[0]} contentsId={id[1]} />
                             </div>
-                        </section>
-                        <ReplyRegisterForm worldcupId={id[0]} contentsId={id[1]} />
-
-                        <div className="h-1/4 bg-gray-400 mt-10">
-                            <span>그래프영역</span>
                         </div>
+
+                        {/* <div className="h-1/4 bg-gray-400 mt-10">
+                            <span>그래프영역</span>
+                        </div> */}
                     </div>
                 </div>
             </>
