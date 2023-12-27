@@ -198,10 +198,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                             onClick={() => handleSelection(1)}
                         >
                             {gameList[0]?.fileType === 'INTERNET_VIDEO_URL' ? (
-                                <div
-                                    className="flex items-center justify-center h-full"
-                                    onClick={() => handleSelection(1)}
-                                >
+                                <div className="flex items-center justify-center h-full">
                                     <CustomYoutubePlayer
                                         videoUrl={gameList[0]?.imgUrl}
                                         time={gameList[0]?.internetMovieStartPlayTime}
@@ -250,10 +247,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                             onClick={() => handleSelection(0)}
                         >
                             {gameList[1]?.fileType === 'INTERNET_VIDEO_URL' ? (
-                                <div
-                                    className="flex items-center justify-center h-full"
-                                    onClick={() => handleSelection(0)}
-                                >
+                                <div className="flex items-center justify-center h-full">
                                     <CustomYoutubePlayer
                                         videoUrl={gameList[1]?.imgUrl}
                                         time={gameList[1]?.internetMovieStartPlayTime}
