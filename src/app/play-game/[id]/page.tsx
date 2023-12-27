@@ -180,7 +180,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                         </div>
                         {/* <div className="flex items-start relative" onClick={() => handleClick()}> */}
                         <animated.div
-                            className={'flex items-start relative'}
+                            className={'flex items-start relative w-full'}
                             style={{
                                 ...left,
                             }}
@@ -228,7 +228,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                         {/* <span className='text-white'>VS</span> */}
                         {/* <div className="flex items-end mx-auto left-0 right-0" onClick={() => handleSelection(0)}> */}
                         <animated.div
-                            className={'flex items-end mx-auto left-0 right-0'}
+                            className={'flex items-end mx-auto left-0 right-0 w-full'}
                             style={{
                                 ...light,
                             }}
