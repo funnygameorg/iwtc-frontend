@@ -4,14 +4,15 @@ import React from 'react';
 import SignInUpButton from '../header/SignInUpButton';
 import { getUserInfo } from '@/stores/LocalStore';
 import { useInView } from '@react-spring/web';
+import { useAuth } from '../AuthProvider';
 
 const Header = () => {
+    const { isLoggedIn, logout } = useAuth();
     const userInfo = getUserInfo();
-
     const userId = userInfo != null ? userInfo.id : '';
 
     const handleLoginBaseService = (e: any) => {
-        if (userId === '') {
+        if (!isLoggedIn) {
             e.preventDefault(); // 링크의 기본 동작을 방지합니다.
             alert('로그인이 필요한 서비스입니다.');
         }
