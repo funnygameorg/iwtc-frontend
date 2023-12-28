@@ -20,18 +20,11 @@ const CustomYoutubePlayer = ({ videoUrl, time, width, height, isAutoPlay = true,
     };
 
     const onStateChange = (event: any) => {
+        // 동영상 재생이 끝나면
         if (event.data === YouTube.PlayerState.ENDED) {
-            // 동영상 재생이 끝나면
-            currentRepeat += 1;
-
-            if (currentRepeat >= playDuration) {
-                // 지정된 횟수만큼 재생되면 재생 중지
-                event.target.pauseVideo();
-            } else {
-                // 아직 반복 횟수가 남아있다면 시작 지점으로 이동하여 재생
-                event.target.seekTo(time);
-                event.target.playVideo();
-            }
+            // 특정 구간 내에서 반복 재생
+            event.target.seekTo(time);
+            event.target.playVideo();
         }
     };
 
@@ -68,6 +61,7 @@ const CustomYoutubePlayer = ({ videoUrl, time, width, height, isAutoPlay = true,
                     rel: 0, //관련 동영상 표시하지 않음 (근데 별로 쓸모 없는듯..)
                     modestbranding: 1, // 컨트롤 바에 youtube 로고를 표시하지 않음,
                     start: convertTimeToSeconds(time),
+                    end: convertTimeToSeconds(time) + playDuration + 1,
                     controls: 0,
                     mute: 1,
                 },
