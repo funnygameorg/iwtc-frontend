@@ -179,16 +179,16 @@ const Page = ({ params }: { params: { id: number } }) => {
         return (
             <>
                 <div className="grid h-full flex  place-items-center box-border" style={{ height: '1000px' }}>
-                    <div
+                    {/* <div
                         className="absolute mx-auto left-0 right-0 text-center z-10 rounded-md shadow-md "
                         style={{ width: calculatedWidth }}
-                    >
-                        <div style={{ height: '15px' }} />
-                        <h1 className="text-white text-2xl font-black">🔥 {roundList?.data?.worldCupTitle} 🔥</h1>
-                        <h1 className="text-white text-2xl font-black">
-                            {selectRound === 2 ? '결승' : selectRound + '강'}
-                        </h1>
-                    </div>
+                    > */}
+                    <div style={{ height: '15px' }} />
+                    <h1 className="text-white text-2xl font-black">🔥 {roundList?.data?.worldCupTitle} 🔥</h1>
+                    <h1 className="text-white text-2xl font-black">
+                        {selectRound === 2 ? '결승' : selectRound + '강'}
+                    </h1>
+                    {/* </div> */}
                     <div className="relative flex p-4 text-black shadow " style={{ width: '1600px', height: '800px' }}>
                         {/* <div className="flex items-start relative" onClick={() => handleClick()}> */}
                         <animated.div
@@ -220,7 +220,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                         </animated.div>
                         {/* <div className="fixed bottom-0 left-0 bg-white p-4 text-white"> */}
 
-                        <div className='absolute bottom-10 left-10'>
+                        <div className="absolute bottom-10 left-10">
                             <div className="bg-white text-6xl font-bold text-black px-3 py-3 rounded-md">
                                 {gameList[0]?.name}
                             </div>
@@ -233,7 +233,6 @@ const Page = ({ params }: { params: { id: number } }) => {
                             <div className="absolute">
                                 <div class="flex items-center justify-center h-screen">
                                     <div class="relative">
-
                                         <div class="px-6 py-6 bg-red-500 text-white font-extrabold text-4xl rounded-lg shadow-lg animate-bounce">
                                             VS
                                         </div>
@@ -269,7 +268,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                                     alt={gameList[1]?.name}
                                 />
                             )}
-                            <div className='absolute bottom-10 right-10'>
+                            <div className="absolute bottom-10 right-10">
                                 <div className="bg-white text-6xl font-bold text-black px-3 py-3 rounded-md">
                                     {gameList[1]?.name}
                                 </div>
