@@ -231,9 +231,9 @@ const Page = ({ params }: { params: { id: number } }) => {
                         {/* <div className="grid place-items-center "> */}
                         <div className="flex items-center justify-center">
                             <div className="absolute">
-                                <div class="flex items-center justify-center h-screen">
-                                    <div class="relative">
-                                        <div class="px-6 py-6 bg-red-500 text-white font-extrabold text-4xl rounded-lg shadow-lg animate-bounce">
+                                <div className="flex items-center justify-center h-screen">
+                                    <div className="relative">
+                                        <div className="px-6 py-6 bg-red-500 text-white font-extrabold text-4xl rounded-lg shadow-lg animate-bounce">
                                             VS
                                         </div>
                                     </div>
