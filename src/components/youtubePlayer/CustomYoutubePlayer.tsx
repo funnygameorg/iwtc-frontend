@@ -17,6 +17,7 @@ const CustomYoutubePlayer = ({ videoUrl, time, width, height, isAutoPlay = true,
 
     const onReady = (event: any) => {
         playerRef.current = event.target;
+        disablePointerEventsForAllIframes();
     };
 
     const onStateChange = (event: any) => {
@@ -54,6 +55,15 @@ const CustomYoutubePlayer = ({ videoUrl, time, width, height, isAutoPlay = true,
 
         // 시, 분, 초를 초로 환산하여 반환
         return hours * 3600 + minutes * 60 + seconds;
+    };
+
+    const disablePointerEventsForAllIframes = () => {
+        const playerIframe = document.getElementsByTagName('iframe');
+        if (playerIframe) {
+            Array.from(playerIframe).forEach((iframe) => {
+                iframe.style.pointerEvents = 'none';
+            });
+        }
     };
 
     return (
