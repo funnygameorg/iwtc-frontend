@@ -24,7 +24,7 @@ export const worldCupAllList = async (
     const param = {
         page,
         size,
-        sort,
+        sort: `${sort},DESC`,
         keyword,
         dateRange,
         // memberId,
@@ -63,8 +63,7 @@ export const worldCupGamePlay = async ({
 
 export const worldCupGameClear = async (param: any) => {
     const [worldcupId, firstWinnerContentsId, secondWinnerContentsId, thirdWinnerContentsId, fourthWinnerContentsId] =
-      param.map((value: any) => value === '0' ? undefined : value);;
-
+        param.map((value: any) => (value === '0' ? undefined : value));
 
     const params = {
         firstWinnerContentsId,
