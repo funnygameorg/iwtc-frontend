@@ -10,6 +10,7 @@ import Header from '@/components/common/Header';
 import { getSelectorsByUserAgent } from 'react-device-detect';
 import { headers } from 'next/headers';
 import MobileView from '@/components/mobile/MobileView';
+import PopupProvider from '@/components/PopupProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -34,10 +35,12 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                     ) : (
                         <Providers>
                             <AuthProvider>
-                                {/* TODO: 공통 header적용 */}
-                                <Header />
-                                <RouteHandler />
-                                {children}
+                                <PopupProvider>
+                                    {/* TODO: 공통 header적용 */}
+                                    <Header />
+                                    <RouteHandler />
+                                    {children}
+                                </PopupProvider>
                             </AuthProvider>
                         </Providers>
                     )}
