@@ -6,6 +6,8 @@ import { getAccessToken } from '@/utils/TokenManager';
 import { useMutation } from '@tanstack/react-query';
 import React, { useContext, useEffect, useState } from 'react';
 import { isContext } from 'vm';
+import AlertPopup from '../popup/AlertPopup';
+import { PopupContext } from '../PopupProvider';
 
 /**
  * 게임 관리 폼에서 월드컵 게임에 관한 내용을 표현하는 폼
@@ -15,6 +17,7 @@ import { isContext } from 'vm';
 const WorldCupManageForm = (params: any) => {
     const { isCreateWorldCup, setIsCreateWorldCup }: any = useContext(WorldCupManageContext);
     const { worldCupId, setWorldCupId }: any = useContext(WorldCupIdManageContext);
+    const { showPopup, hidePopup } = useContext(PopupContext);
 
     const [worldCup, setValue] = useState({
         title: '',
@@ -66,23 +69,27 @@ const WorldCupManageForm = (params: any) => {
         },
 
         onError: (error) => {
-            alert(error);
+            showAlertPopup('error');
         },
     });
 
+    const showAlertPopup = (maeeage: string) => {
+        showPopup(<AlertPopup message={maeeage} hidePopup={hidePopup} />);
+    };
+
     const handleCreateWorldCup = (e: any) => {
         if (description.length > 100 || description === '') {
-            alert('월드컵 설명 1자 이상 100자 이하입니다.');
+            showAlertPopup('월드컵 설명 1자 이상 100자 이하입니다.');
             throw Error();
         }
 
         if (title === '') {
-            alert('제목을 입력해주세요.');
+            showAlertPopup('제목을 입력해주세요.');
             throw Error();
         }
 
         if (!(visibleType === 'PUBLIC' || visibleType === 'PRIVATE')) {
-            alert('노출 여부 선택해주세요.');
+            showAlertPopup('노출 여부 선택해주세요.');
             throw Error();
         }
 

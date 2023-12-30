@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { getRegisterFormSchema } from '@/utils/validations/registerValidation';
 import ValidateMessage from '../ValidateMessage';
@@ -7,6 +7,8 @@ import { useMutation } from '@tanstack/react-query';
 import { userSignUp } from '@/services/MemberService';
 import { useRouter } from 'next/navigation';
 import { BASE_URL } from '@/consts';
+import { PopupContext } from '../PopupProvider';
+import AlertPopup from '../popup/AlertPopup';
 
 type FormTypes = {
     username: string;
@@ -33,6 +35,7 @@ const RegisterForm = () => {
     });
 
     const router = useRouter();
+    const { showPopup, hidePopup } = useContext(PopupContext);
 
     const inputCss =
         'w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded focus:text-gray-700 focus:bg-white focus:border-yellow-400 focus:outline-none';
@@ -73,7 +76,7 @@ const RegisterForm = () => {
     const { mutate, isLoading, error, isSuccess } = useMutation(userSignUp, {
         onSuccess: () => {
             router.push('/sign-in');
-            window.alert('회원가입에 성공하셨습니다.');
+            showPopup(<AlertPopup message={'회원가입에 성공하셨습니다.'} hidePopup={hidePopup} />);
         },
         onError: (error) => {
             console.log('에러', error);

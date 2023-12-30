@@ -1,11 +1,19 @@
 'use client';
-import React from 'react';
+import React, { useContext } from 'react';
+import { PopupContext } from '../PopupProvider';
+import AlertPopup from '../popup/AlertPopup';
 
 const MobileView = () => {
+    const { showPopup, hidePopup } = useContext(PopupContext);
+
     const handleCopyLink = async () => {
         //https
         await window.navigator.clipboard?.writeText(window.location.href);
-        alert('링크가 복사되었습니다!');
+        showAlertPopup('링크가 복사되었습니다!');
+    };
+
+    const showAlertPopup = (maeeage: string) => {
+        showPopup(<AlertPopup message={maeeage} hidePopup={hidePopup} />);
     };
 
     return (

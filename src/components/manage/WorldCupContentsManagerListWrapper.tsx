@@ -6,6 +6,8 @@ import { useMutation } from '@tanstack/react-query';
 import { getAccessToken } from '@/utils/TokenManager';
 import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageContext';
 import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
+import AlertPopup from '../popup/AlertPopup';
+import { PopupContext } from '../PopupProvider';
 
 /**
  * 게임 컨텐츠 리스트 래핑 요소입니다.
@@ -13,6 +15,8 @@ import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
  * @returns
  */
 const WorldCupContentsManageListWrapper = (params: any) => {
+    const { showPopup, hidePopup } = useContext(PopupContext);
+
     const { worldCupContentsManageContext, setWorldCupContentsManageContext }: any =
         useContext(WorldCupContentsManageContext);
 
@@ -74,7 +78,7 @@ const WorldCupContentsManageListWrapper = (params: any) => {
         const bindingNewWorldCupContents = transformToCreateWorldCupContentsType(newContentsList);
 
         if (bindingNewWorldCupContents.length === 0) {
-            alert('새로운 컨텐츠가 없습니다.');
+            showAlertPopup('새로운 컨텐츠가 없습니다.');
             return;
         }
         const token = getAccessToken();
@@ -88,13 +92,17 @@ const WorldCupContentsManageListWrapper = (params: any) => {
 
     const mutationWorldCupContents = useMutation(createWorldCupContents, {
         onSuccess: () => {
-            alert('성공');
+            showAlertPopup('성공');
             window.location.reload();
         },
         onError: (error) => {
-            alert(error);
+            showAlertPopup('error');
         },
     });
+
+    const showAlertPopup = (maeeage: string) => {
+        showPopup(<AlertPopup message={maeeage} hidePopup={hidePopup} />);
+    };
 
     const getSizeNewContents = (newWorldCupContents: any) =>
         newWorldCupContents.filter((item: any) => item.id === undefined).length;

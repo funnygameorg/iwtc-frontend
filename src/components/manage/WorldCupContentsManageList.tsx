@@ -9,12 +9,16 @@ import InternetVideoUrlCard from './contentsListCard/InternetVideoUrlCard';
 import StaticMediaFileTypeCard from './contentsListCard/StaticMediaFileTypeCard';
 import { type } from 'os';
 import ManageCardWrapper from './contentsListCard/ManageCardWrapper';
+import AlertPopup from '../popup/AlertPopup';
+import { PopupContext } from '../PopupProvider';
 
 /*
     게임 관리 폼에서 월드컵 게임 컨텐츠에 관한 내용을 표현하는 폼
     TODO : 리스트의 Card 내용을 컴포넌트로 따로 분리하기
 */
 const WorldCupContentsManageList = () => {
+    const { showPopup, hidePopup } = useContext(PopupContext);
+
     // 유튜브 영상 상태
     const [youtubeUrl, setYoutubeUrl] = useState('');
 
@@ -63,12 +67,12 @@ const WorldCupContentsManageList = () => {
     const verifyVideoTypeContents = ({ videoStartTime, videoPlayDuration }: any) => {
         const size5AndOnlyNumberRegex = /^\d{5}$/;
         if (!size5AndOnlyNumberRegex.test(videoStartTime)) {
-            alert("'영상 시작 시간'은 '00000'의 형식입니다. \n 예 : 10분 1초 -> 01001, 0분 30초 -> 00030");
+            showAlertPopup("'영상 시작 시간'은 '00000'의 형식입니다. \n 예 : 10분 1초 -> 01001, 0분 30초 -> 00030");
             throw Error();
         }
 
         if (!(3 <= videoPlayDuration && videoPlayDuration <= 5)) {
-            alert('반복 시간은 3~5초로 설정해주세요.');
+            showAlertPopup('반복 시간은 3~5초로 설정해주세요.');
             throw Error();
         }
     };
@@ -76,7 +80,7 @@ const WorldCupContentsManageList = () => {
     // 파일 형식 컨텐츠 데이터 검증
     const verifyFileTypeContents = ({ mediaPath, originalName }: any) => {
         if (mediaPath === '' || originalName === '') {
-            alert('파일이 존재하지 않습니다.');
+            showAlertPopup('파일이 존재하지 않습니다.');
             throw Error();
         }
     };
@@ -84,19 +88,23 @@ const WorldCupContentsManageList = () => {
     // 컨텐츠 데이터 검증 공통 파트
     const verifyAllTypeContents = ({ contentsName, visibleType, fileType }: any) => {
         if (contentsName === '') {
-            alert('컨텐츠 이름이 없습니다.');
+            showAlertPopup('컨텐츠 이름이 없습니다.');
             throw Error();
         }
 
         if (!(visibleType === 'PUBLIC' || fileType === 'PRIVATE')) {
-            alert('공개 여부를 선택해주세요.');
+            showAlertPopup('공개 여부를 선택해주세요.');
             throw Error();
         }
 
         if (!(fileType === 'video' || fileType === 'file')) {
-            alert('파일 타입이 존재하지 않음');
+            showAlertPopup('파일 타입이 존재하지 않음');
             throw Error();
         }
+    };
+
+    const showAlertPopup = (maeeage: string) => {
+        showPopup(<AlertPopup message={maeeage} hidePopup={hidePopup} />);
     };
 
     // 새로운 컨텐츠를 리스트 추가

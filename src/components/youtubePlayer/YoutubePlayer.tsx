@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import AlertPopup from '../popup/AlertPopup';
+import { PopupContext } from '../PopupProvider';
 
 // 플레이어 사용 위치에 따라 플레이어 크기 선택
 const getPlayerSize = (componentType: any) => {
+    const { showPopup, hidePopup } = useContext(PopupContext);
+
     const uploadComponentWidth = 560;
     const uploadComponentHeight = 315;
 
@@ -13,7 +17,7 @@ const getPlayerSize = (componentType: any) => {
     } else if (componentType == 'uploadList') {
         return [uploadListComponentWidth, uploadListComponentHeight];
     } else {
-        alert('sorry..');
+        showPopup(<AlertPopup message={'sorry..'} hidePopup={hidePopup} />);
     }
 };
 
