@@ -3,14 +3,17 @@ import { userMeSummary, userSignOut } from '@/services/MemberService';
 import { getAccessToken } from '@/utils/TokenManager';
 import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getUserInfo, localStorageClear } from '@/stores/LocalStore';
 import { useAuth } from '../AuthProvider';
+import { PopupContext } from '../PopupProvider';
+import AlertPopup from '../popup/AlertPopup';
 
 const SignInUpButton = () => {
     const router = useRouter();
     const { isLoggedIn, logout } = useAuth();
+    const { showPopup, hidePopup } = useContext(PopupContext);
 
     // const { mutate } = useMutation(userSignOut2, {
     //     onSuccess: (data) => {
@@ -28,7 +31,7 @@ const SignInUpButton = () => {
             if (response) {
                 localStorageClear();
                 logout();
-                window.alert('로그아웃 하셨습니다.');
+                showPopup(<AlertPopup message="로그아웃 하셨습니다." hidePopup={hidePopup} />);
             }
         } else {
             router.push('/sign-in');

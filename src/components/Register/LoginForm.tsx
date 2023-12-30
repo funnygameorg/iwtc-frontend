@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { getLoginFormSchema } from '@/utils/validations/loginValidation';
 import ValidateMessage from '../ValidateMessage';
@@ -10,6 +10,8 @@ import { setToken } from '@/utils/TokenManager';
 import { useRouter } from 'next/navigation';
 import { setUserInfo } from '@/stores/LocalStore';
 import { useAuth } from '../AuthProvider';
+import AlertPopup from '../popup/AlertPopup';
+import { PopupContext } from '../PopupProvider';
 interface FormTypes {
     username: string;
     password: string;
@@ -18,6 +20,7 @@ interface FormTypes {
 const LoginForm = () => {
     const router = useRouter();
     const { login } = useAuth();
+    const { showPopup, hidePopup } = useContext(PopupContext);
 
     const {
         register,
@@ -46,7 +49,7 @@ const LoginForm = () => {
             if (error.response.data) {
                 const { errorCode, message } = error.response.data;
                 if (errorCode === 5003) {
-                    window.alert(message);
+                    showPopup(<AlertPopup message={message} hidePopup={hidePopup} />);
                 }
             }
         },
