@@ -21,9 +21,9 @@ const WorldCupList = ({ wcList }: any) => {
     } = wcList;
     return (
         <div className="p-4 max-w-sm">
-            <div className="w-80 h-128 rounded overflow-hidden shadow-lg">
+            <div className="w-120 h-128 rounded overflow-hidden shadow-lg">
                 <Link href={`/play-game/${contentNum}`}>
-                    <div className="flex">
+                    <div className="flex h-2/3">
                         <div className="flex-1">
                             {reftFileType === 'INTERNET_VIDEO_URL' ? (
                                 <div className="flex items-center justify-center h-full">
@@ -67,9 +67,10 @@ const WorldCupList = ({ wcList }: any) => {
                             )}
                         </div>
                     </div>
-                    <div className="px-6 py-4 h-52">
+                    <div className="px-6 py-4 h-1/3">
                         <div className="font-bold text-xl mb-2">{gameTitle}</div>
                         <p className="text-gray-700 text-base">{description}</p>
+                        <p className="text-gray-700 text-base">{''}</p>
                     </div>
                 </Link>
             </div>
