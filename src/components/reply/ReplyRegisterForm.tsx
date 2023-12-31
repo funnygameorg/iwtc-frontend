@@ -1,6 +1,9 @@
 import { worldCupGameReplyRegister } from '@/services/ReplyService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '../AuthProvider';
+import { getUserInfo } from '@/stores/LocalStore';
+import * as shortid from 'shortid';
 
 interface IProps {
     worldcupId: number;
@@ -9,6 +12,7 @@ interface IProps {
 
 const ReplyRegisterForm = ({ worldcupId, contentsId }: IProps) => {
     const queryClient = useQueryClient();
+    const { isLoggedIn, logout } = useAuth();
 
     const [text, setText] = useState<string>('');
     const { mutate: replyRegister } = useMutation(worldCupGameReplyRegister, {
@@ -29,7 +33,7 @@ const ReplyRegisterForm = ({ worldcupId, contentsId }: IProps) => {
             worldcupId: worldcupId,
             contentsId: contentsId,
             body: text,
-            nickname: '테스트',
+            nickname: isLoggedIn ? getUserInfo().nickname : shortid.generate(),
         };
         replyRegister(params);
     };

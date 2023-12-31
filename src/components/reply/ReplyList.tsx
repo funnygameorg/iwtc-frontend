@@ -28,11 +28,11 @@ const ReplyList = ({ replyData }: IProps) => {
                 <footer className="flex justify-between items-center mb-2">
                     <div className="flex items-center">
                         <p className="inline-flex items-center mr-3 text-sm font-semibold">
-                            <img
+                            {/* <img
                                 className="mr-2 w-6 h-6 rounded-full"
                                 src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
                                 alt="Michael Gough"
-                            />
+                            /> */}
                             <span className="text-yellow-400">{writerNickname}</span>
                         </p>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
