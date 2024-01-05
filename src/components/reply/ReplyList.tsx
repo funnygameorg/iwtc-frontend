@@ -24,7 +24,7 @@ const ReplyList = ({ replyData }: IProps) => {
     };
     return (
         <>
-            <article className="bg-zinc-900 border border-zinc-600 p-6 text-base rounded-lg dark:bg-gray-900">
+            <article className="bg-zinc-900 border border-zinc-600 p-3 text-base rounded-lg dark:bg-gray-900">
                 <footer className="flex justify-between items-center mb-2">
                     <div className="flex items-center">
                         <p className="inline-flex items-center mr-3 text-sm font-semibold">

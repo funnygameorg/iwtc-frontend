@@ -1,4 +1,5 @@
 import CustomYoutubePlayer from '@/components/youtubePlayer/CustomYoutubePlayer';
+import { isMP4 } from '@/utils/common';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
@@ -35,6 +36,17 @@ const WorldCupList = ({ wcList }: any) => {
                                         playDuration={reftVideoPlayDuration}
                                     />
                                 </div>
+                            ) : isMP4(reftImgMediaFileNo) ? (
+                                <div className="flex items-center justify-center h-full">
+                                    <video
+                                        src={reftImgMediaFileNo}
+                                        width={'100%'}
+                                        height={'100%'}
+                                        autoPlay
+                                        muted
+                                        loop
+                                    />
+                                </div>
                             ) : (
                                 <Image
                                     className="w-full h-52"
@@ -54,6 +66,17 @@ const WorldCupList = ({ wcList }: any) => {
                                         width={'100%'}
                                         height={'100%'}
                                         playDuration={rightVideoPlayDuration}
+                                    />
+                                </div>
+                            ) : isMP4(rightImgMediaFileNo) ? (
+                                <div className="flex items-center justify-center h-full">
+                                    <video
+                                        src={rightImgMediaFileNo}
+                                        width={'100%'}
+                                        height={'100%'}
+                                        autoPlay
+                                        muted
+                                        loop
                                     />
                                 </div>
                             ) : (

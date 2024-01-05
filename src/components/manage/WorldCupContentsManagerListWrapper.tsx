@@ -8,15 +8,15 @@ import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageCon
 import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
 import AlertPopup from '../popup/AlertPopup';
 import { PopupContext } from '../PopupProvider';
+import router from 'next/router';
 
 /**
  * 게임 컨텐츠 리스트 래핑 요소입니다.
  * @param initWorldCupGameContentsList 월드컵 게임수정 버튼으로 들어오면 기존 월드컵 컨텐츠가 들어온다.
  * @returns
  */
-const WorldCupContentsManageListWrapper = (params: any) => {
+const WorldCupContentsManageListWrapper = ({ initWorldCupGameContentsList }: any) => {
     const { showPopup, hidePopup } = useContext(PopupContext);
-
     const { worldCupContentsManageContext, setWorldCupContentsManageContext }: any =
         useContext(WorldCupContentsManageContext);
 
@@ -27,8 +27,8 @@ const WorldCupContentsManageListWrapper = (params: any) => {
     const [createdContentsNames, setCreatedContentsNames] = useState([]);
 
     useEffect(() => {
-        if (params.initWorldCupGameContentsList) {
-            const contentsLst = params.initWorldCupGameContentsList.map((item: any) => ({
+        if (initWorldCupGameContentsList) {
+            const contentsLst = initWorldCupGameContentsList.map((item: any) => ({
                 contentsId: item.id,
                 contentsName: item.contentsName,
                 visibleType: item.visibleType,
@@ -93,7 +93,9 @@ const WorldCupContentsManageListWrapper = (params: any) => {
     const mutationWorldCupContents = useMutation(createWorldCupContents, {
         onSuccess: () => {
             showAlertPopup('성공');
-            window.location.reload();
+            router.push('/');
+            //TODO: 초기화
+            // window.location.reload();
         },
         onError: (error) => {
             showAlertPopup('error');
@@ -106,7 +108,6 @@ const WorldCupContentsManageListWrapper = (params: any) => {
 
     const getSizeNewContents = (newWorldCupContents: any) =>
         newWorldCupContents.filter((item: any) => item.id === undefined).length;
-
     // 반환 컴포넌트
     return (
         <div>
@@ -127,7 +128,7 @@ const WorldCupContentsManageListWrapper = (params: any) => {
                                     } hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
                                     onClick={() => createNewWorldCupContentsList()}
                                 >
-                                    새로운 컨텐츠 생성 적용 [{getSizeNewContents(worldCupContentsManageContext)}개]
+                                    새로운 컨텐츠 생성 적용 [{worldCupContentsManageContext?.length}개]
                                 </button>
                             </div>
                         </>

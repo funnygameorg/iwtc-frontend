@@ -1,5 +1,5 @@
 'use client';
-import React, { ChangeEvent, useContext, useRef, useState } from 'react';
+import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
@@ -11,13 +11,25 @@ import { type } from 'os';
 import ManageCardWrapper from './contentsListCard/ManageCardWrapper';
 import AlertPopup from '../popup/AlertPopup';
 import { PopupContext } from '../PopupProvider';
+import { FFmpeg, createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 
 /*
     게임 관리 폼에서 월드컵 게임 컨텐츠에 관한 내용을 표현하는 폼
     TODO : 리스트의 Card 내용을 컴포넌트로 따로 분리하기
 */
+
+const ffmpeg: FFmpeg = createFFmpeg({
+    // corePath: '../../node_modules/@ffmpeg/core/dist/ffmpeg-core.js',
+    // corePath: '/ffmpeg/core@0.11.0/ffmpeg-core.js',
+    corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
+
+    log: true,
+});
+
 const WorldCupContentsManageList = () => {
     const { showPopup, hidePopup } = useContext(PopupContext);
+
+    const [ready, setReady] = useState<boolean>(false);
 
     // 유튜브 영상 상태
     const [youtubeUrl, setYoutubeUrl] = useState('');
@@ -26,26 +38,38 @@ const WorldCupContentsManageList = () => {
     const [worldCupContents, setWorldCupContents] = useState({
         contentsName: '',
         visibleType: '',
-
         fileType: '',
         mediaPath: '',
         originalName: '',
         absoluteName: '',
         videoStartTime: '',
         videoPlayDuration: '',
+        mp4Type: '',
+        imgType: '',
     });
 
     const {
         contentsName,
         visibleType,
-
         fileType,
         mediaPath,
         originalName,
         absoluteName,
         videoStartTime,
         videoPlayDuration,
+        mp4Type,
+        imgType,
     } = worldCupContents;
+
+    useEffect(() => {
+        //ffmpeg load
+        load();
+    }, []);
+
+    const load = async () => {
+        await ffmpeg.load();
+        setReady(true);
+    };
 
     const handleCreateWorldCupContents = (e: any) => {
         const { name, value } = e.target;
@@ -68,12 +92,12 @@ const WorldCupContentsManageList = () => {
         const size5AndOnlyNumberRegex = /^\d{5}$/;
         if (!size5AndOnlyNumberRegex.test(videoStartTime)) {
             showAlertPopup("'영상 시작 시간'은 '00000'의 형식입니다. \n 예 : 10분 1초 -> 01001, 0분 30초 -> 00030");
-            throw Error();
+            return;
         }
 
         if (!(3 <= videoPlayDuration && videoPlayDuration <= 5)) {
             showAlertPopup('반복 시간은 3~5초로 설정해주세요.');
-            throw Error();
+            return;
         }
     };
 
@@ -81,7 +105,7 @@ const WorldCupContentsManageList = () => {
     const verifyFileTypeContents = ({ mediaPath, originalName }: any) => {
         if (mediaPath === '' || originalName === '') {
             showAlertPopup('파일이 존재하지 않습니다.');
-            throw Error();
+            return;
         }
     };
 
@@ -89,18 +113,19 @@ const WorldCupContentsManageList = () => {
     const verifyAllTypeContents = ({ contentsName, visibleType, fileType }: any) => {
         if (contentsName === '') {
             showAlertPopup('컨텐츠 이름이 없습니다.');
-            throw Error();
+            return;
         }
 
         if (!(visibleType === 'PUBLIC' || fileType === 'PRIVATE')) {
             showAlertPopup('공개 여부를 선택해주세요.');
-            throw Error();
+            return;
         }
 
         if (!(fileType === 'video' || fileType === 'file')) {
             showAlertPopup('파일 타입이 존재하지 않음');
-            throw Error();
+            return;
         }
+        return true;
     };
 
     const showAlertPopup = (maeeage: string) => {
@@ -109,28 +134,30 @@ const WorldCupContentsManageList = () => {
 
     // 새로운 컨텐츠를 리스트 추가
     const applyNewContents = () => {
-        verifyAllTypeContents({ contentsName, visibleType, fileType });
+        const isVerify = verifyAllTypeContents({ contentsName, visibleType, fileType });
+        if (isVerify) {
+            if (fileType === 'video') {
+                verifyVideoTypeContents({ videoStartTime, videoPlayDuration });
+            }
 
-        if (fileType === 'video') {
-            verifyVideoTypeContents({ videoStartTime, videoPlayDuration });
+            if (fileType === 'file') {
+                verifyFileTypeContents({ mediaPath, originalName });
+            }
+            const newContent = {
+                contentsName,
+                visibleType,
+                fileType,
+                mediaPath,
+                originalName,
+                absoluteName,
+                videoStartTime,
+                videoPlayDuration,
+                mp4Type,
+                imgType,
+            };
+            handleMediaFileType('');
+            setWorldCupContentsManageContext((prev: any) => [...prev, newContent]);
         }
-
-        if (fileType === 'file') {
-            verifyFileTypeContents({ mediaPath, originalName });
-        }
-
-        const newContent = {
-            contentsName,
-            visibleType,
-            fileType,
-            mediaPath,
-            originalName,
-            absoluteName,
-            videoStartTime,
-            videoPlayDuration,
-        };
-        handleMediaFileType('');
-        setWorldCupContentsManageContext((prev: any) => [...prev, newContent]);
     };
 
     // 공개 여부 상태
@@ -158,6 +185,8 @@ const WorldCupContentsManageList = () => {
             absoluteName: '',
             videoStartTime: '',
             videoPlayDuration: '',
+            mp4Type: '',
+            imgType: '',
         });
         setIsImageLoaded(false);
         if (imgRef.current) {
@@ -168,12 +197,13 @@ const WorldCupContentsManageList = () => {
     };
 
     // 정적 파일 입력 컴포넌트
-    const imgRef = useRef<HTMLImageElement>(null);
+    const imgRef = useRef<any>(null);
+    const videoRef = useRef<any>(null);
 
     const [isImageLoaded, setIsImageLoaded] = useState(false);
 
     const staticMediaFileType = () => {
-        const readImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const readImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
             setIsImageLoaded(true);
 
             if (!e.target.files?.length) return;
@@ -181,22 +211,59 @@ const WorldCupContentsManageList = () => {
             const imageFile = e.target.files[0];
             const reader = new FileReader();
 
-            setWorldCupContents((prevWorldCupContents) => ({
-                ...prevWorldCupContents,
-                originalName: imageFile.name,
-                absoluteName: imageFile.name,
-            }));
-
             reader.addEventListener('load', (e: ProgressEvent<FileReader>) => {
                 if (!e || !e.target) return;
-                if (typeof e.target.result !== 'string' || !imgRef.current) return;
-
-                imgRef.current.src = e.target.result;
-                setWorldCupContents((prevWorldCupContents: any) => ({
-                    ...prevWorldCupContents,
-                    mediaPath: e?.target?.result,
-                }));
+                // if (typeof e.target.result !== 'string' || !imgRef.current) return;
+                let type = e.target.result as string;
+                if (imageFile.type === 'image/gif') {
+                    setWorldCupContents((prevWorldCupContents: any) => ({
+                        ...prevWorldCupContents,
+                        originalName: imageFile.name,
+                        absoluteName: imageFile.name,
+                        mediaPath: e?.target?.result,
+                        mp4Type: type,
+                    }));
+                } else {
+                    setWorldCupContents((prevWorldCupContents: any) => ({
+                        ...prevWorldCupContents,
+                        originalName: imageFile.name,
+                        absoluteName: imageFile.name,
+                        mediaPath: e?.target?.result,
+                        imgType: type,
+                    }));
+                }
             });
+
+            // setWorldCupContents((prevWorldCupContents) => ({
+            //     ...prevWorldCupContents,
+
+            // }));
+
+            console.log('imageFile', imageFile);
+            if (imageFile.type === 'image/gif') {
+                ffmpeg.FS('writeFile', imageFile.name, await fetchFile(imageFile));
+                await ffmpeg.run('-i', imageFile.name, 'output.mp4');
+                // await ffmpeg.run(
+                //     '-f',
+                //     'gif',
+                //     '-i',
+                //     imageFile.name,
+                //     '-movflags',
+                //     '+faststart',
+                //     '-pix_fmt',
+                //     'yuv420p',
+                //     '-vf',
+                //     'scale=trunc(iw/2)*2:trunc(ih/2)*2',
+                //     'output.mp4'
+                // );
+
+                const data = ffmpeg.FS('readFile', 'output.mp4');
+                // const url = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+                const url = new Blob([data.buffer], { type: 'video/mp4' });
+
+                reader.readAsDataURL(url);
+                return;
+            }
 
             reader.readAsDataURL(imageFile);
         };
@@ -215,10 +282,22 @@ const WorldCupContentsManageList = () => {
                     />
                     {isImageLoaded === true ? (
                         <div style={{ marginTop: '10px' }}>
-                            <img ref={imgRef} width={'auto'} height={100} alt="img" />
+                            {mp4Type && (
+                                <video
+                                    ref={videoRef}
+                                    src={mp4Type}
+                                    width={'auto'}
+                                    height={100}
+                                    autoPlay
+                                    muted
+                                    loop
+                                ></video>
+                            )}
+
+                            {imgType && <img ref={imgRef} src={imgType} width={'auto'} height={100} alt="img" />}
                         </div>
                     ) : (
-                        <div></div>
+                        <></>
                     )}
                 </div>
             </div>
@@ -267,9 +346,11 @@ const WorldCupContentsManageList = () => {
                         />
                     </div>
                 </div>
-                <div className="m-5">
-                    <YoutubePlayer url={mediaPath} componentType={'uploadForm'} />
-                </div>
+                {mediaPath && (
+                    <div className="m-5">
+                        <YoutubePlayer url={mediaPath} componentType={'uploadForm'} />
+                    </div>
+                )}
             </div>
         );
     };
@@ -405,7 +486,6 @@ const WorldCupContentsManageList = () => {
             </div>
         );
     };
-
     return (
         <div>
             {createWorldCupComponent()}

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import InternetVideoUrlCard from './InternetVideoUrlCard';
 import StaticMediaFileTypeCard from './StaticMediaFileTypeCard';
 import { getMediaFile } from '@/services/EtcService';
+import { isMP4 } from '@/utils/common';
 
 const ManageCardWrapper = ({ contents, index }: any) => {
     // DB에서 가져온 데이터 양식과 새로 추가된 컨텐츠의 데이터 양식이 다르다.
@@ -17,6 +18,8 @@ const ManageCardWrapper = ({ contents, index }: any) => {
             fileType: contentsByServer?.fileType || contentsByClient.filType,
             mediaData: contentsByServer?.mediaData || contentsByClient.mediaPath,
             mediaFileId: contentsByServer?.mediaFileId,
+            mp4Type: contentsByServer ? isMP4(contentsByServer.mediaData) : contentsByClient.mp4Type,
+            imgType: contentsByServer ? !isMP4(contentsByServer.mediaData) : contentsByClient.imgType,
         };
     };
 

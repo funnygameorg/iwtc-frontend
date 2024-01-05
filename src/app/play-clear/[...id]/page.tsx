@@ -4,7 +4,7 @@ import ReplyRegisterForm from '@/components/reply/ReplyRegisterForm';
 import ReplyList from '@/components/reply/ReplyList';
 import { useQueryGetWorldCupGameResultRankList, worldCupGameClear } from '@/services/WorldCupService';
 import { useQueryGetReplyList, worldCupGameReplyRegister } from '@/services/ReplyService';
-import { mappingMediaFile } from '@/utils/common';
+import { isMP4, mappingMediaFile } from '@/utils/common';
 import { useMutation } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import CustomYoutubePlayer from '@/components/youtubePlayer/CustomYoutubePlayer';
@@ -35,9 +35,9 @@ const Page = ({ params }: { params: { id: any } }) => {
                 <div className="flex h-screen bg-zinc-950 text-white">
                     {/* 왼쪽 영역 */}
                     <div className="w-8/12 p-4" style={{ height: '100%' }}>
+                        <h1 className="text-2xl font-bold mb-4 text-center">월드컵 우승</h1>
                         <div className="h-full flex flex-col ">
                             {/* 여기에 왼쪽 영역 컨텐츠를 넣으세요 */}
-                            <h1 className="text-2xl font-bold mb-4 text-center">월드컵 우승</h1>
                             <div className="flex h-2/3 bg-zinc-900 border-zinc-400">
                                 {/* <div className="w-1/4 bg-gray-100 max-w-2xl mx-auto h-full rounded-md shadow-md p-2 h-5/6 flex flex-col justify-center items-center"> */}
                                 {/* 세로로 이미지 4개 배치 */}
@@ -57,6 +57,20 @@ const Page = ({ params }: { params: { id: any } }) => {
                                                         playDuration={items.videoPlayDuration}
                                                     />
                                                     {/* </div> */}
+                                                </li>
+                                            ) : isMP4(items.imgUrl) ? (
+                                                <li className="w-full h-1/3 text-center " key={items.contentsId}>
+                                                    <span>{items.rank}등</span>
+                                                    <div className="flex justify-center items-center w-full h-full">
+                                                        <video
+                                                            src={items.imgUrl}
+                                                            width={'100%'}
+                                                            height={'75%'}
+                                                            autoPlay
+                                                            muted
+                                                            loop
+                                                        />
+                                                    </div>
                                                 </li>
                                             ) : (
                                                 <li className="w-full h-1/3 text-center" key={items.contentsId}>
@@ -88,6 +102,17 @@ const Page = ({ params }: { params: { id: any } }) => {
                                                         playDuration={items.videoPlayDuration}
                                                     />
                                                 </li>
+                                            ) : isMP4(items.imgUrl) ? (
+                                                <div className="w-full h-full flex justify-center items-centerl">
+                                                    <video
+                                                        src={items.imgUrl}
+                                                        width={'600rem'}
+                                                        height={'400'}
+                                                        autoPlay
+                                                        muted
+                                                        loop
+                                                    />
+                                                </div>
                                             ) : (
                                                 <>
                                                     <li className="w-full h-full flex justify-center items-center ">

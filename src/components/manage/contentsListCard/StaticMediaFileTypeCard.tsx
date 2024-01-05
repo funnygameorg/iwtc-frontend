@@ -27,6 +27,8 @@ const StaticMediaFileTypeCard = ({ index, contents }: any) => {
             mediaData: contents.mediaData,
             videoStartTime: contents.videoStartTime,
             videoPlayDuration: contents.videoPlayDuration,
+            imgType: contents.imgType,
+            mp4Type: contents.mp4Type,
         });
         setImage(contents.mediaData);
     }, [contents.mediaData]);
@@ -86,14 +88,18 @@ const StaticMediaFileTypeCard = ({ index, contents }: any) => {
             originalName: imageFile.name,
         }));
     };
-
     return (
         <div>
             <div key={index} className="mb-4 p-4 border rounded-xl shadow-sm">
                 <div className="flex justify-between">
                     <div className="flex min-w-0 gap-x-4">
                         <div className="flex min-w-0 gap-x-4">
-                            <Image className="w-full h-52" src={image || ''} width={'10'} height={'10'} alt="img" />
+                            {mediaData.mp4Type && (
+                                <video src={image} width={'auto'} height={100} autoPlay muted loop></video>
+                            )}
+                            {mediaData.imgType && (
+                                <Image className="w-full h-52" src={image || ''} width={'10'} height={'10'} alt="img" />
+                            )}
                         </div>
                         <div>
                             <div className="flex-1 min-w-0">

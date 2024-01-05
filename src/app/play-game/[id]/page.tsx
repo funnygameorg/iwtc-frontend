@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useQueryGetWorldCupGameRound, worldCupGamePlay } from '@/services/WorldCupService';
 import RoundPopup from '@/components/popup/RoundPopup';
 import { useMutation } from '@tanstack/react-query';
-import { mappingMediaFile } from '@/utils/common';
+import { isMP4, mappingMediaFile } from '@/utils/common';
 import { useRouter } from 'next/navigation';
 import { animated, useSpring } from '@react-spring/web';
 import CustomYoutubePlayer from '@/components/youtubePlayer/CustomYoutubePlayer';
@@ -192,7 +192,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                     <div className="relative flex p-4 text-black shadow " style={{ width: '1600px', height: '800px' }}>
                         {/* <div className="flex items-start relative" onClick={() => handleClick()}> */}
                         <animated.div
-                            className={'flex items-start relative w-full'}
+                            className={'flex items-start mx-auto left-0 right-0 w-full'}
                             style={{
                                 ...left,
                             }}
@@ -208,6 +208,10 @@ const Page = ({ params }: { params: { id: number } }) => {
                                         playDuration={gameList[0]?.videoPlayDuration}
                                     />
                                 </div>
+                            ) : isMP4(gameList[0]?.imgUrl) ? (
+                                <div className="flex items-center justify-center h-full">
+                                    <video src={gameList[0]?.imgUrl} width={'700'} height={'300'} autoPlay muted loop />
+                                </div>
                             ) : (
                                 <Image
                                     className="h-full w-full"
@@ -217,14 +221,13 @@ const Page = ({ params }: { params: { id: number } }) => {
                                     alt={gameList[0]?.name}
                                 />
                             )}
+                            <div className="absolute bottom-10 left-10">
+                                <div className="bg-white text-6xl font-bold text-black px-3 py-3 rounded-md">
+                                    {gameList[0]?.name}
+                                </div>
+                            </div>
                         </animated.div>
                         {/* <div className="fixed bottom-0 left-0 bg-white p-4 text-white"> */}
-
-                        <div className="absolute bottom-10 left-10">
-                            <div className="bg-white text-6xl font-bold text-black px-3 py-3 rounded-md">
-                                {gameList[0]?.name}
-                            </div>
-                        </div>
 
                         {/* </div> */}
                         {/* </div> */}
@@ -258,6 +261,10 @@ const Page = ({ params }: { params: { id: number } }) => {
                                         height={'500'}
                                         playDuration={gameList[1]?.videoPlayDuration}
                                     />
+                                </div>
+                            ) : isMP4(gameList[1]?.imgUrl) ? (
+                                <div className="flex items-center justify-center h-full">
+                                    <video src={gameList[1]?.imgUrl} width={'700'} height={'300'} autoPlay muted loop />
                                 </div>
                             ) : (
                                 <Image
