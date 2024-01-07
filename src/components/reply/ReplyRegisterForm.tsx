@@ -43,7 +43,7 @@ const ReplyRegisterForm = ({ worldcupId, contentsId }: IProps) => {
     };
     return (
         <div className="flex mb-10 ">
-            <div className=" w-2/3 border border-zinc-600 py-2 px-4 mb-4  bg-zinc-900 rounded-md shadow-md rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+            <div className=" w-2/3 border border-zinc-600 py-1 px-4 mb-4  bg-zinc-900 rounded-md shadow-md rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                 <label form="comment" className="sr-only">
                     Your comment
                 </label>
