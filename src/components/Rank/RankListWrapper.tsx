@@ -23,7 +23,7 @@ const RankListWrapper = ({ contentsId }: IProps) => {
             <h2 className="text-2xl font-bold mb-4">게임 결과 랭킹 목록</h2>
             <div className="overflow-auto">
                 {allRankIsSuccess ? (
-                    <ul className="divide-y divide-gray-200 w-full h-1/6 ">
+                    <ul className="divide-y divide-zinc-600  w-full h-1/6 ">
                         {allRankList.data.map((items: any, index: number) => {
                             const { contentsName } = items;
                             return <RankList key={index} contentsName={contentsName} rank={index + 1} />;
