@@ -1,10 +1,6 @@
 'use client';
+import { OrderType } from '@/interfaces/models/tab/OrderTab';
 import React, { Dispatch, SetStateAction, useState } from 'react';
-
-enum OrderType {
-    Latest = '최신순',
-    Popularity = '인기순',
-}
 
 interface IProps {
     setOrder: Dispatch<SetStateAction<string>>;
@@ -13,7 +9,7 @@ interface IProps {
 const Order = ({ setOrder }: IProps) => {
     const orderOptions = Object.values(OrderType);
 
-    const [selectedOrder, setSelectedOrder] = useState<OrderType>(OrderType.Latest);
+    const [selectedOrder, setSelectedOrder] = useState<OrderType>(OrderType.Lastest);
     const [isOpen, setOpen] = useState<boolean>(false);
 
     const handleDropDown = () => {
@@ -21,7 +17,7 @@ const Order = ({ setOrder }: IProps) => {
     };
 
     const handleOrderChange = (type: string) => {
-        const valueToSet = type === '최신순' ? 'id' : 'views';
+        const valueToSet = type === OrderType.Lastest ? 'id' : 'views';
         setOrder(valueToSet);
     };
 
@@ -63,10 +59,9 @@ const Order = ({ setOrder }: IProps) => {
                     className="py-2 z-50 text-sm text-gray-700 dark:text-gray-200"
                     aria-labelledby="dropdownDefaultButton"
                 >
-                    {orderOptions.map((option, index) => (
+                    {orderOptions.map((option: OrderType, index: number) => (
                         <li key={index}>
                             <a
-                                href="#"
                                 className={`block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white ${
                                     option === selectedOrder ? 'font-bold' : ''
                                 }`}
