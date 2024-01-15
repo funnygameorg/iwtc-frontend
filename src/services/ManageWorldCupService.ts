@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { ajaxDelete, ajaxGet, ajaxPost, ajaxPut } from './BaseService';
+import { useQuery } from '@tanstack/react-query';
+import { getAccessToken } from '@/utils/TokenManager';
 
 const createHeader = (token: any) => {
     return {
@@ -71,9 +73,9 @@ export const getMyWorldCupList = async (token: string) => {
     }
 };
 
-// 이상형 리스트 조회
-export const getMyWorldCup = async (worldCupId: number, token: string) => {
-    const authHeaders = createHeader(token);
+// 내가 만든 이상형 월드컵 조회
+export const getMyWorldCup = async (worldCupId: number) => {
+    const authHeaders = createHeader(getAccessToken());
 
     const response = await ajaxGet(`/world-cups/me/${worldCupId}`, {
         headers: authHeaders,
@@ -87,9 +89,18 @@ export const getMyWorldCup = async (worldCupId: number, token: string) => {
     }
 };
 
+export const useQueryGetMyWorldCup = (worldcupId: number) => {
+    return useQuery<any, Error>(['MyWorldCup', worldcupId], () => getMyWorldCup(worldcupId), {
+        retry: 0,
+        refetchOnWindowFocus: false,
+        staleTime: 3000,
+        enabled: !!worldcupId,
+    });
+};
+
 // 이상형 컨텐츠 리스트 조회
-export const getMyWorldCupContentsList = async (worldCupId: number, token: string) => {
-    const authHeaders = createHeader(token);
+export const getMyWorldCupContentsList = async (worldCupId: number) => {
+    const authHeaders = createHeader(getAccessToken());
 
     const response = await ajaxGet(`/world-cups/me/${worldCupId}/manage-contents`, {
         headers: authHeaders,
@@ -103,9 +114,18 @@ export const getMyWorldCupContentsList = async (worldCupId: number, token: strin
     }
 };
 
+export const useQueryGetMyWorldCupContentsList = (worldcupId: number) => {
+    return useQuery<any, Error>(['MyWorldCupContentsList', worldcupId], () => getMyWorldCupContentsList(worldcupId), {
+        retry: 0,
+        refetchOnWindowFocus: false,
+        staleTime: 3000,
+        enabled: !!worldcupId,
+    });
+};
+
 // 이상형 컨텐츠 1건 수정
 export const updateMyWorldCupContents = async (worldCupId: number, contentsId: number, params: any, token: string) => {
-    console.log(params);
+    console.log('test ===>', params);
     const authHeaders = createHeader(token);
 
     const response = await ajaxPut(`/world-cups/me/${worldCupId}/contents/${contentsId}`, params, {

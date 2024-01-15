@@ -6,18 +6,17 @@ import { getAccessToken } from '@/utils/TokenManager';
 import Image from 'next/image';
 import { useContext, useEffect, useState } from 'react';
 
-const StaticMediaFileTypeCard = ({ index, contents }: any) => {
-    const { worldCupContentsManageContext, setWorldCupContentsManageContext }: any =
-        useContext(WorldCupContentsManageContext);
+interface IProps {
+    contents: any;
+    index?: any;
+    worldCupId: any;
+    setWorldCupContentsList: any;
+}
 
-    const { worldCupId, setWorldCupId }: any = useContext(WorldCupIdManageContext);
-
-    const [image, setImage] = useState<any>('');
-
+const StaticMediaFileTypeCard = ({ contents, index, worldCupId, setWorldCupContentsList }: IProps) => {
+    // const [image, setImage] = useState<any>('');
     const [mediaData, setMediaData] = useState<any>({});
-
     const [isUpdateMode, setIsUpdateMode] = useState(false);
-
     useEffect(() => {
         setMediaData({
             contentsId: contents.contentsId,
@@ -29,9 +28,11 @@ const StaticMediaFileTypeCard = ({ index, contents }: any) => {
             videoPlayDuration: contents.videoPlayDuration,
             imgType: contents.imgType,
             mp4Type: contents.mp4Type,
+            detailFileType: contents.detailFileType,
+            mediaFileId: contents.mediaFileId,
         });
-        setImage(contents.mediaData);
-    }, [contents.mediaData]);
+        // setImage(contents.mediaData);
+    }, [contents]);
 
     const handleMediaData = (e: any) => {
         const { name, value } = e.target;
@@ -43,32 +44,50 @@ const StaticMediaFileTypeCard = ({ index, contents }: any) => {
     };
 
     // 해당 요소 삭제
-    const removeContents = (contentsName: any) => {
-        const accessToken = getAccessToken();
-        console.log(worldCupId, mediaData.contentsId);
-        removeMyWorldCupContents(worldCupId, mediaData.contentsId, accessToken);
-        setWorldCupContentsManageContext((prev: any) =>
-            prev.filter((contents: any) => contents.contentsName !== contentsName)
+    const removeContents = async () => {
+        setWorldCupContentsList((prev: any) =>
+            prev
+                .filter((contents: any) => contents.id !== index)
+                .map((contents: any, newIndex: number) => ({ ...contents, id: newIndex }))
         );
+        if (mediaData.contentsId) {
+            const accessToken = getAccessToken();
+
+            await removeMyWorldCupContents(worldCupId, mediaData.contentsId, accessToken);
+        }
     };
 
     const updateContentsMode = () => {
         setIsUpdateMode(true);
     };
 
-    const applyUpdateContents = () => {
-        const requestBody = {
-            contentsName: mediaData.contentsName,
-            originalName: mediaData.originalName || 'No_NAME',
-            mediaData: image,
-            videoStartTime: null,
-            videoPlayDuration: null,
-            visibleType: mediaData.visibleType,
-        };
+    const applyUpdateContents = async () => {
+        setWorldCupContentsList((prev: any) =>
+            prev.map((contents: any) =>
+                contents.id === index
+                    ? { ...contents, contentsName: mediaData.contentsName, mediaData: mediaData.mediaData }
+                    : contents
+            )
+        );
 
-        const accessToken = getAccessToken();
+        // setMediaData((prevData: any) => ({
+        //     ...prevData,
+        //     contentsName: imageFile.name,
+        // }));
+        if (mediaData.contentsId) {
+            const requestBody = {
+                contentsName: mediaData.contentsName,
+                originalName: mediaData.originalName || 'No_NAME',
+                mediaData: mediaData.mediaData,
+                videoStartTime: null,
+                videoPlayDuration: null,
+                visibleType: mediaData.visibleType,
+                detailFileType: mediaData.detailFileType,
+            };
 
-        updateMyWorldCupContents(worldCupId, mediaData.contentsId, requestBody, accessToken);
+            const accessToken = getAccessToken();
+            await updateMyWorldCupContents(worldCupId, mediaData.contentsId, requestBody, accessToken);
+        }
 
         setIsUpdateMode(false);
     };
@@ -76,9 +95,12 @@ const StaticMediaFileTypeCard = ({ index, contents }: any) => {
     const changeImage = (e: any) => {
         const imageFile = e.target.files[0];
         const reader = new FileReader();
-
         reader.addEventListener('load', (e: ProgressEvent<FileReader>) => {
-            setImage(e?.target?.result);
+            // setImage(e?.target?.result);
+            setMediaData((prevData: any) => ({
+                ...prevData,
+                mediaData: e?.target?.result,
+            }));
         });
 
         reader.readAsDataURL(imageFile);
@@ -88,6 +110,7 @@ const StaticMediaFileTypeCard = ({ index, contents }: any) => {
             originalName: imageFile.name,
         }));
     };
+
     return (
         <div>
             <div key={index} className="mb-4 p-4 border rounded-xl shadow-sm">
@@ -95,10 +118,23 @@ const StaticMediaFileTypeCard = ({ index, contents }: any) => {
                     <div className="flex min-w-0 gap-x-4">
                         <div className="flex min-w-0 gap-x-4">
                             {mediaData.mp4Type && (
-                                <video src={image} width={'auto'} height={100} autoPlay muted loop></video>
+                                <video
+                                    src={mediaData.mediaData}
+                                    width={'auto'}
+                                    height={100}
+                                    autoPlay
+                                    muted
+                                    loop
+                                ></video>
                             )}
                             {mediaData.imgType && (
-                                <Image className="w-full h-52" src={image || ''} width={'10'} height={'10'} alt="img" />
+                                <Image
+                                    className="w-full h-52"
+                                    src={mediaData.mediaData}
+                                    width={'10'}
+                                    height={'10'}
+                                    alt="img"
+                                />
                             )}
                         </div>
                         <div>
@@ -192,7 +228,7 @@ const StaticMediaFileTypeCard = ({ index, contents }: any) => {
                             {!isUpdateMode ? (
                                 <button
                                     className="bg-red-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded"
-                                    onClick={() => removeContents(mediaData.contentsName)}
+                                    onClick={() => removeContents()}
                                 >
                                     삭제
                                 </button>

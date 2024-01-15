@@ -9,67 +9,89 @@ import { isContext } from 'vm';
 import AlertPopup from '../popup/AlertPopup';
 import { PopupContext } from '../PopupProvider';
 
+interface IProps {
+    setIsCreateWorldCup: any;
+    worldCupContentsList: any;
+    setWorldCupId: any;
+    worldCupId: any;
+    myWorldCupData?: any;
+    isCreateWorldCup: any;
+}
 /**
  * 게임 관리 폼에서 월드컵 게임에 관한 내용을 표현하는 폼
  * @param params - 월드컵 게임수정 버튼으로 들어오면 기존 월드컵의 내용이 들어온다.
  * @returns 월드컵 게임 수정 컴포넌트
  */
-const WorldCupManageForm = (params: any) => {
-    const { isCreateWorldCup, setIsCreateWorldCup }: any = useContext(WorldCupManageContext);
-    const { worldCupId, setWorldCupId }: any = useContext(WorldCupIdManageContext);
+const WorldCupManageForm = ({
+    setIsCreateWorldCup,
+    worldCupContentsList,
+    setWorldCupId,
+    worldCupId,
+    myWorldCupData,
+    isCreateWorldCup,
+}: IProps) => {
     const { showPopup, hidePopup } = useContext(PopupContext);
 
-    const [worldCup, setValue] = useState({
-        title: '',
-        description: '',
-        visibleType: 'PUBLIC',
-    });
-
-    const [freezeWorldCup, setFreezeWorldCup] = useState({
-        freezeTitle: '',
-        freezeDescription: '',
-        freezeVisibleType: 'PUBLIC',
+    const [worldCupInfo, setWorldCuptInfo] = useState({
+        title: myWorldCupData ? myWorldCupData.title : '',
+        description: myWorldCupData ? myWorldCupData.description : '',
+        visibleType: myWorldCupData ? myWorldCupData.visibleType : '',
     });
 
     useEffect(() => {
-        if (params.initWorldCupGame !== undefined) {
-            setValue({
-                title: params.initWorldCupGame.title,
-                description: params.initWorldCupGame.description,
-                visibleType: params.initWorldCupGame.visibleType,
-            });
-            setFreezeWorldCup({
-                freezeTitle: params.initWorldCupGame.title,
-                freezeDescription: params.initWorldCupGame.description,
-                freezeVisibleType: params.initWorldCupGame.visibleType,
-            });
-        }
-    }, [params.initWorldCupGame]);
+        setWorldCuptInfo((prevWorldCup: any) => ({
+            ...prevWorldCup,
+            visibleType: myWorldCupData ? myWorldCupData.visibleType : 'PUBLIC',
+        }));
+    }, []);
 
-    const { title, description, visibleType } = worldCup;
+    useEffect(() => {
+        if (myWorldCupData) {
+            setWorldCuptInfo((prevWorldCup: any) => ({
+                ...prevWorldCup,
+                title: myWorldCupData.title,
+                description: myWorldCupData.description,
+                visibleType: myWorldCupData.visibleType,
+            }));
+        }
+    }, [myWorldCupData]);
+
+    // useEffect(() => {
+    //     if (params.initWorldCupGame !== undefined) {
+    //         setValue({
+    //             title: params.initWorldCupGame.title,
+    //             description: params.initWorldCupGame.description,
+    //             visibleType: params.initWorldCupGame.visibleType,
+    //         });
+    //         setFreezeWorldCup({
+    //             freezeTitle: params.initWorldCupGame.title,
+    //             freezeDescription: params.initWorldCupGame.description,
+    //             freezeVisibleType: params.initWorldCupGame.visibleType,
+    //         });
+    //     }
+    // }, [params.initWorldCupGame]);
+
+    // const { title, description, visibleType } = worldCup;
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
-        setValue((prevWorldCup) => ({
+        setWorldCuptInfo((prevWorldCup: any) => ({
             ...prevWorldCup,
             [name]: value,
         }));
     };
 
-    const mutation = useMutation(createWorldCup, {
+    const createGame = useMutation(createWorldCup, {
         onSuccess: (data) => {
-            setFreezeWorldCup({
-                freezeTitle: title,
-                freezeDescription: description,
-                freezeVisibleType: visibleType,
-            });
-
             setWorldCupId(data.data);
-            setIsCreateWorldCup(false);
+            setIsCreateWorldCup(true);
         },
 
-        onError: (error) => {
-            showAlertPopup('error');
+        onError: (error: any) => {
+            const { errorCode, message } = error?.response.data;
+            if (errorCode) {
+                showAlertPopup(message);
+            }
         },
     });
 
@@ -78,6 +100,7 @@ const WorldCupManageForm = (params: any) => {
     };
 
     const handleCreateWorldCup = (e: any) => {
+        const { title, description, visibleType } = worldCupInfo;
         if (description.length > 100 || description === '') {
             showAlertPopup('월드컵 설명 1자 이상 100자 이하입니다.');
             throw Error();
@@ -104,21 +127,7 @@ const WorldCupManageForm = (params: any) => {
 
         e.preventDefault();
 
-        mutation.mutate(newWorldCup);
-    };
-
-    const updatableWorldCupState = (freezeWorldCup: any, worldCup: any) => {
-        const equalsUpdateWorldCup =
-            freezeWorldCup.freezeTitle === worldCup.title &&
-            freezeWorldCup.freezeDescription === worldCup.description &&
-            freezeWorldCup.freezeVisibleType === worldCup.visibleType;
-
-        const blankWorldCup =
-            freezeWorldCup.freezeTitle === '' &&
-            freezeWorldCup.freezeDescription === '' &&
-            freezeWorldCup.freezeVisibleType === '';
-
-        return !blankWorldCup && !equalsUpdateWorldCup;
+        createGame.mutate(newWorldCup);
     };
 
     const disabledUpdateButton = () => {
@@ -155,7 +164,7 @@ const WorldCupManageForm = (params: any) => {
                         type="text"
                         id="title"
                         name="title"
-                        value={title}
+                        value={worldCupInfo.title}
                         onChange={handleChange}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
@@ -168,7 +177,7 @@ const WorldCupManageForm = (params: any) => {
                     <textarea
                         id="description"
                         name="description"
-                        value={description}
+                        value={worldCupInfo.description}
                         onChange={handleChange}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
@@ -184,7 +193,7 @@ const WorldCupManageForm = (params: any) => {
                                 value="PUBLIC"
                                 onChange={handleChange}
                                 className="form-radio"
-                                checked={visibleType === 'PUBLIC'}
+                                checked={worldCupInfo.visibleType === 'PUBLIC'}
                             />
                             <span className="ml-2">공개</span>
                         </label>
@@ -195,14 +204,14 @@ const WorldCupManageForm = (params: any) => {
                                 value="PRIVATE"
                                 onChange={handleChange}
                                 className="form-radio"
-                                checked={visibleType === 'PRIVATE'}
+                                checked={worldCupInfo.visibleType === 'PRIVATE'}
                             />
                             <span className="ml-2">비공개</span>
                         </label>
                     </div>
                 </div>
 
-                {updatableWorldCupState(freezeWorldCup, worldCup) ? enableUpdateButton() : disabledUpdateButton()}
+                {!isCreateWorldCup ? enableUpdateButton() : disabledUpdateButton()}
             </div>
         </div>
     );

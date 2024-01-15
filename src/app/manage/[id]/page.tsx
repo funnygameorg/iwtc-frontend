@@ -2,84 +2,116 @@
 import React, { useContext, useEffect, useState } from 'react';
 import WorldCupManageForm from '@/components/manage/WorldCupManageForm';
 import WorldCupContentsManageListWrapper from '@/components/manage/WorldCupContentsManagerListWrapper';
-import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
 import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
 import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageContext';
-import { getMyWorldCup, getMyWorldCupContentsList } from '@/services/ManageWorldCupService';
+import { useQueryGetMyWorldCup, useQueryGetMyWorldCupContentsList } from '@/services/ManageWorldCupService';
 import { getAccessToken } from '@/utils/TokenManager';
+import { getMediaFile } from '@/services/EtcService';
+import { isMP4 } from '@/utils/common';
 
 /*
     월드컵 관리 페이지를 표현합니다.
 */
-const ManageForm = (params: any) => {
-    // 월드컵 데이터
-    const [worldCupManageContext, setWorldCupManageContext] = useState('');
-    console.log('월드컵 아이디', worldCupManageContext);
-    // 월드컵 컨텐츠 데이터
-    const [worldCupContentsManageContext, setWorldCupContentsManageContext] = useState([]);
+const ManageForm = ({ params }: any) => {
+    const { id } = params;
+    const { data: myWorldCupData, isSuccess: isMyWorldCupSuccess } = useQueryGetMyWorldCup(id);
+    const { data: myWorldCupContentsList, isSuccess: isMyWorldCupContentsList } = useQueryGetMyWorldCupContentsList(id);
 
-    // 월드컵 데이터 상태로 대신 사용해도 가능할 듯?
-    const [worldCupId, setWorldCupId] = useState(0);
-
-    // 월드컵이 현재 생성 상태인가?
-    const [isCreateWorldCup, setIsCreateWorldCup] = useState<any>('');
+    const [worldCupContentsList, setWorldCupContentsList] = useState([]);
+    const [worldCupId, setWorldCupId] = useState(id ? id : 0);
+    const [isCreateWorldCup, setIsCreateWorldCup] = useState(false);
 
     useEffect(() => {
-        // 월드컵 게임 상태 저장
-        const fetchMyWorldCup = async () => {
-            try {
-                const myWorldCup: any = await getMyWorldCup(worldCupId, accessToken);
-
-                setWorldCupManageContext(myWorldCup.data.data);
-            } catch (error) {
-                console.error('월드컵 정보 가져오기 실패:', error);
-            }
-        };
-
-        // 월드컵 게임 컨텐츠 리스트 상태 저장
-        const fetchMyWorldCupContents = async () => {
-            try {
-                const myWorldCupContents: any = await getMyWorldCupContentsList(worldCupId, accessToken);
-
-                setWorldCupContentsManageContext(myWorldCupContents.data.data);
-            } catch (error) {
-                console.error('월드컵 게임 컨텐츠 정보 가져오기 실패:', error);
-            }
-        };
-
-        const accessToken = getAccessToken();
-
-        if (params.params.id !== null) {
-            setIsCreateWorldCup(false);
-            setWorldCupId(params.params.id);
-            fetchMyWorldCup();
-            fetchMyWorldCupContents();
-        } else {
+        if (isMyWorldCupSuccess) {
             setIsCreateWorldCup(true);
         }
-    }, [params.params.id, worldCupId]);
+    }, [isMyWorldCupSuccess]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (isMyWorldCupContentsList) {
+                try {
+                    const newData: any = await Promise.all(
+                        myWorldCupContentsList.data.data.map(async (items: any, index: number) => {
+                            const data = await getMediaFile(items.mediaFileId);
+                            const dataForm = syncFormatMediaData(items, data?.data.data, index);
+                            return dataForm;
+                        })
+                    );
+
+                    setWorldCupContentsList(newData);
+                } catch (error) {
+                    console.error('비동기 작업 실패:', error);
+                }
+            }
+        };
+
+        fetchData();
+    }, [isMyWorldCupContentsList]);
+    const syncFormatMediaData = (contentsByClient: any, contentsByServer: any, index: number) => {
+        return {
+            id: index,
+            contentsId: contentsByClient?.id,
+            contentsName: contentsByClient.contentsName,
+            videoStartTime: contentsByServer?.videoStartTime
+                ? contentsByServer?.videoStartTime
+                : '' || contentsByClient.videoStartTime,
+            videoPlayDuration: contentsByServer?.videoPlayDuration
+                ? contentsByServer?.videoPlayDuration
+                : '' || contentsByClient.videoPlayDuration,
+            visibleType: contentsByServer?.visibleType || contentsByClient.visibleType,
+            fileType: contentsByServer?.fileType || contentsByClient.fileType,
+            mediaData: contentsByServer?.mediaData || contentsByClient.mediaPath,
+            mediaFileId: contentsByServer?.mediaFileId || contentsByClient.mediaFileId,
+            mp4Type: contentsByServer
+                ? isMP4(contentsByServer.mediaData)
+                    ? contentsByServer?.mediaData
+                    : undefined
+                : contentsByClient.mp4Type,
+            imgType: contentsByServer
+                ? !isMP4(contentsByServer.mediaData)
+                    ? contentsByServer?.mediaData
+                    : undefined
+                : contentsByClient.imgType,
+            detailFileType: contentsByServer ? contentsByServer.detailType : contentsByClient.detailFileType,
+            originalName: contentsByServer ? contentsByServer.originalName : contentsByClient.originalName,
+        };
+    };
+
+    // 월드컵 게임 상태 저장
+    // const fetchMediaFile = async () => {
+    //     try {
+    //         const data = await getMediaFile(contents.mediaFileId);
+    //         const getMediaFileData = data?.data.data;
+    //         const newData = syncFormatMediaData(contents, getMediaFileData);
+    //         setMediaData(newData);
+    //     } catch (error) {
+    //         console.error('월드컵 정보 가져오기 실패:', error);
+    //     }
+    // };
 
     return (
         <div>
-            <WorldCupIdManageContext.Provider value={{ worldCupId, setWorldCupId }}>
-                <WorldCupContentsManageContext.Provider
-                    value={{ worldCupContentsManageContext, setWorldCupContentsManageContext }}
-                >
-                    <WorldCupManageContext.Provider value={{ isCreateWorldCup, setIsCreateWorldCup }}>
-                        <div className="flex my-5">
-                            <div className="flex-none m-5">
-                                <WorldCupManageForm initWorldCupGame={worldCupManageContext} />
-                            </div>
-
-                            <div className="flex-auto">
-                                <WorldCupContentsManageListWrapper
-                                    initWorldCupGameContentsList={worldCupContentsManageContext}
-                                />
-                            </div>
-                        </div>
-                    </WorldCupManageContext.Provider>
-                </WorldCupContentsManageContext.Provider>
-            </WorldCupIdManageContext.Provider>
+            <div className="flex my-5">
+                <div className="flex-none m-5">
+                    <WorldCupManageForm
+                        setIsCreateWorldCup={setIsCreateWorldCup}
+                        worldCupContentsList={worldCupContentsList}
+                        setWorldCupId={setWorldCupId}
+                        worldCupId={worldCupId}
+                        myWorldCupData={isMyWorldCupSuccess && myWorldCupData.data.data}
+                        isCreateWorldCup={isCreateWorldCup}
+                    />
+                </div>
+                <div className="flex-auto">
+                    <WorldCupContentsManageListWrapper
+                        isCreateWorldCup={isCreateWorldCup}
+                        worldCupContentsList={worldCupContentsList}
+                        setWorldCupContentsList={setWorldCupContentsList}
+                        worldCupId={worldCupId}
+                    />
+                </div>
+            </div>
         </div>
     );
 };

@@ -19,6 +19,7 @@ const WorldCupList = ({ wcList }: any) => {
         rightVideoStartTime,
         description,
         contentNum,
+        detailType,
     } = wcList;
     return (
         <div className="p-4 max-w-sm">

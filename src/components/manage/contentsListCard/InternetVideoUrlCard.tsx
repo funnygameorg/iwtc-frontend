@@ -7,22 +7,19 @@ import exp from 'constants';
 import Image from 'next/image';
 import { useContext, useEffect, useState } from 'react';
 
-const InternetVideoUrlCard = ({ index, contents }: any) => {
-    const { worldCupContentsManageContext, setWorldCupContentsManageContext }: any =
-        useContext(WorldCupContentsManageContext);
+interface IProps {
+    contents: any;
+    index?: any;
+    worldCupId: any;
+    setWorldCupContentsList: any;
+}
 
+const InternetVideoUrlCard = ({ contents, index, worldCupId, setWorldCupContentsList }: IProps) => {
     // 유튜브 영상 플레이어에 제공한다.
-    const [youtubeUrl, setYoutubeUrl] = useState('');
-
-    const { worldCupId, setWorldCupId }: any = useContext(WorldCupIdManageContext);
-
     const [mediaData, setMediaData] = useState<any>({});
-
     const [isUpdateMode, setIsUpdateMode] = useState(false);
 
     useEffect(() => {
-        setYoutubeUrl(contents.mediaData);
-
         setMediaData({
             contentsId: contents.contentsId,
             contentsName: contents.contentsName,
@@ -31,16 +28,23 @@ const InternetVideoUrlCard = ({ index, contents }: any) => {
             mediaData: contents.mediaData,
             videoStartTime: contents.videoStartTime,
             videoPlayDuration: contents.videoPlayDuration,
+            detailFileType: 'YOU_TUBE_URL',
+            mediaFileId: contents.mediaFileId,
         });
-    }, []);
+    }, [contents]);
 
     // 해당 요소 삭제
     const removeContents = (contentsName: any) => {
-        const accessToken = getAccessToken();
-        removeMyWorldCupContents(worldCupId, mediaData.contentsId, accessToken);
-        setWorldCupContentsManageContext((prev: any) =>
-            prev.filter((contents: any) => contents.contentsName !== contentsName)
+        setWorldCupContentsList((prev: any) =>
+            prev
+                .filter((contents: any) => contents.id !== index)
+                .map((contents: any, newIndex: number) => ({ ...contents, id: newIndex }))
         );
+        if (mediaData.contentsId) {
+            const accessToken = getAccessToken();
+
+            removeMyWorldCupContents(worldCupId, mediaData.contentsId, accessToken);
+        }
     };
 
     // 해당 요소 수정
@@ -49,7 +53,10 @@ const InternetVideoUrlCard = ({ index, contents }: any) => {
     };
 
     const changeVideo = (e: any) => {
-        setYoutubeUrl(e.target.value);
+        setMediaData((prevData: any) => ({
+            ...prevData,
+            mediaData: e.target.value,
+        }));
     };
 
     const handleMediaData = (e: any) => {
@@ -65,19 +72,27 @@ const InternetVideoUrlCard = ({ index, contents }: any) => {
     };
 
     const applyUpdateContents = () => {
-        const requestBody = {
-            contentsName: mediaData.contentsName,
-            originalName: '',
-            mediaData: youtubeUrl,
-            videoStartTime: mediaData.videoStartTime,
-            videoPlayDuration: mediaData.videoPlayDuration,
-            visibleType: mediaData.visibleType,
-        };
+        setWorldCupContentsList((prev: any) =>
+            prev.map((contents: any) =>
+                contents.id === index
+                    ? { ...contents, contentsName: mediaData.contentsName, mediaData: mediaData.mediaData }
+                    : contents
+            )
+        );
+        if (mediaData.contentsId) {
+            const accessToken = getAccessToken();
+            const requestBody = {
+                contentsName: mediaData.contentsName,
+                originalName: mediaData.originalName,
+                mediaData: mediaData.mediaData,
+                videoStartTime: mediaData.videoStartTime,
+                videoPlayDuration: mediaData.videoPlayDuration,
+                visibleType: mediaData.visibleType,
+            };
+            // console.log('전송 데이터', requestBody);
 
-        const accessToken = getAccessToken();
-        console.log('전송 데이터', requestBody);
-
-        updateMyWorldCupContents(worldCupId, mediaData.contentsId, requestBody, accessToken);
+            updateMyWorldCupContents(worldCupId, mediaData.contentsId, requestBody, accessToken);
+        }
 
         setIsUpdateMode(false);
     };
@@ -88,7 +103,7 @@ const InternetVideoUrlCard = ({ index, contents }: any) => {
                 <div className="flex justify-between">
                     <div className="flex min-w-0 gap-x-4">
                         <div className="flex min-w-0 gap-x-4">
-                            <YoutubePlayer url={youtubeUrl} componentType={'uploadList'} />
+                            <YoutubePlayer url={mediaData.mediaData} componentType={'uploadList'} />
                         </div>
 
                         <div className="flex-1">
@@ -117,12 +132,12 @@ const InternetVideoUrlCard = ({ index, contents }: any) => {
                                 <span className="ml-1">
                                     {!isUpdateMode ? (
                                         <a
-                                            href={youtubeUrl}
+                                            href={mediaData.mediaData}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="text-blue-500 hover:underline"
                                         >
-                                            {youtubeUrl}
+                                            {mediaData.mediaData}
                                         </a>
                                     ) : (
                                         <input
@@ -132,7 +147,7 @@ const InternetVideoUrlCard = ({ index, contents }: any) => {
                                             placeholder="YouTube URL"
                                             name="youtubeUrl"
                                             onChange={changeVideo}
-                                            value={youtubeUrl}
+                                            value={mediaData.mediaData}
                                         />
                                     )}
                                 </span>

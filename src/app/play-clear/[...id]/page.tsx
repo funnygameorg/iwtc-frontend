@@ -34,14 +34,14 @@ const Page = ({ params }: { params: { id: any } }) => {
             <>
                 <div className="flex h-screen bg-zinc-950 text-white">
                     {/* 왼쪽 영역 */}
-                    <div className="w-8/12 p-4" style={{ height: '100%' }}>
+                    <div className="w-8/12 h-auto p-4 overflow-auto" style={{ height: '100%' }}>
                         <h1 className="text-2xl font-bold mb-4 text-center">월드컵 우승</h1>
                         <div className="h-full flex flex-col ">
                             {/* 여기에 왼쪽 영역 컨텐츠를 넣으세요 */}
                             <div className="flex h-2/3 bg-zinc-900 border-zinc-400">
                                 {/* <div className="w-1/4 bg-gray-100 max-w-2xl mx-auto h-full rounded-md shadow-md p-2 h-5/6 flex flex-col justify-center items-center"> */}
                                 {/* 세로로 이미지 4개 배치 */}
-                                <ul className=" w-1/4 bg-gray-100 rounded-md shadow-md  bg-zinc-900 border border-zinc-600 ">
+                                <ul className=" w-1/4 bg-gray-100 rounded-md shadow-md bg-zinc-900 border border-zinc-600 ">
                                     {rankList.map((items: any) => {
                                         if (items.rank !== 1) {
                                             return items.fileType === 'INTERNET_VIDEO_URL' ? (
@@ -130,7 +130,7 @@ const Page = ({ params }: { params: { id: any } }) => {
                                 </ul>
                                 {/* 예시로 h-96 사용 */}
                             </div>
-                            <div className="flex h-1/3">
+                            <div className="flex h-full">
                                 <RankListWrapper contentsId={id[0]} />
                             </div>
                         </div>
