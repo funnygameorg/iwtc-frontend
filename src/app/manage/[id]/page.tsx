@@ -29,7 +29,7 @@ const ManageForm = ({ params }: any) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (isMyWorldCupContentsList) {
+            if (isMyWorldCupContentsList && id) {
                 try {
                     const newData: any = await Promise.all(
                         myWorldCupContentsList.data.data.map(async (items: any, index: number) => {
@@ -47,7 +47,7 @@ const ManageForm = ({ params }: any) => {
         };
 
         fetchData();
-    }, [isMyWorldCupContentsList]);
+    }, [isMyWorldCupContentsList, id]);
     const syncFormatMediaData = (contentsByClient: any, contentsByServer: any, index: number) => {
         return {
             id: index,
@@ -60,7 +60,7 @@ const ManageForm = ({ params }: any) => {
                 ? contentsByServer?.videoPlayDuration
                 : '' || contentsByClient.videoPlayDuration,
             visibleType: contentsByServer?.visibleType || contentsByClient.visibleType,
-            fileType: contentsByServer?.fileType || contentsByClient.fileType,
+            fileType: contentsByServer?.fileType === 'STATIC_MEDIA_FILE' ? 'file' : '' || contentsByClient.fileType,
             mediaData: contentsByServer?.mediaData || contentsByClient.mediaPath,
             mediaFileId: contentsByServer?.mediaFileId || contentsByClient.mediaFileId,
             mp4Type: contentsByServer
