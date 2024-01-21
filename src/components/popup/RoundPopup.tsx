@@ -3,13 +3,15 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 interface IProps {
     roundList: any;
     setSelectRound: Dispatch<SetStateAction<number>>;
+    setFirstSelectedRound: Dispatch<SetStateAction<number>>;
 }
 
-const RoundPopup = ({ roundList, setSelectRound }: IProps) => {
+const RoundPopup = ({ roundList, setSelectRound, setFirstSelectedRound }: IProps) => {
     const [isOnPopup, setIsOnPopup] = useState<boolean>(true);
 
     const selectRound = (round: number) => {
         setSelectRound(round);
+        setFirstSelectedRound(round);
         closePopup();
     };
 
@@ -26,8 +28,9 @@ const RoundPopup = ({ roundList, setSelectRound }: IProps) => {
                 id="crypto-modal"
                 tabIndex={-1}
                 aria-hidden="true"
-                className={`${isOnPopup ? '' : 'hidden'
-                    } grid place-items-center fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full`}
+                className={`${
+                    isOnPopup ? '' : 'hidden'
+                } grid place-items-center fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full`}
             >
                 <div className="relative w-full max-w-md max-h-full">
                     {/* <!-- Modal content --> */}

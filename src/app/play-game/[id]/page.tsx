@@ -26,34 +26,52 @@ const Page = ({ params }: { params: { id: number } }) => {
         fourthWinnerContentsId: 0,
     });
     const [isSwapping, setIsSwapping] = useState<boolean>(false);
-    // console.log('gameList', gameList);
-    // const mappingMediaFile = async (test: any) => {
-    //     const promises = test.map(async (item: any) => {
-    //         getMediaFileAPI(item.mediaFileId)); // 각 mediaFileId에 대해 API를 호출하는 Promise 배열 생성
-    //     const responses = await Promise.all(promises); // 모든 Promise가 완료될 때까지 기다림
-    //     console.log('asdasdasdasd', responses);
+    const [firstSelectedRound, setFirstSelectedRound] = useState<number>(0);
+    const [progressPercentage, setProgressPercentage] = useState<number>(0);
+    const [roundLabels, setRoundLabels] = useState({});
 
-    //     return responses; // API 응답 값들을 배열로 반환
-    // };
+    useEffect(() => {
+        // 8강 기준 4번의 게임을 하면 4강으로 진출 71.4286
+        // (100 / 7 ) * (4 + 1)
+        const updateProgressBar = () => {
+            const percentage = 100 / (firstSelectedRound - 1);
+            setProgressPercentage((prev) => prev + percentage);
+        };
+        //결승은 1
+        // 4강은 2번
+        // 8강은 6번
+        // 16강은 14번에 결승 15번에 끝
+        //32강은 30번에 결승 31번에 끝
+        if (firstSelectedRound !== 0) {
+            updateProgressBar();
+        }
+    }, [gameList]);
 
-    // const mappingMediaFile = async (gameList: any) => {
-    //     const promises = gameList.map(async (item: any) => {
-    //         try {
-    //             const response = await getMediaFileAPI(item.mediaFileId); // API 호출
-    //             item.imgUrl = response.data.mediaData;
-    //             return item; // 응답을 객체에 추가
-    //         } catch (error) {
-    //             console.error(`API 호출 중 오류 발생: ${error}`);
-    //             item.apiResponse = 'API 호출 에러'; // 에러 발생 시 처리
-    //         }
-    //     });
+    useEffect(() => {
+        if (firstSelectedRound !== 0) {
+            const newRoundLabels = updateRoundLabels(firstSelectedRound);
+            setRoundLabels(newRoundLabels);
+        }
+    }, [firstSelectedRound]);
 
-    //     const newGameList = await Promise.all(promises);
-    //     return newGameList;
-    // };
-    const handleAnimationRest = () => {
-        console.log('Animation finished.');
-        // 여기에 원하는 작업을 추가할 수 있습니다.
+    // 선택된 라운드에 따라 roundLabels 상태를 계산하고 업데이트하는 함수
+    const updateRoundLabels = (initialRound: number) => {
+        const labels: any = {};
+        let currentRound = initialRound;
+        let positionIncrement = 100;
+
+        while (currentRound > 2) {
+            if (currentRound === initialRound) {
+                labels[`${currentRound}강`] = 100 - positionIncrement;
+                positionIncrement /= 2;
+            } else {
+                labels[`${currentRound}강`] = (100 / (initialRound - 1)) * (currentRound + 1);
+            }
+            currentRound /= 2;
+        }
+
+        labels['결승'] = 100;
+        return labels;
     };
 
     const useSpringAnimation = (from: number, to: number) => {
@@ -170,7 +188,13 @@ const Page = ({ params }: { params: { id: number } }) => {
     }, [selectRound]);
 
     if (!isPlay) {
-        return <RoundPopup roundList={roundList} setSelectRound={setSelectRound} />;
+        return (
+            <RoundPopup
+                roundList={roundList}
+                setSelectRound={setSelectRound}
+                setFirstSelectedRound={setFirstSelectedRound}
+            />
+        );
     }
     if (gameList) {
         const wcTitle = roundList?.data?.worldCupTitle;
@@ -188,6 +212,28 @@ const Page = ({ params }: { params: { id: number } }) => {
                     <h1 className="text-white text-2xl font-black">
                         {selectRound === 2 ? '결승' : selectRound + '강'}
                     </h1>
+                    <div className="w-1/2 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 relative ">
+                        <div
+                            className={`bg-blue-600 h-2.5 rounded-full absolute left-0 transition-width transition-all duration-700 ease-in-out`}
+                            style={{ width: `${progressPercentage}%` }}
+                        ></div>
+                        {Object.entries(roundLabels).map(([label, position]) => (
+                            <div
+                                key={label}
+                                className="absolute text-white flex"
+                                style={{ left: `${position}%`, transform: 'translateX(-50%)' }}
+                            >
+                                {label}
+                            </div>
+                        ))}
+                    </div>
+                    <div
+                        // key={index}
+                        className="absolute left-0 transform -translate-x-1/2 -translate-y-1/2"
+                        style={{ left: `${progressPercentage}%`, top: '50%' }}
+                    >
+                        {`4강`}
+                    </div>
                     {/* </div> */}
                     <div className="relative flex p-4 text-black shadow " style={{ width: '1600px', height: '800px' }}>
                         {/* <div className="flex items-start relative" onClick={() => handleClick()}> */}
