@@ -33,6 +33,10 @@ const Page = ({ params }: { params: { id: number } }) => {
     useEffect(() => {
         // 8강 기준 4번의 게임을 하면 4강으로 진출 71.4286
         // (100 / 7 ) * (4 + 1)
+        // 16강 기준 8번의 게임을 하면 8강으로 진출
+        // (100 / 15) * (8 + 1)
+        // 8강에서 4강 계산 총 12번 클릭
+        //
         const updateProgressBar = () => {
             const percentage = 100 / (firstSelectedRound - 1);
             setProgressPercentage((prev) => prev + percentage);
@@ -59,16 +63,24 @@ const Page = ({ params }: { params: { id: number } }) => {
         const labels: any = {};
         let currentRound = initialRound;
         let positionIncrement = 100;
+        let currentRound2 = initialRound;
+        let index = 1;
 
         while (currentRound > 2) {
             if (currentRound === initialRound) {
                 labels[`${currentRound}강`] = 100 - positionIncrement;
                 positionIncrement /= 2;
             } else {
-                labels[`${currentRound}강`] = (100 / (initialRound - 1)) * (currentRound + 1);
+                console.log('currentRound2', currentRound2, index);
+                labels[`${currentRound}강`] =
+                    (100 / (initialRound - 1)) * (index === 2 ? currentRound + 1 : currentRound2 + 1);
             }
+
+            currentRound2 = currentRound + currentRound / 2;
+            index++;
             currentRound /= 2;
         }
+        // 처음에 16강일 때 8강 까지 위치는 맞음 근데 8강에서 4강 계산 할 때 이상함 initialRound 때문인데..
 
         labels['결승'] = 100;
         return labels;
@@ -186,6 +198,7 @@ const Page = ({ params }: { params: { id: number } }) => {
             playMutation();
         }
     }, [selectRound]);
+    console.log('roundLabels', roundLabels);
 
     if (!isPlay) {
         return (
@@ -220,7 +233,11 @@ const Page = ({ params }: { params: { id: number } }) => {
                         {Object.entries(roundLabels).map(([label, position]) => (
                             <div
                                 key={label}
-                                className="absolute text-white flex"
+                                className={`absolute ${
+                                    Math.round(position as number) === Math.round(progressPercentage)
+                                        ? 'text-blue text-1xl text-orange-500 font-bold'
+                                        : 'text-white'
+                                } flex`}
                                 style={{
                                     left: `${position === 100 ? 96 : position}%`,
                                     transform: `translateX(${position === 100 ? `50` : '-50'}%)`,
