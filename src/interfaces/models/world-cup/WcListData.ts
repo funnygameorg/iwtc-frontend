@@ -4,7 +4,7 @@ interface WCListDataType {
     description: string;
     // reftImgPath: string;
     // rightImgPath: string;
-    contentNum: number;
+    worldCupId: number;
     gameTitle: string;
     reftImgMediaFileNo: number;
     rightImgMediaFileNo: number;
@@ -35,7 +35,7 @@ export const mapWCListData = (data: any): WCListDataType => {
         rightImgMediaFileNo: data.mediaFileId2,
         // reftImgPath: data.filePath1,
         // rightImgPath: data.filePath2,
-        contentNum: data.id,
+        worldCupId: data.worldCupId,
         gameTitle: data.title,
     };
 };

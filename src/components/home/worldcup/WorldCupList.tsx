@@ -18,13 +18,14 @@ const WorldCupList = ({ wcList }: any) => {
         rightVideoPlayDuration,
         rightVideoStartTime,
         description,
-        contentNum,
+        worldCupId,
         detailType,
     } = wcList;
+    console.log('wcList', wcList);
     return (
         <div className="p-4 max-w-sm">
             <div className="w-120 h-128 rounded overflow-hidden shadow-lg">
-                <Link href={`/play-game/${contentNum}`}>
+                <Link href={`/play-game/${worldCupId}`}>
                     <div className="flex h-2/3">
                         <div className="flex-1">
                             {reftFileType === 'INTERNET_VIDEO_URL' ? (

@@ -51,7 +51,7 @@ const ManageForm = ({ params }: any) => {
     const syncFormatMediaData = (contentsByClient: any, contentsByServer: any, index: number) => {
         return {
             id: index,
-            contentsId: contentsByClient?.id,
+            contentsId: contentsByClient?.worldCupId,
             contentsName: contentsByClient.contentsName,
             videoStartTime: contentsByServer?.videoStartTime
                 ? contentsByServer?.videoStartTime

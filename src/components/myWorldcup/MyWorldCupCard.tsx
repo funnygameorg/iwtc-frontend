@@ -7,7 +7,7 @@ const MyWorldCupCard = ({ myWorldCup }: any) => {
     const updateMyWorldCup = (worldCupId: any) => {};
 
     const removeMyWorldCup = (worldCupId: any) => {};
-
+    console.log('myWorldCup', myWorldCup);
     return (
         <div className="w-full p-4 shadow-md">
             <div className="flex justify-between items-center m-5">
@@ -21,19 +21,19 @@ const MyWorldCupCard = ({ myWorldCup }: any) => {
                 <div>
                     <button
                         className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        onClick={() => playMyWorldCup(myWorldCup.id)}
+                        onClick={() => playMyWorldCup(myWorldCup.worldCupId)}
                     >
                         플레이
                     </button>
                     <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-3"
-                        onClick={() => updateMyWorldCup(myWorldCup.id)}
+                        onClick={() => updateMyWorldCup(myWorldCup.worldCupId)}
                     >
-                        <Link href={`/manage/${myWorldCup.id}`}>수정</Link>
+                        <Link href={`/manage/${myWorldCup.worldCupId}`}>수정</Link>
                     </button>
                     <button
                         className="bg-orange-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-3"
-                        onClick={() => removeMyWorldCup(myWorldCup.id)}
+                        onClick={() => removeMyWorldCup(myWorldCup.worldCupId)}
                     >
                         삭제
                     </button>
