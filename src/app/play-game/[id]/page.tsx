@@ -221,7 +221,10 @@ const Page = ({ params }: { params: { id: number } }) => {
                             <div
                                 key={label}
                                 className="absolute text-white flex"
-                                style={{ left: `${position}%`, transform: 'translateX(-50%)' }}
+                                style={{
+                                    left: `${position === 100 ? 96 : position}%`,
+                                    transform: `translateX(${position === 100 ? `50` : '-50'}%)`,
+                                }}
                             >
                                 {label}
                             </div>
