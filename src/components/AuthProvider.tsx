@@ -16,21 +16,17 @@ export const AuthProvider = ({ children }: any) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태값
 
     useEffect(() => {
-        if (getUserInfo()) {
-            setIsLoggedIn(true);
-        }
-    }, []);
-
-    useEffect(() => {
         if (getAccessToken() && getUserInfo()) {
+            setIsLoggedIn(true);
             loginCheck();
+        } else {
+            setIsLoggedIn(false);
         }
     }, []);
 
     const loginCheck = async () => {
         const accessToken = getAccessToken();
         const userInfo = await userMeSummary(accessToken);
-        console.log('userInfo ===>', userInfo);
     };
 
     const login = () => {

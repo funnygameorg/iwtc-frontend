@@ -2,7 +2,7 @@ import { BASE_URL } from '@/consts';
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 import { newAccessToken, userSignOut } from './MemberService';
 import { localStorageClear } from '@/stores/LocalStore';
-import { setToken } from '@/utils/TokenManager';
+import { removeToken, setToken } from '@/utils/TokenManager';
 
 const instance = axios.create({
     baseURL: `${BASE_URL}api/`,
@@ -42,9 +42,12 @@ instance.interceptors.response.use(
             if (newToken.code === 1010101) {
                 const response = await userSignOut();
                 if (response) {
+                    removeToken('ACCESS_TOKEN');
+                    removeToken('REFRESH_TOKEN');
                     localStorageClear();
                     // logout();
                     window.alert('로그인이 만료되었습니다. 다시 로그인을 해주세요.');
+                    window.location.href = '/sign-in';
                 }
             } else {
                 const { newAccessToken, refreshToken } = newToken.data;
