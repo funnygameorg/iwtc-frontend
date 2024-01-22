@@ -63,25 +63,18 @@ const Page = ({ params }: { params: { id: number } }) => {
         const labels: any = {};
         let currentRound = initialRound;
         let positionIncrement = 100;
-        let currentRound2 = initialRound;
-        let index = 1;
+        let currentRound2 = initialRound / 2;
 
         while (currentRound > 2) {
             if (currentRound === initialRound) {
                 labels[`${currentRound}강`] = 100 - positionIncrement;
                 positionIncrement /= 2;
             } else {
-                console.log('currentRound2', currentRound2, index);
-                labels[`${currentRound}강`] =
-                    (100 / (initialRound - 1)) * (index === 2 ? currentRound + 1 : currentRound2 + 1);
+                labels[`${currentRound}강`] = (100 / (initialRound - 1)) * (currentRound2 + 1);
+                currentRound2 = currentRound2 + currentRound / 2;
             }
-
-            currentRound2 = currentRound + currentRound / 2;
-            index++;
             currentRound /= 2;
         }
-        // 처음에 16강일 때 8강 까지 위치는 맞음 근데 8강에서 4강 계산 할 때 이상함 initialRound 때문인데..
-
         labels['결승'] = 100;
         return labels;
     };
