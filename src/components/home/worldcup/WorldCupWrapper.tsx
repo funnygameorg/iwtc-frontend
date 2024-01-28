@@ -14,7 +14,7 @@ const WorldCupWrapper = () => {
     const [order, setOrder] = useState<string>('id');
     const [rank, setRank] = useState<string>('ALL');
 
-    const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery(
+    const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isSuccess } = useInfiniteQuery(
         ['wclist', order, keyword, rank],
         async ({ pageParam = 0 }) => {
             const response: any = await worldCupAllList(pageParam, 20, order, keyword, rank);
@@ -42,7 +42,7 @@ const WorldCupWrapper = () => {
             },
             staleTime: 3000,
             // enabled: false
-            // cacheTime: 60 * 1000
+            // cacheTime: 60 * 1000,
         }
     );
     return (
@@ -53,17 +53,17 @@ const WorldCupWrapper = () => {
                 <Order setOrder={setOrder} />
             </div>
             <>
-                {/* {!isFetchingNextPage &&  */}
-                <InfiniteScroll loadMore={() => fetchNextPage()} hasMore={hasNextPage}>
-                    <div className="flex flex-wrap justify-center mt-10overflow-auto">
-                        {data?.pages.map((page: any) => {
-                            return page.list.map((items: any, idx: number) => {
-                                return <WorldCupList wcList={items} key={idx} />;
-                            });
-                        })}
-                    </div>
-                </InfiniteScroll>
-                {/* } */}
+                {isSuccess && (
+                    <InfiniteScroll loadMore={() => fetchNextPage()} hasMore={hasNextPage}>
+                        <div className="flex flex-wrap justify-center mt-10overflow-auto">
+                            {data?.pages.map((page: any) => {
+                                return page.list.map((items: any, idx: number) => {
+                                    return <WorldCupList wcList={items} key={idx} />;
+                                });
+                            })}
+                        </div>
+                    </InfiniteScroll>
+                )}
             </>
         </>
     );

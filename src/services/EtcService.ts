@@ -10,9 +10,12 @@ import { ajaxGet } from './BaseService';
 // };
 
 export const getMediaFileAPI = async (mediaFileId: number) => {
+    const params = {
+        size: 'devide2',
+    };
     if (!mediaFileId) return;
     try {
-        const response = await ajaxGet(`/media-files/${mediaFileId}`);
+        const response = await ajaxGet(`/media-files/${mediaFileId}`, { params });
         return response.data;
     } catch (e) {
         console.log('E');
@@ -20,7 +23,10 @@ export const getMediaFileAPI = async (mediaFileId: number) => {
 };
 
 export const getMediaFile = async (mediaFileId: number) => {
-    const response = await ajaxGet(`/media-files/${mediaFileId}`, { timeout: 20000 });
+    const params = {
+        size: 'devide2',
+    };
+    const response = await ajaxGet(`/media-files/${mediaFileId}`, { params });
 
     // console.log("조회 데이터", response?.data.data.mediaData);
     if (response) {

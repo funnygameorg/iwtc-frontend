@@ -15,6 +15,11 @@ export default async function HydratedWCList() {
     await queryClient.prefetchInfiniteQuery(
         ['wclist', 'id', undefined, 'ALL'],
         async () => await worldCupAllList(0, 20, 'id', undefined, 'ALL')
+        // {
+        //     staleTime: 5 * 60 * 1000, // 데이터가 오래된 것으로 간주되기 전까지의 시간 (예: 5분)
+        //     cacheTime: 24 * 60 * 60 * 1000, // 캐시에서 데이터가 유지되는 시간 (예: 24시간)
+        //     // 여기에 추가적인 옵션을 넣을 수 있습니다.
+        // }
     );
     // queryClient.setQueryData(queryKey, (data) => ({
     //   ...data,
