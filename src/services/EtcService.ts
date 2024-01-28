@@ -11,7 +11,7 @@ import { ajaxGet } from './BaseService';
 
 export const getMediaFileAPI = async (mediaFileId: number) => {
     const params = {
-        size: 'devide2',
+        size: 'divide2',
     };
     if (!mediaFileId) return;
     try {
@@ -24,7 +24,7 @@ export const getMediaFileAPI = async (mediaFileId: number) => {
 
 export const getMediaFile = async (mediaFileId: number) => {
     const params = {
-        size: 'devide2',
+        size: 'divide2',
     };
     const response = await ajaxGet(`/media-files/${mediaFileId}`, { params });
 
