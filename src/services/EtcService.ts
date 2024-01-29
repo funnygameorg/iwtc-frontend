@@ -9,9 +9,9 @@ import { ajaxGet } from './BaseService';
 //     });
 // };
 
-export const getMediaFileAPI = async (mediaFileId: number) => {
+export const getMediaFileAPI = async (mediaFileId: number, type?: any) => {
     const params = {
-        size: 'divide2',
+        size: type ? type : undefined,
     };
     if (!mediaFileId) return;
     try {
@@ -23,10 +23,10 @@ export const getMediaFileAPI = async (mediaFileId: number) => {
 };
 
 export const getMediaFile = async (mediaFileId: number) => {
-    const params = {
-        size: 'divide2',
-    };
-    const response = await ajaxGet(`/media-files/${mediaFileId}`, { params });
+    // const params = {
+    //     size: 'divide2',
+    // };
+    const response = await ajaxGet(`/media-files/${mediaFileId}`);
 
     // console.log("조회 데이터", response?.data.data.mediaData);
     if (response) {

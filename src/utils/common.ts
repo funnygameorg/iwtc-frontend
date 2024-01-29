@@ -39,8 +39,8 @@ export const mappingMediaFile2 = async (gameList: any) => {
         const promises = gameList.map(async (item: any) => {
             try {
                 const results = await Promise.allSettled([
-                    getMediaFileAPI(item.reftImgMediaFileNo),
-                    getMediaFileAPI(item.rightImgMediaFileNo),
+                    getMediaFileAPI(item.reftImgMediaFileNo, 'divide2'),
+                    getMediaFileAPI(item.rightImgMediaFileNo, 'divide2'),
                 ]);
 
                 const successfulResults = results.filter((result) => result.status === 'fulfilled');
