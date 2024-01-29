@@ -21,7 +21,6 @@ const WorldCupList = ({ wcList }: any) => {
         worldCupId,
         detailType,
     } = wcList;
-    console.log('wcList', wcList);
     return (
         <div className="p-4 max-w-sm">
             <div className="w-120 h-128 rounded overflow-hidden shadow-lg">

@@ -73,6 +73,15 @@ export const getMyWorldCupList = async (token: string) => {
     }
 };
 
+export const useQueryGetMyWorldCupList = (token: string) => {
+    return useQuery<any, Error>(['MyWorldCupList'], () => getMyWorldCupList(token), {
+        retry: 0,
+        refetchOnWindowFocus: false,
+        staleTime: 3000,
+        enabled: !!token,
+    });
+};
+
 // 내가 만든 이상형 월드컵 조회
 export const getMyWorldCup = async (worldCupId: number) => {
     const authHeaders = createHeader(getAccessToken());
@@ -145,6 +154,18 @@ export const removeMyWorldCupContents = async (worldCupId: number, contentsId: n
     const authHeaders = createHeader(token);
 
     const response = await ajaxDelete(`/world-cups/me/${worldCupId}/contents/${contentsId}`, null, authHeaders);
+
+    console.log('response ===>', response);
+
+    if (response) {
+        return response;
+    }
+};
+
+// 나의 이상형 월드컵 리스트에서 삭제
+export const deleteMyWorldCup = async ({ worldCupId, token }: any) => {
+    const authHeaders = createHeader(token);
+    const response = await ajaxDelete(`/world-cups/me/${String(worldCupId)}`, null, authHeaders);
 
     console.log('response ===>', response);
 

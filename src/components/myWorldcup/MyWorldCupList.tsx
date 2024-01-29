@@ -1,31 +1,34 @@
 'use client';
 
-import { getMyWorldCupList } from '@/services/ManageWorldCupService';
+import { getMyWorldCupList, useQueryGetMyWorldCupList } from '@/services/ManageWorldCupService';
 import { getAccessToken } from '@/utils/TokenManager';
 import { get } from 'http';
 import { useEffect, useState } from 'react';
 import MyWorldCupCard from './MyWorldCupCard';
 
 const MyWorldCupList = () => {
-    const [myWorldCupList, setMyWorldCupList] = useState([]);
-
     const accessToken = getAccessToken();
+    const { data: myWorldCupList, isSuccess, refetch } = useQueryGetMyWorldCupList(accessToken);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const response: any = await getMyWorldCupList(accessToken);
-            setMyWorldCupList(response.data.data);
-        };
-        fetchData();
-    }, []);
+    // useEffect(() => {
+    //     const accessToken = getAccessToken();
 
-    return (
-        <div>
-            {myWorldCupList.map((myWorldCup, index) => (
-                <MyWorldCupCard key={index} myWorldCup={myWorldCup} />
-            ))}
-        </div>
-    );
+    //     const fetchData = async () => {
+    //         const response: any = await getMyWorldCupList(accessToken);
+    //         setMyWorldCupList(response.data.data);
+    //     };
+    //     fetchData();
+    // }, []);
+
+    if (isSuccess) {
+        return (
+            <div>
+                {myWorldCupList.data.data.map((myWorldCup: any, index: number) => (
+                    <MyWorldCupCard key={index} myWorldCup={myWorldCup} refetch={refetch} />
+                ))}
+            </div>
+        );
+    }
 };
 
 export default MyWorldCupList;

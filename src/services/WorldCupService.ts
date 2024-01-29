@@ -34,7 +34,7 @@ export const worldCupAllList = async (
 };
 
 export const useQueryGetWorldCupGameRound = (worldcupId: number) => {
-    return useQuery<any, Error>(['wcRounds'], () => worldCupGameRound(worldcupId), {
+    return useQuery<any, Error>(['wcRounds', worldcupId], () => worldCupGameRound(worldcupId), {
         retry: 0,
         refetchOnWindowFocus: false,
         staleTime: 1000,
