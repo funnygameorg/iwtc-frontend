@@ -127,7 +127,7 @@ export const useQueryGetMyWorldCupContentsList = (worldcupId: number) => {
     return useQuery<any, Error>(['MyWorldCupContentsList', worldcupId], () => getMyWorldCupContentsList(worldcupId), {
         retry: 0,
         refetchOnWindowFocus: false,
-        staleTime: 3000,
+        staleTime: 0,
         enabled: !!worldcupId,
     });
 };
