@@ -16,7 +16,7 @@ export const createWorldCup = async ({ title, description, visibleType, token }:
 
     const param = { title, description, visibleType };
     console.log('월드컵 생성 시 요청값 ', authHeaders, param);
-    const response = await ajaxPost(`/world-cups/me`, param, { headers: authHeaders });
+    const response = await ajaxPost(`/me/game-manage/world-cups`, param, { headers: authHeaders });
     console.log('response ===>', response);
     return response.data;
 };
@@ -47,7 +47,7 @@ export const createWorldCupContents = async ({
     const authHeaders = createHeader(token);
 
     const response = await ajaxPost(
-        `/world-cups/me/${worldCupId}/contents`,
+        `/me/game-contents-manage/world-cups/${worldCupId}/contents`,
         { data: params },
         { headers: authHeaders }
     );
@@ -61,7 +61,7 @@ export const createWorldCupContents = async ({
 export const getMyWorldCupList = async (token: string) => {
     const authHeaders = createHeader(token);
 
-    const response = await ajaxGet('/world-cups/me', {
+    const response = await ajaxGet('/me/game-manage/world-cups', {
         headers: authHeaders,
         timeout: 5000,
     });
@@ -86,7 +86,8 @@ export const useQueryGetMyWorldCupList = (token: string) => {
 export const getMyWorldCup = async (worldCupId: number) => {
     const authHeaders = createHeader(getAccessToken());
 
-    const response = await ajaxGet(`/world-cups/me/${worldCupId}`, {
+    // const response = await ajaxGet(`/world-cups/me/${worldCupId}`, {
+    const response = await ajaxGet(`me/game-manage/world-cups/${worldCupId}`, {
         headers: authHeaders,
         timeout: 5000,
     });
@@ -111,7 +112,7 @@ export const useQueryGetMyWorldCup = (worldcupId: number) => {
 export const getMyWorldCupContentsList = async (worldCupId: number) => {
     const authHeaders = createHeader(getAccessToken());
 
-    const response = await ajaxGet(`/world-cups/me/${worldCupId}/manage-contents`, {
+    const response = await ajaxGet(`/me/game-contents-manage/world-cups/${worldCupId}/manage-contents`, {
         headers: authHeaders,
         timeout: 5000,
     });
@@ -137,7 +138,8 @@ export const updateMyWorldCupContents = async (worldCupId: number, contentsId: n
     console.log('test ===>', params);
     const authHeaders = createHeader(token);
 
-    const response = await ajaxPut(`/world-cups/me/${worldCupId}/contents/${contentsId}`, params, {
+    // const response = await ajaxPut(`/world-cups/me/${worldCupId}/contents/${contentsId}`, params, {
+    const response = await ajaxPut(`/me/game-contents-manage/world-cups/${worldCupId}/contents/${contentsId}`, params, {
         headers: authHeaders,
         timeout: 5000,
     });
@@ -153,8 +155,12 @@ export const updateMyWorldCupContents = async (worldCupId: number, contentsId: n
 export const removeMyWorldCupContents = async (worldCupId: number, contentsId: number, token: string) => {
     const authHeaders = createHeader(token);
 
-    const response = await ajaxDelete(`/world-cups/me/${worldCupId}/contents/${contentsId}`, null, authHeaders);
-
+    // const response = await ajaxDelete(`/world-cups/me/${worldCupId}/contents/${contentsId}`, null, authHeaders);
+    const response = await ajaxDelete(
+        `/me/game-contents-manage/world-cups/${worldCupId}/contents/${contentsId}`,
+        null,
+        authHeaders
+    );
     console.log('response ===>', response);
 
     if (response) {
@@ -165,7 +171,7 @@ export const removeMyWorldCupContents = async (worldCupId: number, contentsId: n
 // 나의 이상형 월드컵 리스트에서 삭제
 export const deleteMyWorldCup = async ({ worldCupId, token }: any) => {
     const authHeaders = createHeader(token);
-    const response = await ajaxDelete(`/world-cups/me/${String(worldCupId)}`, null, authHeaders);
+    const response = await ajaxDelete(`/me/game-manage/world-cups/${String(worldCupId)}`, null, authHeaders);
 
     console.log('response ===>', response);
 
