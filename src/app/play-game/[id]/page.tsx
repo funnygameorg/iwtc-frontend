@@ -8,6 +8,7 @@ import { isMP4, mappingMediaFile } from '@/utils/common';
 import { useRouter } from 'next/navigation';
 import { animated, useSpring } from '@react-spring/web';
 import CustomYoutubePlayer from '@/components/youtubePlayer/CustomYoutubePlayer';
+import Spiner from '@/components/common/Spiner';
 
 const Page = ({ params }: { params: { id: number } }) => {
     const router = useRouter();
@@ -29,6 +30,7 @@ const Page = ({ params }: { params: { id: number } }) => {
     const [firstSelectedRound, setFirstSelectedRound] = useState<number>(0);
     const [progressPercentage, setProgressPercentage] = useState<number>(0);
     const [roundLabels, setRoundLabels] = useState({});
+    const [isLoding, setIsLoding] = useState<boolean>(true);
 
     useEffect(() => {
         // 8강 기준 4번의 게임을 하면 4강으로 진출 71.4286
@@ -106,6 +108,7 @@ const Page = ({ params }: { params: { id: number } }) => {
         onSuccess: async (data: any) => {
             setIsPlay(true);
             const list = await mappingMediaFile(data.data.contentsList);
+            setIsLoding(false);
             setGameList(list);
         },
     });
@@ -191,7 +194,6 @@ const Page = ({ params }: { params: { id: number } }) => {
             playMutation();
         }
     }, [selectRound]);
-    console.log('roundLabels', roundLabels);
 
     if (!isPlay) {
         return (
@@ -202,7 +204,12 @@ const Page = ({ params }: { params: { id: number } }) => {
             />
         );
     }
-    if (gameList) {
+
+    if (isLoding) {
+        return <Spiner />;
+    }
+
+    if (gameList.length > 0) {
         const wcTitle = roundList?.data?.worldCupTitle;
         const nameLength = wcTitle ? wcTitle.length : 0;
         const calculatedWidth = `${nameLength * 2}rem`; // 예시로 간단한 계산을 적용했습니다.
@@ -272,13 +279,26 @@ const Page = ({ params }: { params: { id: number } }) => {
                                     <video src={gameList[0]?.imgUrl} width={'700'} height={'300'} autoPlay muted loop />
                                 </div>
                             ) : (
-                                <Image
-                                    className="h-full w-full"
-                                    src={gameList[0]?.imgUrl}
-                                    width={'750'}
-                                    height={'500'}
-                                    alt={gameList[0]?.name}
-                                />
+                                <>
+                                    {/* {isLeftImageLoding && (
+                                        <ImageSpiner
+                                            style={
+                                                'flex items-center justify-center mx-auto left-0 right-0 w-full h-full'
+                                            }
+                                        />
+                                    )} */}
+                                    <Image
+                                        className="h-full w-full"
+                                        src={gameList[0]?.imgUrl}
+                                        width={'750'}
+                                        height={'500'}
+                                        alt={gameList[0]?.name}
+                                        // onLoadingComplete={() => setIsLeftImageLoding(false)}
+                                        // onError={() => setIsLeftImageLoding(true)}
+                                        // style={{ display: isLeftImageLoding ? 'none' : 'block' }}
+                                        // placeholder="blur"
+                                    />
+                                </>
                             )}
                             <div className="absolute bottom-10 left-10">
                                 <div className="bg-white text-6xl font-bold text-black px-3 py-3 rounded-md">
@@ -332,6 +352,7 @@ const Page = ({ params }: { params: { id: number } }) => {
                                     width={'750'}
                                     height={'500'}
                                     alt={gameList[1]?.name}
+                                    // placeholder="blur"
                                 />
                             )}
                             <div className="absolute bottom-10 right-10">
