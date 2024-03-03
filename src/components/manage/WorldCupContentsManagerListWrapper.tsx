@@ -128,8 +128,8 @@ const WorldCupContentsManageListWrapper = ({
         },
     });
 
-    const showAlertPopup = (maeeage: string) => {
-        showPopup(<AlertPopup message={maeeage} hidePopup={hidePopup} />);
+    const showAlertPopup = (message: string) => {
+        showPopup(<AlertPopup message={message} hidePopup={hidePopup} />);
     };
 
     const getSizeNewContents = (newWorldCupContents: any) => {
