@@ -27,9 +27,21 @@ interface IProps {
     worldCupContentsList: any;
     setWorldCupContentsList: any;
     worldCupId: any;
+    setModifyList?: any;
+    setDeleteList?: any;
+    setNewList?: any;
+    newList?: any;
 }
 
-const WorldCupContentsManageList = ({ worldCupContentsList, setWorldCupContentsList, worldCupId }: IProps) => {
+const WorldCupContentsManageList = ({
+    worldCupContentsList,
+    setWorldCupContentsList,
+    worldCupId,
+    setModifyList,
+    setDeleteList,
+    setNewList,
+    newList,
+}: IProps) => {
     const { showPopup, hidePopup } = useContext(PopupContext);
 
     const imgRef = useRef<any>(null);
@@ -68,6 +80,7 @@ const WorldCupContentsManageList = ({ worldCupContentsList, setWorldCupContentsL
 
         setWorldCupContents((prevWorldCupContents) => ({
             ...prevWorldCupContents,
+            absoluteName: `uniqueName_${Math.random().toString(36).substr(2, 9)}`,
             [name]: value,
         }));
     };
@@ -116,8 +129,8 @@ const WorldCupContentsManageList = ({ worldCupContentsList, setWorldCupContentsL
         return true;
     };
 
-    const showAlertPopup = (maeeage: string) => {
-        showPopup(<AlertPopup message={maeeage} hidePopup={hidePopup} />);
+    const showAlertPopup = (message: string) => {
+        showPopup(<AlertPopup message={message} hidePopup={hidePopup} />);
     };
 
     // 새로운 컨텐츠를 리스트 추가
@@ -134,13 +147,19 @@ const WorldCupContentsManageList = ({ worldCupContentsList, setWorldCupContentsL
             }
 
             handleMediaFileType('');
+            // let updatedContents: any;
             // setWorldCupContentsList((prev: any) => [...prev, worldCupContents]);
+            let updatedContents: any;
             setWorldCupContentsList((prev: any) => {
                 const id = prev.length; // 이 예제에서는 배열의 길이를 인덱스로 사용
-                const updatedContents = { ...worldCupContents, id };
-                console.log('updatedContents', updatedContents);
+                updatedContents = { ...worldCupContents, id };
                 return [...prev, updatedContents];
             });
+            if (setNewList) {
+                setNewList((prev: any) => {
+                    return [...prev, updatedContents];
+                });
+            }
         }
     };
 
@@ -251,6 +270,10 @@ const WorldCupContentsManageList = ({ worldCupContentsList, setWorldCupContentsL
                         worldCupId={worldCupId}
                         setWorldCupContentsList={setWorldCupContentsList}
                         worldCupContentsList={worldCupContentsList}
+                        setModifyList={setModifyList}
+                        setDeleteList={setDeleteList}
+                        setNewList={setNewList}
+                        newList={newList}
                     />
                 ))}
         </div>

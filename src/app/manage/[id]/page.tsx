@@ -16,10 +16,14 @@ const ManageForm = ({ params }: any) => {
     const { id } = params;
     const { data: myWorldCupData, isSuccess: isMyWorldCupSuccess } = useQueryGetMyWorldCup(id);
     const { data: myWorldCupContentsList, isSuccess: isMyWorldCupContentsList } = useQueryGetMyWorldCupContentsList(id);
-
-    const [worldCupContentsList, setWorldCupContentsList] = useState([]);
+    // myWorldCupContentsList.data.data가 API이고 이거와, worldCupContentsList 비교를 해서 다르면 변경사항 적용
+    const [worldCupContentsList, setWorldCupContentsList] = useState([]); // 최초 수정페이지에서 컨텐츠가 담기는 배열
     const [worldCupId, setWorldCupId] = useState(id ? id : 0);
     const [isCreateWorldCup, setIsCreateWorldCup] = useState(false);
+    const [modifyList, setModifyList] = useState([]);
+    const [deleteList, setDeleteList] = useState([]);
+    const [newList, setNewList] = useState([]);
+    const [isChanges, setIsChange] = useState(false);
 
     useEffect(() => {
         if (isMyWorldCupSuccess) {
@@ -29,7 +33,7 @@ const ManageForm = ({ params }: any) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (isMyWorldCupContentsList && id) {
+            if (worldCupContentsList.length < 1 && isMyWorldCupContentsList && id) {
                 try {
                     const newData: any = await Promise.all(
                         myWorldCupContentsList.data.data.map(async (items: any, index: number) => {
@@ -48,6 +52,15 @@ const ManageForm = ({ params }: any) => {
 
         fetchData();
     }, [isMyWorldCupContentsList, id]);
+
+    useEffect(() => {
+        if (newList.length > 0 || deleteList.length > 0 || modifyList.length > 0) {
+            setIsChange(true);
+        } else {
+            setIsChange(false);
+        }
+    }, [newList, deleteList, modifyList, worldCupContentsList]);
+
     const syncFormatMediaData = (contentsByClient: any, contentsByServer: any, index: number) => {
         return {
             id: index,
@@ -89,7 +102,6 @@ const ManageForm = ({ params }: any) => {
     //         console.error('월드컵 정보 가져오기 실패:', error);
     //     }
     // };
-
     return (
         <div>
             <div className="flex my-5">
@@ -109,6 +121,14 @@ const ManageForm = ({ params }: any) => {
                         worldCupContentsList={worldCupContentsList}
                         setWorldCupContentsList={setWorldCupContentsList}
                         worldCupId={worldCupId}
+                        setModifyList={setModifyList}
+                        setDeleteList={setDeleteList}
+                        setNewList={setNewList}
+                        newList={newList}
+                        modifyList={modifyList}
+                        deleteList={deleteList}
+                        isChanges={isChanges}
+                        isModifyPage={id ? true : false}
                     />
                 </div>
             </div>

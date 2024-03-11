@@ -11,9 +11,23 @@ interface IProps {
     worldCupId: any;
     setWorldCupContentsList: any;
     worldCupContentsList: any;
+    setModifyList?: any;
+    setDeleteList?: any;
+    setNewList?: any;
+    newList?: any;
 }
 
-const ManageCardWrapper = ({ contents, index, worldCupId, setWorldCupContentsList, worldCupContentsList }: IProps) => {
+const ManageCardWrapper = ({
+    contents,
+    index,
+    worldCupId,
+    setWorldCupContentsList,
+    worldCupContentsList,
+    setModifyList,
+    setDeleteList,
+    setNewList,
+    newList,
+}: IProps) => {
     // DB에서 가져온 데이터 양식과 새로 추가된 컨텐츠의 데이터 양식이 다르다.
     // 하위 컴포넌트에 뿌려주기 위해 포맷을 통일시킨다.
     // ByServer를 우선적용하고 없다면 ByClient를 적용한다.
@@ -67,6 +81,10 @@ const ManageCardWrapper = ({ contents, index, worldCupId, setWorldCupContentsLis
                 contents={mediaData}
                 worldCupId={worldCupId}
                 setWorldCupContentsList={setWorldCupContentsList}
+                setModifyList={setModifyList}
+                setDeleteList={setDeleteList}
+                setNewList={setNewList}
+                newList={newList}
             />
         ) : (
             <StaticMediaFileTypeCard
@@ -74,6 +92,10 @@ const ManageCardWrapper = ({ contents, index, worldCupId, setWorldCupContentsLis
                 contents={mediaData}
                 worldCupId={worldCupId}
                 setWorldCupContentsList={setWorldCupContentsList}
+                setModifyList={setModifyList}
+                setDeleteList={setDeleteList}
+                setNewList={setNewList}
+                newList={newList}
             />
         )
     );
