@@ -1,4 +1,4 @@
-import { BASE_URL } from '@/consts';
+import { BASE_URL, MEMBER_URL } from '@/consts';
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 import { newAccessToken, userSignOut } from './MemberService';
 import { localStorageClear } from '@/stores/LocalStore';
@@ -15,6 +15,13 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     (config: any) => {
+        if (config.url.includes('member')) {
+            // 'member'가 포함된 경우 MEMBER_BASE_URL 사용
+            config.baseURL = `${MEMBER_URL}api/`;
+        } else {
+            // 그렇지 않은 경우 기본 BASE_URL 사용
+            config.baseURL = `${BASE_URL}api/`;
+        }
         return config;
     },
     (error: any) => {

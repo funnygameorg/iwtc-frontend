@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "env-cmd -f .env.development next dev",
+        "prod": "env-cmd -f .env.production next dev",
         "build:prod": "env-cmd -f .env.production next build",
         "build": "env-cmd -f .env.production next build",
         "start": "next start -p 8080",
