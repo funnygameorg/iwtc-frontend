@@ -12,7 +12,7 @@ interface IProps {
     setModifyList?: Dispatch<SetStateAction<PersistedManagedContentView[]>>;
     setDeleteList?: Dispatch<SetStateAction<PersistedManagedContentView[]>>;
     setNewList?: Dispatch<SetStateAction<ManagedContent[]>>;
-    newList?: ManagedContent[];
+    newList: ManagedContent[];
 }
 
 const ManageCardWrapper = ({
@@ -42,7 +42,6 @@ const ManageCardWrapper = ({
             <InternetVideoUrlCard
                 index={index}
                 contents={mediaData}
-                worldCupId={worldCupId}
                 setWorldCupContentsList={setWorldCupContentsList}
                 setModifyList={setModifyList}
                 setDeleteList={setDeleteList}

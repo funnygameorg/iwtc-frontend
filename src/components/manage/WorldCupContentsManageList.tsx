@@ -44,7 +44,7 @@ const WorldCupContentsManageList = ({
     setModifyList,
     setDeleteList,
     setNewList,
-    newList,
+    newList = [],
 }: IProps) => {
     const { showPopup, hidePopup } = useContext(PopupContext);
 
