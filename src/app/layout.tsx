@@ -2,7 +2,6 @@ import '../styles/globals.css';
 // import "tw-elements-react/dist/css/tw-elements-react.min.css";
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import RouteHandler from '@/components/RouteHandler';
 import QueryProvider from '@/providers/QueryProvider';
 import { AuthProvider } from '@/providers/AuthProvider';
 import Header from '@/components/common/Header';
@@ -52,7 +51,6 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                                 <PopupProvider>
                                     {/* TODO: 공통 header적용 */}
                                     <Header />
-                                    <RouteHandler />
                                     {children}
                                 </PopupProvider>
                             </AuthProvider>
