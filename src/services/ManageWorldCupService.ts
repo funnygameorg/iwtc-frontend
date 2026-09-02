@@ -1,6 +1,7 @@
 import { ajaxDelete, ajaxGet, ajaxPost, ajaxPut } from './BaseService';
 import { useQuery } from '@tanstack/react-query';
 import { getAccessToken } from '@/utils/TokenManager';
+import { manageWorldCupQueryKeys } from '@/lib/react-query/queryKeys';
 
 const createHeader = (token: any) => {
     return {
@@ -73,7 +74,7 @@ export const getMyWorldCupList = async (token: string) => {
 };
 
 export const useQueryGetMyWorldCupList = (token: string) => {
-    return useQuery<any, Error>(['MyWorldCupList'], () => getMyWorldCupList(token), {
+    return useQuery<any, Error>(manageWorldCupQueryKeys.lists(), () => getMyWorldCupList(token), {
         retry: 0,
         refetchOnWindowFocus: false,
         staleTime: 3000,
@@ -99,7 +100,7 @@ export const getMyWorldCup = async (worldCupId: number) => {
 };
 
 export const useQueryGetMyWorldCup = (worldcupId: number) => {
-    return useQuery<any, Error>(['MyWorldCup', worldcupId], () => getMyWorldCup(worldcupId), {
+    return useQuery<any, Error>(manageWorldCupQueryKeys.detail(worldcupId), () => getMyWorldCup(worldcupId), {
         retry: 0,
         refetchOnWindowFocus: false,
         staleTime: 3000,
@@ -124,12 +125,16 @@ export const getMyWorldCupContentsList = async (worldCupId: number) => {
 };
 
 export const useQueryGetMyWorldCupContentsList = (worldcupId: number) => {
-    return useQuery<any, Error>(['MyWorldCupContentsList', worldcupId], () => getMyWorldCupContentsList(worldcupId), {
-        retry: 0,
-        refetchOnWindowFocus: false,
-        staleTime: 0,
-        enabled: !!worldcupId,
-    });
+    return useQuery<any, Error>(
+        manageWorldCupQueryKeys.contents(worldcupId),
+        () => getMyWorldCupContentsList(worldcupId),
+        {
+            retry: 0,
+            refetchOnWindowFocus: false,
+            staleTime: 0,
+            enabled: !!worldcupId,
+        }
+    );
 };
 
 // 이상형 컨텐츠 1건 수정

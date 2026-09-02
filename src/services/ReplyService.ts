@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { ajaxGet, ajaxPost } from './BaseService';
+import { replyQueryKeys } from '@/lib/react-query/queryKeys';
 
 // 댓글 조회
 export const useQueryGetReplyList = (worldcupId: number, offset: number) => {
     return useQuery<any, Error>(
-        ['worldCupReplyList', worldcupId, offset],
+        replyQueryKeys.list(worldcupId, offset),
         () => worldCupGameReplyList(worldcupId, offset),
         {
             retry: 0,

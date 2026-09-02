@@ -1,9 +1,10 @@
 import { worldCupGameReplyRegister } from '@/services/ReplyService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/providers/AuthProvider';
 import { getUserInfo } from '@/stores/LocalStore';
 import * as shortid from 'shortid';
+import { replyQueryKeys } from '@/lib/react-query/queryKeys';
 
 interface IProps {
     worldcupId: number;
@@ -12,16 +13,12 @@ interface IProps {
 
 const ReplyRegisterForm = ({ worldcupId, contentsId }: IProps) => {
     const queryClient = useQueryClient();
-    const { isLoggedIn, logout } = useAuth();
+    const { isLoggedIn } = useAuth();
 
     const [text, setText] = useState<string>('');
     const { mutate: replyRegister } = useMutation(worldCupGameReplyRegister, {
-        onSuccess: async (data) => {
-            // router.push('/sign-in');
-            // @ts-ignore
-            queryClient.invalidateQueries('worldCupReplyList', { refetchInactive: true });
-            // const mappingLsit = await mappingMediaFile(data.data);
-            // setRankList(mappingLsit);
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: replyQueryKeys.lists(), refetchType: 'all' });
         },
         onError: (error) => {
             console.log('에러', error);

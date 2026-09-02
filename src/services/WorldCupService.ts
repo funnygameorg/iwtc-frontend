@@ -4,6 +4,7 @@ import { WCListParent, loadWCListData } from '@/interfaces/models/world-cup/WcLi
 import Error from 'next/error';
 import { createWorldCupClearRequest } from '@/domain/game/clear';
 import { WorldCupGameRequest } from '@/domain/game/play';
+import { worldCupQueryKeys } from '@/lib/react-query/queryKeys';
 
 // export const useQueryGetWorldCupAllList = (page: number, size: number, sort: number) => {
 //     return useQuery<any, Error>(['WorldCupList', page, size, sort], () => worldCupAllList(page, size, sort), {
@@ -34,7 +35,7 @@ export const worldCupAllList = async (
 };
 
 export const useQueryGetWorldCupGameRound = (worldcupId: number) => {
-    return useQuery<any, Error>(['wcRounds', worldcupId], () => worldCupGameRound(worldcupId), {
+    return useQuery<any, Error>(worldCupQueryKeys.rounds(worldcupId), () => worldCupGameRound(worldcupId), {
         retry: 0,
         refetchOnWindowFocus: false,
         staleTime: 1000,
@@ -69,7 +70,7 @@ export const worldCupGameClear = async (routeParams: string[]) => {
 
 //게임의 모든 컨텐츠 조회 (랭크 정렬)
 export const useQueryGetWorldCupGameResultRankList = (worldcupId: number) => {
-    return useQuery<any, Error>(['AllRankList'], () => worldCuplGameResultRankList(worldcupId), {
+    return useQuery<any, Error>(worldCupQueryKeys.rank(), () => worldCuplGameResultRankList(worldcupId), {
         retry: 0,
         refetchOnWindowFocus: false,
         staleTime: 1000,
