@@ -1,12 +1,15 @@
-import { deleteMyWorldCup } from '@/services/ManageWorldCupService';
+import { deleteMyWorldCup, ManagedWorldCupSummary } from '@/services/ManageWorldCupService';
 import { getAccessToken } from '@/utils/TokenManager';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
 
-const MyWorldCupCard = ({ myWorldCup, refetch }: any) => {
-    const queryClient = useQueryClient();
+interface MyWorldCupCardProps {
+    myWorldCup: ManagedWorldCupSummary;
+    refetch: () => void;
+}
 
-    const { mutate, isLoading, error, isSuccess } = useMutation(deleteMyWorldCup, {
+const MyWorldCupCard = ({ myWorldCup, refetch }: MyWorldCupCardProps) => {
+    const { mutate } = useMutation(deleteMyWorldCup, {
         onSuccess: async (data) => {
             if (refetch) {
                 refetch();
@@ -17,11 +20,9 @@ const MyWorldCupCard = ({ myWorldCup, refetch }: any) => {
         },
     });
 
-    const playMyWorldCup = (worldCupId: any) => {};
+    const updateMyWorldCup = (worldCupId: number) => {};
 
-    const updateMyWorldCup = (worldCupId: any) => {};
-
-    const removeMyWorldCup = (worldCupId: any) => {
+    const removeMyWorldCup = (worldCupId: number) => {
         const accessToken = getAccessToken();
         const pramas = {
             worldCupId: worldCupId,

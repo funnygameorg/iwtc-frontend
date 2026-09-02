@@ -1,8 +1,7 @@
 'use client';
 
-import { getMyWorldCupList, useQueryGetMyWorldCupList } from '@/services/ManageWorldCupService';
+import { useQueryGetMyWorldCupList } from '@/services/ManageWorldCupService';
 import { getAccessToken } from '@/utils/TokenManager';
-import { useEffect, useState } from 'react';
 import MyWorldCupCard from './MyWorldCupCard';
 
 const MyWorldCupList = () => {
@@ -22,7 +21,7 @@ const MyWorldCupList = () => {
     if (isSuccess) {
         return (
             <div>
-                {myWorldCupList.data.data.map((myWorldCup: any, index: number) => (
+                {myWorldCupList.data.data.map((myWorldCup, index) => (
                     <MyWorldCupCard key={index} myWorldCup={myWorldCup} refetch={refetch} />
                 ))}
             </div>

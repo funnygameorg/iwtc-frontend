@@ -19,6 +19,17 @@ interface DeleteMyWorldCupRequest {
     token: string;
 }
 
+export interface ManagedWorldCupSummary {
+    worldCupId: number;
+    title: string;
+    description: string;
+    visibleType: string;
+}
+
+interface ManagedWorldCupListResponse {
+    data: ManagedWorldCupSummary[];
+}
+
 const createHeader = (token: string) => {
     return {
         'Content-Type': 'application/json',
@@ -79,20 +90,17 @@ export const createWorldCupContents = async ({
 export const getMyWorldCupList = async (token: string) => {
     const authHeaders = createHeader(token);
 
-    const response = await ajaxGet('/me/game-manage/world-cups', {
+    const response = await ajaxGet<ManagedWorldCupListResponse>('/me/game-manage/world-cups', {
         headers: authHeaders,
         timeout: 5000,
     });
 
     console.log('response ===>', response);
-
-    if (response) {
-        return response;
-    }
+    return response;
 };
 
 export const useQueryGetMyWorldCupList = (token: string) => {
-    return useQuery<any, Error>(manageWorldCupQueryKeys.lists(), () => getMyWorldCupList(token), {
+    return useQuery(manageWorldCupQueryKeys.lists(), () => getMyWorldCupList(token), {
         retry: 0,
         refetchOnWindowFocus: false,
         staleTime: 3000,
