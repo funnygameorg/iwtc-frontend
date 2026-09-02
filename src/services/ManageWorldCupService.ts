@@ -3,7 +3,23 @@ import { useQuery } from '@tanstack/react-query';
 import { getAccessToken } from '@/utils/TokenManager';
 import { manageWorldCupQueryKeys } from '@/lib/react-query/queryKeys';
 
-const createHeader = (token: any) => {
+interface CreateWorldCupRequest {
+    title: string;
+    description: string;
+    visibleType: string;
+    token: string;
+}
+
+interface CreateWorldCupResponse {
+    data: number;
+}
+
+interface DeleteMyWorldCupRequest {
+    worldCupId: number;
+    token: string;
+}
+
+const createHeader = (token: string) => {
     return {
         'Content-Type': 'application/json',
         'access-token': `${token}`,
@@ -11,12 +27,14 @@ const createHeader = (token: any) => {
 };
 
 // 이상형 생성
-export const createWorldCup = async ({ title, description, visibleType, token }: any) => {
+export const createWorldCup = async ({ title, description, visibleType, token }: CreateWorldCupRequest) => {
     const authHeaders = createHeader(token);
 
     const param = { title, description, visibleType };
     console.log('월드컵 생성 시 요청값 ', authHeaders, param);
-    const response = await ajaxPost(`/me/game-manage/world-cups`, param, { headers: authHeaders });
+    const response = await ajaxPost<CreateWorldCupResponse, typeof param>(`/me/game-manage/world-cups`, param, {
+        headers: authHeaders,
+    });
     console.log('response ===>', response);
     return response.data;
 };
@@ -173,7 +191,7 @@ export const removeMyWorldCupContents = async (worldCupId: number, contentsId: n
 };
 
 // 나의 이상형 월드컵 리스트에서 삭제
-export const deleteMyWorldCup = async ({ worldCupId, token }: any) => {
+export const deleteMyWorldCup = async ({ worldCupId, token }: DeleteMyWorldCupRequest) => {
     const authHeaders = createHeader(token);
     const response = await ajaxDelete(`/me/game-manage/world-cups/${String(worldCupId)}`, null, authHeaders);
 
