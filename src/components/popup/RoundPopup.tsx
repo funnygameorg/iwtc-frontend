@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { WorldCupRoundResponse } from '@/interfaces/models/world-cup/WcGameData';
 
 interface IProps {
-    roundList: any;
+    roundList?: WorldCupRoundResponse;
     onSelectRound: (round: number) => void;
 }
 

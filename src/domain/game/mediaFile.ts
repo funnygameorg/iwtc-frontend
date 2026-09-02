@@ -8,18 +8,20 @@ export interface MediaMappableContent {
     videoPlayDuration?: number;
 }
 
+export type MappedMediaContent<T extends MediaMappableContent> = T & MediaMappableContent & { imgUrl: string };
+
 export const mergeMediaFile = <T extends MediaMappableContent>(
     content: T,
     mediaFile: ManagedMediaFile | undefined
-): T => {
+): MappedMediaContent<T> => {
     if (!mediaFile) {
-        content.imgUrl = '/images/default.png';
-        return content;
+        return Object.assign(content, { imgUrl: '/images/default.png' });
     }
 
-    content.imgUrl = mediaFile.mediaData;
-    content.fileType = mediaFile.fileType;
-    content.videoStartTime = mediaFile.videoStartTime;
-    content.videoPlayDuration = mediaFile.videoPlayDuration;
-    return content;
+    return Object.assign(content, {
+        imgUrl: mediaFile.mediaData,
+        fileType: mediaFile.fileType,
+        videoStartTime: mediaFile.videoStartTime,
+        videoPlayDuration: mediaFile.videoPlayDuration,
+    });
 };

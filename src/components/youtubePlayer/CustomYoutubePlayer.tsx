@@ -1,27 +1,25 @@
 'use client';
-import React, { useRef } from 'react';
-import YouTube from 'react-youtube';
+import React from 'react';
+import YouTube, { YouTubeEvent } from 'react-youtube';
 import { getYoutubeVideoId } from '@/utils/youtube';
 
 interface IProps {
     videoUrl: string;
-    time: string;
+    time?: string;
     width: string;
     height: string;
     isAutoPlay?: boolean;
-    playDuration: number;
+    playDuration?: number;
 }
 
 const CustomYoutubePlayer = ({ videoUrl, time, width, height, isAutoPlay = true, playDuration = 3 }: IProps) => {
-    const playerRef = useRef(null);
     let currentRepeat = 0; // 현재 반복 횟수
 
-    const onReady = (event: any) => {
-        playerRef.current = event.target;
+    const onReady = () => {
         disablePointerEventsForAllIframes();
     };
 
-    const onStateChange = (event: any) => {
+    const onStateChange = (event: YouTubeEvent<number>) => {
         if (event.data === YouTube.PlayerState.ENDED) {
             // 동영상 재생이 끝나면
             currentRepeat += 1;
@@ -37,11 +35,11 @@ const CustomYoutubePlayer = ({ videoUrl, time, width, height, isAutoPlay = true,
         }
     };
 
-    const convertTimeToSeconds = (timeString: string) => {
+    const convertTimeToSeconds = (timeString?: string) => {
         // 문자열을 시, 분, 초로 분리
-        const hours = parseInt(timeString?.substring(0, 1));
-        const minutes = parseInt(timeString?.substring(1, 3));
-        const seconds = parseInt(timeString?.substring(3, 5));
+        const hours = parseInt(timeString?.substring(0, 1) || '');
+        const minutes = parseInt(timeString?.substring(1, 3) || '');
+        const seconds = parseInt(timeString?.substring(3, 5) || '');
 
         // 시, 분, 초를 초로 환산하여 반환
         return hours * 3600 + minutes * 60 + seconds;

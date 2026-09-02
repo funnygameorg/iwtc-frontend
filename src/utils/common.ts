@@ -1,5 +1,5 @@
 import { getMediaFileAPI } from '@/services/EtcService';
-import { MediaMappableContent, mergeMediaFile } from '@/domain/game/mediaFile';
+import { MappedMediaContent, MediaMappableContent, mergeMediaFile } from '@/domain/game/mediaFile';
 
 export { getMimeType, isMP4 } from './media';
 
@@ -11,7 +11,9 @@ export { getMimeType, isMP4 } from './media';
 //     return encodedArray;
 // };
 
-export const mappingMediaFile = async <T extends MediaMappableContent>(gameList: T[]): Promise<T[]> => {
+export const mappingMediaFile = async <T extends MediaMappableContent>(
+    gameList: T[]
+): Promise<MappedMediaContent<T>[]> => {
     const promises = gameList.map(async (item) => {
         try {
             const response = await getMediaFileAPI(item.mediaFileId); // API 호출
