@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { Dispatch, SetStateAction, useContext } from 'react';
 import WorldCupContentsManageList from './WorldCupContentsManageList';
 import {
     createWorldCupContents,
@@ -12,19 +12,20 @@ import AlertPopup from '../popup/AlertPopup';
 import { PopupContext } from '@/providers/PopupProvider';
 import NotCreateWorldCupLogo from './NotCreateWorldCupLogo';
 import { useRouter } from 'next/navigation';
+import { ManagedContent, PersistedManagedContentView } from '@/domain/manage/persistedContent';
 
 interface IProps {
     isCreateWorldCup: boolean;
-    worldCupContentsList: any;
-    setWorldCupContentsList: any;
-    worldCupId: any;
-    setModifyList?: any;
-    setDeleteList?: any;
-    setNewList?: any;
-    newList?: any;
-    modifyList?: any;
-    deleteList?: any;
-    isChanges?: any;
+    worldCupContentsList: ManagedContent[];
+    setWorldCupContentsList: Dispatch<SetStateAction<ManagedContent[]>>;
+    worldCupId: number;
+    setModifyList?: Dispatch<SetStateAction<PersistedManagedContentView[]>>;
+    setDeleteList?: Dispatch<SetStateAction<PersistedManagedContentView[]>>;
+    setNewList?: Dispatch<SetStateAction<ManagedContent[]>>;
+    newList?: ManagedContent[];
+    modifyList?: PersistedManagedContentView[];
+    deleteList?: PersistedManagedContentView[];
+    isChanges?: boolean;
     isModifyPage?: boolean;
 }
 /**
@@ -40,9 +41,9 @@ const WorldCupContentsManageListWrapper = ({
     setModifyList,
     setDeleteList,
     setNewList,
-    newList,
-    modifyList,
-    deleteList,
+    newList = [],
+    modifyList = [],
+    deleteList = [],
     isChanges,
     isModifyPage,
 }: IProps) => {
@@ -54,8 +55,8 @@ const WorldCupContentsManageListWrapper = ({
     /**
      * 수정된 월드컵 컨텐츠 서버에 전송
      */
-    const transformToCreateWorldCupContentsType = (contextData: any): createWorldCupContentsType => {
-        return contextData.map((item: any) => ({
+    const transformToCreateWorldCupContentsType = (contextData: ManagedContent[]): createWorldCupContentsType => {
+        return contextData.map((item) => ({
             contentsName: item.contentsName,
             visibleType: item.visibleType,
             createMediaFileRequest: {
@@ -101,7 +102,7 @@ const WorldCupContentsManageListWrapper = ({
 
         // 삭제 작업을 promises 배열에 추가
         if (deleteList.length > 0) {
-            const deletePromises = deleteList.map((item: any) =>
+            const deletePromises = deleteList.map((item) =>
                 removeMyWorldCupContents(worldCupId, item.contentsId, accessToken)
             );
             promises.push(...deletePromises);
@@ -109,7 +110,7 @@ const WorldCupContentsManageListWrapper = ({
 
         // 업데이트 작업을 promises 배열에 추가
         if (modifyList.length > 0) {
-            const updatePromises = modifyList.map((item: any) => {
+            const updatePromises = modifyList.map((item) => {
                 const requestBody = {
                     contentsName: item.contentsName,
                     originalName: item.originalName || 'No_NAME',
@@ -140,9 +141,9 @@ const WorldCupContentsManageListWrapper = ({
         await Promise.all(promises)
             .then(() => {
                 // queryClient.invalidateQueries(['MyWorldCupContentsList', worldcupId], { refetchInactive: false })
-                setDeleteList([]);
-                setModifyList([]);
-                setNewList([]);
+                setDeleteList?.([]);
+                setModifyList?.([]);
+                setNewList?.([]);
                 // setWorldCupContentsList([]);
                 queryClient.invalidateQueries({ queryKey: ['MyWorldCupContentsList'] });
                 showAlertPopup('수정이 완료되었습니다.');
@@ -168,7 +169,7 @@ const WorldCupContentsManageListWrapper = ({
         showPopup(<AlertPopup message={message} hidePopup={hidePopup} />);
     };
 
-    const getSizeNewContents = (newWorldCupContents: any) => {
+    const getSizeNewContents = (newWorldCupContents: ManagedContent[]) => {
         return newWorldCupContents.length > 0;
     };
 

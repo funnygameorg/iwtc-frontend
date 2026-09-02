@@ -65,13 +65,23 @@ export type createWorldCupContentsType = {
     visibleType: string;
     createMediaFileRequest: {
         fileType: string;
-        mediaPath: string;
-        originalName: string;
-        absoluteName: string;
-        videoStartTime: string;
-        videoPlayDuration: number;
+        mediaData?: string;
+        originalName?: string;
+        videoStartTime?: string;
+        videoPlayDuration?: number | string;
+        detailFileType?: string;
     };
 }[];
+
+interface UpdateWorldCupContentRequest {
+    contentsName: string;
+    originalName: string;
+    mediaData?: string;
+    videoStartTime: string | null;
+    videoPlayDuration: number | string | null;
+    visibleType: string;
+    detailFileType?: string;
+}
 
 export const createWorldCupContents = async ({
     worldCupId,
@@ -170,15 +180,24 @@ export const useQueryGetMyWorldCupContentsList = (worldcupId: number) => {
 };
 
 // 이상형 컨텐츠 1건 수정
-export const updateMyWorldCupContents = async (worldCupId: number, contentsId: number, params: any, token: string) => {
+export const updateMyWorldCupContents = async (
+    worldCupId: number,
+    contentsId: number,
+    params: UpdateWorldCupContentRequest,
+    token: string
+) => {
     console.log('test ===>', params);
     const authHeaders = createHeader(token);
 
     // const response = await ajaxPut(`/world-cups/me/${worldCupId}/contents/${contentsId}`, params, {
-    const response = await ajaxPut(`/me/game-contents-manage/world-cups/${worldCupId}/contents/${contentsId}`, params, {
-        headers: authHeaders,
-        timeout: 5000,
-    });
+    const response = await ajaxPut<unknown, UpdateWorldCupContentRequest>(
+        `/me/game-contents-manage/world-cups/${worldCupId}/contents/${contentsId}`,
+        params,
+        {
+            headers: authHeaders,
+            timeout: 5000,
+        }
+    );
 
     console.log('response ===>', response);
 

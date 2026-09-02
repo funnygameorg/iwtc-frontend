@@ -4,7 +4,11 @@ import WorldCupManageForm from '@/components/manage/WorldCupManageForm';
 import WorldCupContentsManageListWrapper from '@/components/manage/WorldCupContentsManagerListWrapper';
 import { useQueryGetMyWorldCup, useQueryGetMyWorldCupContentsList } from '@/services/ManageWorldCupService';
 import { getMediaFile } from '@/services/EtcService';
-import { ManagedContent, normalizePersistedManagedContent } from '@/domain/manage/persistedContent';
+import {
+    ManagedContent,
+    normalizePersistedManagedContent,
+    PersistedManagedContentView,
+} from '@/domain/manage/persistedContent';
 
 /*
     월드컵 관리 페이지를 표현합니다.
@@ -17,9 +21,9 @@ const ManageForm = ({ params }: { params: { id: string } }) => {
     const [worldCupContentsList, setWorldCupContentsList] = useState<ManagedContent[]>([]); // 최초 수정페이지에서 컨텐츠가 담기는 배열
     const [worldCupId, setWorldCupId] = useState(id ? id : 0);
     const [isCreateWorldCup, setIsCreateWorldCup] = useState(false);
-    const [modifyList, setModifyList] = useState([]);
-    const [deleteList, setDeleteList] = useState([]);
-    const [newList, setNewList] = useState([]);
+    const [modifyList, setModifyList] = useState<PersistedManagedContentView[]>([]);
+    const [deleteList, setDeleteList] = useState<PersistedManagedContentView[]>([]);
+    const [newList, setNewList] = useState<ManagedContent[]>([]);
     const [isChanges, setIsChange] = useState(false);
     const persistedContents = myWorldCupContentsList?.data?.data;
 

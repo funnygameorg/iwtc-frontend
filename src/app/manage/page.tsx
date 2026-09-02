@@ -2,12 +2,13 @@
 import React, { useState } from 'react';
 import WorldCupManageForm from '@/components/manage/WorldCupManageForm';
 import WorldCupContentsManageListWrapper from '@/components/manage/WorldCupContentsManagerListWrapper';
+import { ManagedContent } from '@/domain/manage/persistedContent';
 
 /*
     월드컵 관리 페이지를 표현합니다.
 */
 const ManageForm = () => {
-    const [worldCupContentsList, setWorldCupContentsList] = useState([]);
+    const [worldCupContentsList, setWorldCupContentsList] = useState<ManagedContent[]>([]);
     const [worldCupId, setWorldCupId] = useState(0);
     const [isCreateWorldCup, setIsCreateWorldCup] = useState(false);
 
