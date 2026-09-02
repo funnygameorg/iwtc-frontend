@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { getYoutubeVideoId } from '@/utils/youtube';
 import AlertPopup from '../popup/AlertPopup';
-import { PopupContext } from '../PopupProvider';
+import { PopupContext } from '@/providers/PopupProvider';
 
 const YoutubePlayer = ({ url, componentType }: any) => {
     const { showPopup, hidePopup } = useContext(PopupContext);

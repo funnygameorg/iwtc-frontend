@@ -1,6 +1,6 @@
 'use client';
 import React, { useContext } from 'react';
-import { PopupContext } from '../PopupProvider';
+import { PopupContext } from '@/providers/PopupProvider';
 import AlertPopup from '../popup/AlertPopup';
 
 const MobileView = () => {

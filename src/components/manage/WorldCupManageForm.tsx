@@ -4,7 +4,7 @@ import { getAccessToken } from '@/utils/TokenManager';
 import { useMutation } from '@tanstack/react-query';
 import React, { useContext, useEffect, useState } from 'react';
 import AlertPopup from '../popup/AlertPopup';
-import { PopupContext } from '../PopupProvider';
+import { PopupContext } from '@/providers/PopupProvider';
 
 interface IProps {
     setIsCreateWorldCup: any;

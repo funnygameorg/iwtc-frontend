@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { localStorageClear } from '@/stores/LocalStore';
 import { useAuth } from '@/providers/AuthProvider';
-import { PopupContext } from '../PopupProvider';
+import { PopupContext } from '@/providers/PopupProvider';
 import AlertPopup from '../popup/AlertPopup';
 
 const SignInUpButton = () => {

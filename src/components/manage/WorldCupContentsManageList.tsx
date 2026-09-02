@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import ManageCardWrapper from './contentsListCard/ManageCardWrapper';
 import AlertPopup from '../popup/AlertPopup';
-import { PopupContext } from '../PopupProvider';
+import { PopupContext } from '@/providers/PopupProvider';
 import { FFmpeg, createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 import SelectFileType from './SelectFileType';
 import SelectVisibleType from './SelectVisibleType';

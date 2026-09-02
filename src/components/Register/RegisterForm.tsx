@@ -7,7 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import { userSignUp } from '@/services/MemberService';
 import { useRouter } from 'next/navigation';
 import { BASE_URL } from '@/consts';
-import { PopupContext } from '../PopupProvider';
+import { PopupContext } from '@/providers/PopupProvider';
 import AlertPopup from '../popup/AlertPopup';
 
 type FormTypes = {

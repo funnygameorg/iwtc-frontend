@@ -9,7 +9,7 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAccessToken } from '@/utils/TokenManager';
 import AlertPopup from '../popup/AlertPopup';
-import { PopupContext } from '../PopupProvider';
+import { PopupContext } from '@/providers/PopupProvider';
 import NotCreateWorldCupLogo from './NotCreateWorldCupLogo';
 import { useRouter } from 'next/navigation';
 

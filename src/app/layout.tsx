@@ -9,7 +9,7 @@ import Header from '@/components/common/Header';
 import { getSelectorsByUserAgent } from 'react-device-detect';
 import { headers } from 'next/headers';
 import MobileView from '@/components/mobile/MobileView';
-import PopupProvider from '@/components/PopupProvider';
+import PopupProvider from '@/providers/PopupProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 

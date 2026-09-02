@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import { setUserInfo } from '@/stores/LocalStore';
 import { useAuth } from '@/providers/AuthProvider';
 import AlertPopup from '../popup/AlertPopup';
-import { PopupContext } from '../PopupProvider';
+import { PopupContext } from '@/providers/PopupProvider';
 interface FormTypes {
     username: string;
     password: string;
