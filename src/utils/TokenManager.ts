@@ -4,7 +4,6 @@ import { Cookies } from 'react-cookie';
 const cookies = new Cookies();
 
 export const setToken = (key: 'ACCESS_TOKEN' | 'REFRESH_TOKEN', token: string) => {
-    const expires = new Date();
     // expires.setDate(expires.getDate() + 14);
     cookies.set(key, token, { path: '/' });
     // cookies.set(key, token, {

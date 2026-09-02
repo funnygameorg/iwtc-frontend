@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { ajaxDelete, ajaxGet, ajaxPost, ajaxPut } from './BaseService';
 import { useQuery } from '@tanstack/react-query';
 import { getAccessToken } from '@/utils/TokenManager';

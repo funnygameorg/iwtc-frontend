@@ -1,8 +1,6 @@
 import { SignUpInfo, SignInInfo } from '@/interfaces/models/login/MemberData';
 import { ajaxGet, ajaxPost } from './BaseService';
-import axios from 'axios';
 import { getAccessToken, getRefreshToken } from '@/utils/TokenManager';
-import { BASE_URL } from '@/consts';
 
 //TODO: type 설정
 export const userSignUp = async (param: SignUpInfo) => {

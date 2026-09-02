@@ -6,8 +6,6 @@ const hourInMs = 60 * minuteInMs;
 const dayInMs = 24 * hourInMs;
 const monthInMs = 30 * dayInMs;
 const yearInMs = 365 * dayInMs;
-const noLimitInMs = 2000 * dayInMs;
-
 export const getPassedTimeMessage = (date: moment.Moment): string => {
     const diffInMs = moment().diff(date);
 

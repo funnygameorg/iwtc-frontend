@@ -2,8 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 import { ajaxGet, ajaxPost } from './BaseService';
 import { WCListParent, loadWCListData } from '@/interfaces/models/world-cup/WcListData';
 import Error from 'next/error';
-import { getAccessToken } from '@/utils/TokenManager';
-import axios from 'axios';
 
 // export const useQueryGetWorldCupAllList = (page: number, size: number, sort: number) => {
 //     return useQuery<any, Error>(['WorldCupList', page, size, sort], () => worldCupAllList(page, size, sort), {
@@ -71,7 +69,6 @@ export const worldCupGameClear = async (param: any) => {
         thirdWinnerContentsId,
         fourthWinnerContentsId,
     };
-    const numberworldcupId = Number(worldcupId);
     const response = await ajaxPost(`/world-cups/${worldcupId}/clear`, params);
     return response.data;
 };

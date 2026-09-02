@@ -1,5 +1,5 @@
 import { BASE_URL, MEMBER_URL } from '@/consts';
-import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios';
 import { newAccessToken, userSignOut } from './MemberService';
 import { localStorageClear } from '@/stores/LocalStore';
 import { removeToken, setToken } from '@/utils/TokenManager';
@@ -14,8 +14,8 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(
-    (config: any) => {
-        if (config.url.includes('member')) {
+    (config) => {
+        if (config.url?.includes('member')) {
             // 'member'가 포함된 경우 MEMBER_BASE_URL 사용
             config.baseURL = `${MEMBER_URL}api/`;
         } else {
@@ -24,7 +24,7 @@ instance.interceptors.request.use(
         }
         return config;
     },
-    (error: any) => {
+    (error: unknown) => {
         return Promise.reject(error);
     }
 );
@@ -42,9 +42,9 @@ instance.interceptors.response.use(
             return Promise.reject(response.data);
         }
     },
-    async (error: any) => {
+    async (error: AxiosError) => {
         console.log('response error', error);
-        if (error.response.status === 401) {
+        if (error.response!.status === 401) {
             const newToken = await newAccessToken();
             if (newToken.code === 1010101) {
                 const response = await userSignOut();
@@ -61,8 +61,8 @@ instance.interceptors.response.use(
                 // // ACCESS_TOKEN 저장
                 setToken('ACCESS_TOKEN', newAccessToken);
                 setToken('REFRESH_TOKEN', refreshToken);
-                error.config.headers['access-token'] = `${newAccessToken}`;
-                return axios.request(error.config);
+                error.config!.headers['access-token'] = `${newAccessToken}`;
+                return axios.request(error.config!);
                 // const userInfo = await userMeSummary(token);
                 // setUserInfo(userInfo.data);
             }
@@ -82,25 +82,33 @@ instance.interceptors.response.use(
 //   // SessionStorage.setAuthToken(token);
 // };
 
-export const ajaxGet = async <T = any>(subUrl: string, params?: any): Promise<AxiosResponse<T>> => {
-    return instance.get(subUrl, params);
+export const ajaxGet = async <T = any>(subUrl: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> => {
+    return instance.get(subUrl, config);
 };
 
-export const ajaxPost = async <T = any>(subUrl: string, params?: any, headers?: any): Promise<AxiosResponse<T>> => {
-    if (headers) {
-        return instance.post(subUrl, params, headers);
+export const ajaxPost = async <T = any, D = unknown>(
+    subUrl: string,
+    data?: D,
+    config?: AxiosRequestConfig<D>
+): Promise<AxiosResponse<T>> => {
+    if (config) {
+        return instance.post(subUrl, data, config);
     }
-    return instance.post(subUrl, params);
+    return instance.post(subUrl, data);
 };
 
-export const ajaxPut = async <T = any>(subUrl: string, params: any, headers?: any): Promise<AxiosResponse<T>> => {
-    return instance.put(subUrl, params, headers);
+export const ajaxPut = async <T = any, D = unknown>(
+    subUrl: string,
+    data: D,
+    config?: AxiosRequestConfig<D>
+): Promise<AxiosResponse<T>> => {
+    return instance.put(subUrl, data, config);
 };
 
 export const ajaxDelete = async <T = any>(
     subUrl: string,
-    params: any = {}, // 기본값으로 빈 객체 설정
-    headers?: any
+    data: unknown = {},
+    headers?: RawAxiosRequestHeaders
 ): Promise<AxiosResponse<T>> => {
-    return instance.delete(subUrl, { data: params, headers: headers });
+    return instance.delete(subUrl, { data, headers });
 };

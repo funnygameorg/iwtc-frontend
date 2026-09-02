@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import { ajaxGet } from './BaseService';
 
 // export const useQueryGetMediaFiles = (worldcupId: number) => {
@@ -9,7 +8,7 @@ import { ajaxGet } from './BaseService';
 //     });
 // };
 
-export const getMediaFileAPI = async (mediaFileId: number, type?: any) => {
+export const getMediaFileAPI = async (mediaFileId: number, type?: string) => {
     const params = {
         size: type ? type : undefined,
     };
