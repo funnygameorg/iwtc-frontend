@@ -2,20 +2,21 @@
 import RankListWrapper from '@/components/Rank/RankListWrapper';
 import ReplyRegisterForm from '@/components/reply/ReplyRegisterForm';
 import ReplyList from '@/components/reply/ReplyList';
-import { useQueryGetWorldCupGameResultRankList, worldCupGameClear } from '@/services/WorldCupService';
-import { useQueryGetReplyList, worldCupGameReplyRegister } from '@/services/ReplyService';
+import { worldCupGameClear } from '@/services/WorldCupService';
+import { useQueryGetReplyList } from '@/services/ReplyService';
 import { isMP4, mappingMediaFile } from '@/utils/common';
 import { useMutation } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import CustomYoutubePlayer from '@/components/youtubePlayer/CustomYoutubePlayer';
 
-const Page = ({ params }: { params: { id: any } }) => {
+const Page = ({ params }: { params: { id: string[] } }) => {
     const [rankList, setRankList] = useState<any>();
     const { id } = params;
-    const { data: reply, isSuccess: replyIsSuccess } = useQueryGetReplyList(id[0], 0);
-    const { data: allRankList, isSuccess: allRankIsSuccess } = useQueryGetWorldCupGameResultRankList(id[0]);
+    const worldCupId = Number(id[0]);
+    const clearPathParams = id.join('/');
+    const { data: reply } = useQueryGetReplyList(worldCupId, 0);
 
-    const { mutate, isLoading, error, isSuccess } = useMutation(worldCupGameClear, {
+    const { mutate, isSuccess } = useMutation(worldCupGameClear, {
         onSuccess: async (data) => {
             const mappingLsit = await mappingMediaFile(data.data);
             setRankList(mappingLsit);
@@ -26,8 +27,8 @@ const Page = ({ params }: { params: { id: any } }) => {
     });
 
     useEffect(() => {
-        mutate(id);
-    }, []);
+        mutate(clearPathParams.split('/'));
+    }, [clearPathParams, mutate]);
     // 게임 종료 API 응답값에 컨텐츠 ID를 내가 보내는데 응답값에 ID에 대한 게임 이름 데이터 내려줘야함
     if (isSuccess && rankList) {
         return (
@@ -131,7 +132,7 @@ const Page = ({ params }: { params: { id: any } }) => {
                                 {/* 예시로 h-96 사용 */}
                             </div>
                             <div className="flex h-full">
-                                <RankListWrapper contentsId={id[0]} />
+                                <RankListWrapper contentsId={worldCupId} />
                             </div>
                         </div>
                     </div>
@@ -156,7 +157,7 @@ const Page = ({ params }: { params: { id: any } }) => {
                                 </div>
                             </section>
                             <div>
-                                <ReplyRegisterForm worldcupId={id[0]} contentsId={id[1]} />
+                                <ReplyRegisterForm worldcupId={worldCupId} contentsId={Number(id[1])} />
                             </div>
                         </div>
 
