@@ -3,14 +3,13 @@ import Link from 'next/link';
 import React, { useContext } from 'react';
 import SignInUpButton from '../header/SignInUpButton';
 import { getUserInfo } from '@/stores/LocalStore';
-import { useInView } from '@react-spring/web';
 import { useAuth } from '../AuthProvider';
 import { PopupContext } from '../PopupProvider';
 import AlertPopup from '../popup/AlertPopup';
 import { VERSION } from '@/consts/Version';
 
 const Header = () => {
-    const { isLoggedIn, logout } = useAuth();
+    const { isLoggedIn } = useAuth();
     const { showPopup, hidePopup } = useContext(PopupContext);
     const userInfo = getUserInfo();
     const userId = userInfo != null ? userInfo.memberId : '';

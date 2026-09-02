@@ -1,20 +1,20 @@
 'use client';
 import { worldCupAllList } from '@/services/WorldCupService';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import WorldCupList from './WorldCupList';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import InfiniteScroll from 'react-infinite-scroller';
 import SearchBar from '@/components/search';
 import RankSelect from '@/components/button/RankSelect';
 import Order from '@/components/dropdown/Order';
-import { mappingMediaFile, mappingMediaFile2 } from '@/utils/common';
+import { mappingMediaFile2 } from '@/utils/common';
 
 const WorldCupWrapper = () => {
     const [keyword, setKeyword] = useState<undefined | string>(undefined);
     const [order, setOrder] = useState<string>('id');
     const [rank, setRank] = useState<string>('ALL');
 
-    const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isSuccess } = useInfiniteQuery(
+    const { data, fetchNextPage, hasNextPage, isSuccess } = useInfiniteQuery(
         ['wclist', order, keyword, rank],
         async ({ pageParam = 0 }) => {
             const response: any = await worldCupAllList(pageParam, 20, order, keyword, rank);
@@ -25,10 +25,8 @@ const WorldCupWrapper = () => {
             }
         },
         {
-            getNextPageParam: (lastPage, allPages) => {
+            getNextPageParam: (lastPage) => {
                 const currentPageNumber = lastPage.pageable.pageNumber;
-
-                const totalPages = lastPage.totalCount;
                 // 만약 현재 페이지 번호가 전체 페이지 수를 초과하면 더 이상 페이지를 불러오지 않습니다.
 
                 if (

@@ -1,11 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import { getAccessToken } from '@/utils/TokenManager';
 const RouteHandler = () => {
-    const router = useRouter();
-    const pathname = usePathname();
-
     // useEffect(() => {
     //   if(!getAccessToken()){
     //     router.push('/');

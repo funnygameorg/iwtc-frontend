@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 //https://flowbite.com/docs/components/sidebar/#sidebar-with-navbar
 
 function Sidebar() {

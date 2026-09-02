@@ -1,11 +1,8 @@
 'use client';
-import { userMeSummary, userSignOut } from '@/services/MemberService';
-import { getAccessToken } from '@/utils/TokenManager';
-import { useMutation } from '@tanstack/react-query';
-import Link from 'next/link';
-import React, { useContext, useEffect, useState } from 'react';
+import { userSignOut } from '@/services/MemberService';
+import React, { useContext } from 'react';
 import { useRouter } from 'next/navigation';
-import { getUserInfo, localStorageClear } from '@/stores/LocalStore';
+import { localStorageClear } from '@/stores/LocalStore';
 import { useAuth } from '../AuthProvider';
 import { PopupContext } from '../PopupProvider';
 import AlertPopup from '../popup/AlertPopup';

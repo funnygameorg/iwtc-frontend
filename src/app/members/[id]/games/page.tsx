@@ -1,12 +1,9 @@
-import HomeLoginForm from '@/components/register/HomeLoginForm';
-import Sidebar from '@/components/common/Sidebar';
-import HydratedWCList from '@/components/home/HydratedWCList';
 import MyWorldCupList from '@/components/myWorldcup/MyWorldCupList';
 
 /*
     월드컵 관리 페이지를 표현합니다.
 */
-const Page = ({ params }: { params: { id: number } }) => {
+const Page = () => {
     return (
         <div>
             <div className="m-5">

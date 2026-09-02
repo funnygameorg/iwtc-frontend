@@ -1,10 +1,7 @@
 'use client';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import WorldCupManageForm from '@/components/manage/WorldCupManageForm';
 import WorldCupContentsManageListWrapper from '@/components/manage/WorldCupContentsManagerListWrapper';
-import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
-import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
-import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageContext';
 
 /*
     월드컵 관리 페이지를 표현합니다.

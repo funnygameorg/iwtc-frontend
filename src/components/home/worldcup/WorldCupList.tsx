@@ -2,7 +2,6 @@ import CustomYoutubePlayer from '@/components/youtubePlayer/CustomYoutubePlayer'
 import { isMP4 } from '@/utils/common';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
 
 const WorldCupList = ({ wcList }: any) => {
     const {
@@ -19,7 +18,6 @@ const WorldCupList = ({ wcList }: any) => {
         rightVideoStartTime,
         description,
         worldCupId,
-        detailType,
     } = wcList;
     return (
         <div className="p-4 max-w-sm">

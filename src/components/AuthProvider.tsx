@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: any) => {
 
     const loginCheck = async () => {
         const accessToken = getAccessToken();
-        const userInfo = await userMeSummary(accessToken);
+        await userMeSummary(accessToken);
     };
 
     const login = () => {

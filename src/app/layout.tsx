@@ -5,7 +5,6 @@ import { Inter } from 'next/font/google';
 import RouteHandler from '@/components/RouteHandler';
 import Providers from '@/hooks/Provider';
 import { AuthProvider } from '@/components/AuthProvider';
-import Head from 'next/head';
 import Header from '@/components/common/Header';
 import { getSelectorsByUserAgent } from 'react-device-detect';
 import { headers } from 'next/headers';

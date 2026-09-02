@@ -1,11 +1,8 @@
 'use client';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import WorldCupManageForm from '@/components/manage/WorldCupManageForm';
 import WorldCupContentsManageListWrapper from '@/components/manage/WorldCupContentsManagerListWrapper';
-import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
-import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageContext';
 import { useQueryGetMyWorldCup, useQueryGetMyWorldCupContentsList } from '@/services/ManageWorldCupService';
-import { getAccessToken } from '@/utils/TokenManager';
 import { getMediaFile } from '@/services/EtcService';
 import { isMP4 } from '@/utils/common';
 
