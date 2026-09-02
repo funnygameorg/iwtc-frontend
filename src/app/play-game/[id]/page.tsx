@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useQueryGetWorldCupGameRound, worldCupGamePlay } from '@/services/WorldCupService';
 import RoundPopup from '@/components/popup/RoundPopup';
@@ -10,17 +10,18 @@ import { animated, useSpring } from '@react-spring/web';
 import CustomYoutubePlayer from '@/components/youtubePlayer/CustomYoutubePlayer';
 import Spiner from '@/components/common/Spiner';
 import { createRoundLabels, getRoundProgressIncrement } from '@/domain/game/round';
+import { createWorldCupGameRequest } from '@/domain/game/play';
 
-const Page = ({ params }: { params: { id: number } }) => {
+const Page = ({ params }: { params: { id: string } }) => {
     const router = useRouter();
 
-    const { id } = params;
-    const { data: roundList } = useQueryGetWorldCupGameRound(id);
+    const worldCupId = Number(params.id);
+    const { data: roundList } = useQueryGetWorldCupGameRound(worldCupId);
     // const {worldCupTitle} = roundList?.data
     const [selectRound, setSelectRound] = useState<number>(0);
     const [isPlay, setIsPlay] = useState<boolean>(false);
     const [gameList, setGameList] = useState<any>([]);
-    const [saveClickContents, setSaveClickContents] = useState([]);
+    const [saveClickContents, setSaveClickContents] = useState<number[]>([]);
     const [rankContents, setRankContents] = useState({
         firstWinnerContentsId: 0,
         secondWinnerContentsId: 0,
@@ -33,7 +34,9 @@ const Page = ({ params }: { params: { id: number } }) => {
     const [roundLabels, setRoundLabels] = useState({});
     const [isLoding, setIsLoding] = useState<boolean>(true);
 
-    useEffect(() => {
+    const applyGameList = (list: any, initialRound: number) => {
+        setGameList(list);
+
         // 8강 기준 4번의 게임을 하면 4강으로 진출 71.4286
         // (100 / 7 ) * (4 + 1)
         // 16강 기준 8번의 게임을 하면 8강으로 진출
@@ -45,11 +48,11 @@ const Page = ({ params }: { params: { id: number } }) => {
         // 8강은 6번
         // 16강은 14번에 결승 15번에 끝
         //32강은 30번에 결승 31번에 끝
-        if (firstSelectedRound !== 0) {
-            const percentage = getRoundProgressIncrement(firstSelectedRound);
+        if (initialRound !== 0) {
+            const percentage = getRoundProgressIncrement(initialRound);
             setProgressPercentage((prev) => prev + percentage);
         }
-    }, [gameList]);
+    };
 
     useEffect(() => {
         if (firstSelectedRound !== 0) {
@@ -81,14 +84,24 @@ const Page = ({ params }: { params: { id: number } }) => {
         leftApi.start({ to: { x: -left } });
     };
 
-    const getGame: any = useMutation(worldCupGamePlay, {
-        onSuccess: async (data: any) => {
+    const getGame = useMutation(worldCupGamePlay, {
+        onSuccess: async (data: any, variables) => {
             setIsPlay(true);
             const list = await mappingMediaFile(data.data.contentsList);
             setIsLoding(false);
-            setGameList(list);
+            applyGameList(list, variables.initialRound);
         },
     });
+
+    const requestGameRound = (round: number, excludedContentsIds: number[], initialRound: number) => {
+        getGame.mutate(createWorldCupGameRequest(worldCupId, round, excludedContentsIds, initialRound));
+    };
+
+    const handleRoundSelect = (round: number) => {
+        setSelectRound(round);
+        setFirstSelectedRound(round);
+        requestGameRound(round, [], round);
+    };
 
     useEffect(() => {
         document.documentElement.classList.add('dark');
@@ -110,8 +123,9 @@ const Page = ({ params }: { params: { id: number } }) => {
         }
         const loseConetentId = gameList[index].contentsId;
         const winContentId = gameList[index === 1 ? 0 : 1].contentsId;
+        const nextExcludedContents = saveClickContents.concat(loseConetentId);
         // selectRound가 2이면 결승
-        setSaveClickContents(saveClickContents.concat(loseConetentId));
+        setSaveClickContents(nextExcludedContents);
         if (selectRound === 4) {
             if (rankContents.fourthWinnerContentsId !== 0) {
                 const updatedRankContents = { ...rankContents, thirdWinnerContentsId: loseConetentId };
@@ -130,7 +144,7 @@ const Page = ({ params }: { params: { id: number } }) => {
             };
             // setRankContents(updatedRankContents);
             router.push(
-                `/play-clear/${id}/${updatedRankContents.firstWinnerContentsId}/${updatedRankContents.secondWinnerContentsId}/${updatedRankContents.thirdWinnerContentsId}/${updatedRankContents.fourthWinnerContentsId}`
+                `/play-clear/${worldCupId}/${updatedRankContents.firstWinnerContentsId}/${updatedRankContents.secondWinnerContentsId}/${updatedRankContents.thirdWinnerContentsId}/${updatedRankContents.fourthWinnerContentsId}`
             );
             return;
             // 최종 선택 API 호출 후 return
@@ -140,7 +154,9 @@ const Page = ({ params }: { params: { id: number } }) => {
             setTimeout(() => {
                 handleRightImageClick(0, 0);
                 handleLeftImageClick(0, 0);
-                setSelectRound((prev) => prev / 2);
+                const nextRound = selectRound / 2;
+                setSelectRound(nextRound);
+                requestGameRound(nextRound, nextExcludedContents, firstSelectedRound);
                 setIsSwapping(false);
             }, 1000);
             return;
@@ -149,37 +165,15 @@ const Page = ({ params }: { params: { id: number } }) => {
             handleRightImageClick(0, 0);
             handleLeftImageClick(0, 0);
             const newGameList = gameList.slice(2);
-            setGameList(newGameList);
+            applyGameList(newGameList, firstSelectedRound);
             setIsSwapping(false);
         }, 1000);
         // useSpringAnimation(0, 0);
         //클릭한 아이템은 저장!
     };
 
-    const playMutation = () => {
-        const param = {
-            worldcupId: id,
-            currentRound: selectRound,
-            sliceContents: 1,
-            excludeContentsIds: saveClickContents.length < 1 ? undefined : saveClickContents.join(','),
-        };
-        getGame.mutate(param);
-    };
-
-    useEffect(() => {
-        if (selectRound) {
-            playMutation();
-        }
-    }, [selectRound]);
-
     if (!isPlay) {
-        return (
-            <RoundPopup
-                roundList={roundList}
-                setSelectRound={setSelectRound}
-                setFirstSelectedRound={setFirstSelectedRound}
-            />
-        );
+        return <RoundPopup roundList={roundList} onSelectRound={handleRoundSelect} />;
     }
 
     if (isLoding) {

@@ -1,25 +1,21 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 interface IProps {
     roundList: any;
-    setSelectRound: Dispatch<SetStateAction<number>>;
-    setFirstSelectedRound: Dispatch<SetStateAction<number>>;
+    onSelectRound: (round: number) => void;
 }
 
-const RoundPopup = ({ roundList, setSelectRound, setFirstSelectedRound }: IProps) => {
+const RoundPopup = ({ roundList, onSelectRound }: IProps) => {
     const [isOnPopup, setIsOnPopup] = useState<boolean>(true);
 
     const selectRound = (round: number) => {
-        setSelectRound(round);
-        setFirstSelectedRound(round);
+        onSelectRound(round);
         closePopup();
     };
 
     const closePopup = () => {
         setIsOnPopup(false);
     };
-
-    console.log('roundList', roundList);
 
     return (
         <>

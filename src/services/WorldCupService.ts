@@ -3,6 +3,7 @@ import { ajaxGet, ajaxPost } from './BaseService';
 import { WCListParent, loadWCListData } from '@/interfaces/models/world-cup/WcListData';
 import Error from 'next/error';
 import { createWorldCupClearRequest } from '@/domain/game/clear';
+import { WorldCupGameRequest } from '@/domain/game/play';
 
 // export const useQueryGetWorldCupAllList = (page: number, size: number, sort: number) => {
 //     return useQuery<any, Error>(['WorldCupList', page, size, sort], () => worldCupAllList(page, size, sort), {
@@ -50,7 +51,7 @@ export const worldCupGamePlay = async ({
     currentRound,
     sliceContents,
     excludeContentsIds,
-}: any): Promise<any> => {
+}: WorldCupGameRequest): Promise<any> => {
     const param = {
         currentRound,
         sliceContents,

@@ -21,6 +21,8 @@
         "src/domain/game/round.test.ts",
         "src/domain/game/clear.ts",
         "src/domain/game/clear.test.ts",
+        "src/domain/game/play.ts",
+        "src/domain/game/play.test.ts",
         "src/domain/manage/content.ts",
         "src/domain/manage/content.test.ts",
         "src/domain/manage/persistedContent.ts",
