@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { ajaxGet, ajaxPost } from './BaseService';
-import { WCListParent, loadWCListData } from '@/interfaces/models/world-cup/WcListData';
+import { WCListApiEnvelope, WCListParent, loadWCListData } from '@/interfaces/models/world-cup/WcListData';
 import Error from 'next/error';
 import { createWorldCupClearRequest } from '@/domain/game/clear';
 import { WorldCupGameRequest } from '@/domain/game/play';
@@ -30,7 +30,7 @@ export const worldCupAllList = async (
         dateRange,
         // memberId,
     };
-    const response = await ajaxGet('/world-cups', { params: param });
+    const response = await ajaxGet<WCListApiEnvelope>('/world-cups', { params: param });
     return loadWCListData(response.data.data);
 };
 

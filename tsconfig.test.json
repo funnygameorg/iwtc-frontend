@@ -27,6 +27,8 @@
         "src/domain/manage/content.test.ts",
         "src/domain/manage/persistedContent.ts",
         "src/domain/manage/persistedContent.test.ts",
+        "src/interfaces/models/world-cup/WcListData.ts",
+        "src/interfaces/models/world-cup/WcListData.test.ts",
         "src/lib/react-query/queryKeys.ts",
         "src/lib/react-query/queryKeys.test.ts"
     ],
