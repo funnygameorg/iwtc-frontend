@@ -1,11 +1,5 @@
 'use client';
-import { createContext, PropsWithChildren, useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
-import AlertPopup from './popup/AlertPopup';
-
-interface ModalDataType {
-    madal: JSX.Element;
-}
+import { createContext, PropsWithChildren, useState } from 'react';
 
 interface PopupContextType {
     showPopup: (modal: JSX.Element) => void;
@@ -13,17 +7,17 @@ interface PopupContextType {
 }
 
 export const PopupContext = createContext<PopupContextType>({
-    showPopup: (modal: JSX.Element) => {},
+    showPopup: () => {},
     hidePopup: () => {},
 });
 
-const PopupPopvider = ({ children }: PropsWithChildren) => {
+const PopupProvider = ({ children }: PropsWithChildren) => {
     const [isOpenPopup, setIsOpenPopup] = useState(false);
-    const [modalList, setModalList] = useState<ModalDataType[]>([]);
+    const [modalList, setModalList] = useState<JSX.Element[]>([]);
 
     const showPopup = (modal: JSX.Element) => {
         setIsOpenPopup(true);
-        setModalList((prev) => [...prev, modal] as ModalDataType[]);
+        setModalList((prev) => [...prev, modal]);
 
         // if (toastTimer.current) {
         //   clearTimeout(toastTimer.current);
@@ -45,7 +39,7 @@ const PopupPopvider = ({ children }: PropsWithChildren) => {
             {children}
             <>
                 {isOpenPopup &&
-                    modalList.map((modal: any, index: number) => {
+                    modalList.map((modal, index) => {
                         return <div key={index}>{modal}</div>;
                     })}
             </>
@@ -53,4 +47,4 @@ const PopupPopvider = ({ children }: PropsWithChildren) => {
     );
 };
 
-export default PopupPopvider;
+export default PopupProvider;
