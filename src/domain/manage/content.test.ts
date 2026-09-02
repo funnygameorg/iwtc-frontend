@@ -7,6 +7,7 @@ describe('normalizeClientManagedContent', () => {
         assert.deepEqual(
             normalizeClientManagedContent(
                 {
+                    id: 2,
                     contentsName: '후보 A',
                     videoStartTime: '00130',
                     videoPlayDuration: 3,
@@ -40,6 +41,18 @@ describe('normalizeClientManagedContent', () => {
     });
 
     it('preserves the existing zero-id normalization', () => {
-        assert.equal(normalizeClientManagedContent({ contentsId: 0, contentsName: '후보 B' }).contentsId, undefined);
+        assert.equal(
+            normalizeClientManagedContent(
+                {
+                    id: 0,
+                    contentsId: 0,
+                    contentsName: '후보 B',
+                    visibleType: 'PUBLIC',
+                    fileType: 'file',
+                },
+                0
+            ).contentsId,
+            undefined
+        );
     });
 });

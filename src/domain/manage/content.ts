@@ -1,19 +1,6 @@
-export interface ClientManagedContent {
-    contentsId?: number;
-    contentsName: string;
-    videoStartTime?: string;
-    videoPlayDuration?: number;
-    visibleType?: string;
-    fileType?: string;
-    mediaPath?: string;
-    mediaFileId?: number;
-    mp4Type?: boolean;
-    imgType?: boolean;
-    detailFileType?: string;
-    originalName?: string;
-}
+import { ManagedContent } from './persistedContent';
 
-export const normalizeClientManagedContent = (contents: ClientManagedContent, index?: number) => ({
+export const normalizeClientManagedContent = (contents: ManagedContent, index: number): ManagedContent => ({
     id: index,
     contentsId: contents.contentsId || undefined,
     contentsName: contents.contentsName,

@@ -273,7 +273,6 @@ const WorldCupContentsManageList = ({
                         index={contents.id}
                         worldCupId={worldCupId}
                         setWorldCupContentsList={setWorldCupContentsList}
-                        worldCupContentsList={worldCupContentsList}
                         setModifyList={setModifyList}
                         setDeleteList={setDeleteList}
                         setNewList={setNewList}
