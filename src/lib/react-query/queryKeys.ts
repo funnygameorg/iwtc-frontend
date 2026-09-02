@@ -1,6 +1,6 @@
 export const worldCupQueryKeys = {
     rounds: (worldCupId: number) => ['wcRounds', worldCupId] as const,
-    rank: () => ['AllRankList'] as const,
+    rank: (worldCupId: number) => ['AllRankList', worldCupId] as const,
 };
 
 export const manageWorldCupQueryKeys = {

@@ -70,7 +70,7 @@ export const worldCupGameClear = async (routeParams: string[]) => {
 
 //게임의 모든 컨텐츠 조회 (랭크 정렬)
 export const useQueryGetWorldCupGameResultRankList = (worldcupId: number) => {
-    return useQuery<any, Error>(worldCupQueryKeys.rank(), () => worldCuplGameResultRankList(worldcupId), {
+    return useQuery<any, Error>(worldCupQueryKeys.rank(worldcupId), () => worldCuplGameResultRankList(worldcupId), {
         retry: 0,
         refetchOnWindowFocus: false,
         staleTime: 1000,
