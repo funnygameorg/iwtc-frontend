@@ -1,6 +1,7 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import YouTube from 'react-youtube';
+import { getYoutubeVideoId } from '@/utils/youtube';
 
 interface IProps {
     videoUrl: string;
@@ -36,17 +37,6 @@ const CustomYoutubePlayer = ({ videoUrl, time, width, height, isAutoPlay = true,
         }
     };
 
-    const getVideoIdByYoutubeUrl = (data: any): any => {
-        let url;
-        try {
-            url = new URL(data);
-
-            const searchParams = new URLSearchParams(url.search);
-
-            return searchParams.get('v');
-        } catch (err) {}
-    };
-
     const convertTimeToSeconds = (timeString: string) => {
         // 문자열을 시, 분, 초로 분리
         const hours = parseInt(timeString?.substring(0, 1));
@@ -69,7 +59,7 @@ const CustomYoutubePlayer = ({ videoUrl, time, width, height, isAutoPlay = true,
     return (
         <YouTube
             iframeClassName="vod-box"
-            videoId={getVideoIdByYoutubeUrl(videoUrl)}
+            videoId={getYoutubeVideoId(videoUrl)}
             opts={{
                 width: width,
                 height: height,

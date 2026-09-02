@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { getYoutubeVideoId } from '@/utils/youtube';
 import AlertPopup from '../popup/AlertPopup';
 import { PopupContext } from '../PopupProvider';
 
@@ -22,19 +23,7 @@ const YoutubePlayer = ({ url, componentType }: any) => {
         }
     };
 
-    // 유튜브 URL로 비디오 ID 획득
-    const getVideoIdByYoutubeUrl = (data: any) => {
-        let url;
-        try {
-            url = new URL(data);
-
-            const searchParams = new URLSearchParams(url.search);
-
-            return searchParams.get('v');
-        } catch (err) {}
-    };
-
-    const videoId = getVideoIdByYoutubeUrl(url);
+    const videoId = getYoutubeVideoId(url);
 
     const embedUrl = `https://www.youtube.com/embed/${videoId}`;
     const [width, height]: any = getPlayerSize(componentType);
