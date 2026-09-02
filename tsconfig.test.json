@@ -16,7 +16,9 @@
         "src/utils/media.ts",
         "src/utils/media.test.ts",
         "src/utils/youtube.ts",
-        "src/utils/youtube.test.ts"
+        "src/utils/youtube.test.ts",
+        "src/domain/game/round.ts",
+        "src/domain/game/round.test.ts"
     ],
     "exclude": []
 }

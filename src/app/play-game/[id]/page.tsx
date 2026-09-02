@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { animated, useSpring } from '@react-spring/web';
 import CustomYoutubePlayer from '@/components/youtubePlayer/CustomYoutubePlayer';
 import Spiner from '@/components/common/Spiner';
+import { createRoundLabels, getRoundProgressIncrement } from '@/domain/game/round';
 
 const Page = ({ params }: { params: { id: number } }) => {
     const router = useRouter();
@@ -39,47 +40,23 @@ const Page = ({ params }: { params: { id: number } }) => {
         // (100 / 15) * (8 + 1)
         // 8강에서 4강 계산 총 12번 클릭
         //
-        const updateProgressBar = () => {
-            const percentage = 100 / (firstSelectedRound - 1);
-            setProgressPercentage((prev) => prev + percentage);
-        };
         //결승은 1
         // 4강은 2번
         // 8강은 6번
         // 16강은 14번에 결승 15번에 끝
         //32강은 30번에 결승 31번에 끝
         if (firstSelectedRound !== 0) {
-            updateProgressBar();
+            const percentage = getRoundProgressIncrement(firstSelectedRound);
+            setProgressPercentage((prev) => prev + percentage);
         }
     }, [gameList]);
 
     useEffect(() => {
         if (firstSelectedRound !== 0) {
-            const newRoundLabels = updateRoundLabels(firstSelectedRound);
+            const newRoundLabels = createRoundLabels(firstSelectedRound);
             setRoundLabels(newRoundLabels);
         }
     }, [firstSelectedRound]);
-
-    // 선택된 라운드에 따라 roundLabels 상태를 계산하고 업데이트하는 함수
-    const updateRoundLabels = (initialRound: number) => {
-        const labels: any = {};
-        let currentRound = initialRound;
-        let positionIncrement = 100;
-        let currentRound2 = initialRound / 2;
-
-        while (currentRound > 2) {
-            if (currentRound === initialRound) {
-                labels[`${currentRound}강`] = 100 - positionIncrement;
-                positionIncrement /= 2;
-            } else {
-                labels[`${currentRound}강`] = (100 / (initialRound - 1)) * (currentRound2 + 1);
-                currentRound2 = currentRound2 + currentRound / 2;
-            }
-            currentRound /= 2;
-        }
-        labels['결승'] = 100;
-        return labels;
-    };
 
     const useSpringAnimation = (from: number, to: number) => {
         return useSpring(() => ({
