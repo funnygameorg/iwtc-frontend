@@ -1,9 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import InternetVideoUrlCard from './InternetVideoUrlCard';
 import StaticMediaFileTypeCard from './StaticMediaFileTypeCard';
 import { getMediaFile } from '@/services/EtcService';
 import { isMP4 } from '@/utils/common';
-import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageContext';
 
 interface IProps {
     contents: any;

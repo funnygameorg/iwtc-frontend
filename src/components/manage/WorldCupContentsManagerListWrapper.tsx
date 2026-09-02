@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import WorldCupContentsManageList from './WorldCupContentsManageList';
-import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
 import {
     createWorldCupContents,
     createWorldCupContentsType,
@@ -11,8 +10,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAccessToken } from '@/utils/TokenManager';
 import AlertPopup from '../popup/AlertPopup';
 import { PopupContext } from '../PopupProvider';
-import { isMP4 } from '@/utils/common';
-import { getMediaFile } from '@/services/EtcService';
 import NotCreateWorldCupLogo from './NotCreateWorldCupLogo';
 import { useRouter } from 'next/navigation';
 
@@ -54,24 +51,6 @@ const WorldCupContentsManageListWrapper = ({
 
     const { showPopup, hidePopup } = useContext(PopupContext);
 
-    useEffect(() => {
-        // if (worldCupContentsManageContext && worldCupContentsManageContext.length > 0) {
-        //     const contentsLst = worldCupContentsManageContext.map((item: any) => ({
-        //         contentsId: item.id,
-        //         contentsName: item.contentsName,
-        //         visibleType: item.visibleType,
-        //         createMediaFileRequest: {
-        //             fileType: item.fileType === 'file' ? 'STATIC_MEDIA_FILE' : 'INTERNET_VIDEO_URL',
-        //             mediaData: item.mediaPath,
-        //             originalName: item.originalName,
-        //             videoStartTime: item.videoStartTime,
-        //             videoPlayDuration: item.videoPlayDuration,
-        //         },
-        //     }));
-        //     setWorldCupContentsManageContext(contentsLst);
-        // }
-    }, []);
-
     /**
      * 수정된 월드컵 컨텐츠 서버에 전송
      */
@@ -92,33 +71,6 @@ const WorldCupContentsManageListWrapper = ({
             },
         }));
     };
-
-    // const fetchMediaFile = async (id: any) => {
-    //     try {
-    //         const data = await getMediaFile(id);
-    //         const getMediaFileData = data?.data.data;
-    //         return syncFormatMediaData(undefined, getMediaFileData);
-    //     } catch (error) {
-    //         console.error('월드컵 정보 가져오기 실패:', error);
-    //     }
-    // };
-
-    // const syncFormatMediaData = (contentsByClient: any, contentsByServer: any) => {
-    //     console.log('contentsByServer', contentsByServer);
-    //     return {
-    //         contentsId: contentsByClient?.id || undefined,
-    //         contentsName: contentsByClient.contentsName,
-    //         videoStartTime: contentsByServer?.videoStartTime || contentsByClient.videoStartTime,
-    //         videoPlayDuration: contentsByServer?.videoPlayDuration || contentsByClient.videoPlayDuration,
-    //         visibleType: contentsByServer?.visibleType || contentsByClient.visibleType,
-    //         fileType: contentsByServer?.fileType || contentsByClient.filType,
-    //         mediaData: contentsByServer?.mediaData || contentsByClient.mediaPath,
-    //         mediaFileId: contentsByServer?.mediaFileId,
-    //         mp4Type: contentsByServer ? isMP4(contentsByServer.mediaData) : contentsByClient.mp4Type,
-    //         imgType: contentsByServer ? !isMP4(contentsByServer.mediaData) : contentsByClient.imgType,
-    //         detailFileType: contentsByServer ? contentsByServer.detailType : contentsByClient.detailType,
-    //     };
-    // };
 
     const createNewWorldCupContentsList = () => {
         // console.log('데이터 전 ', worldCupContentsList);

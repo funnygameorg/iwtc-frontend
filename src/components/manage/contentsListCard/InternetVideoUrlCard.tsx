@@ -1,10 +1,8 @@
 import YoutubePlayer from '@/components/youtubePlayer/YoutubePlayer';
-import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageContext';
-import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
 import { removeMyWorldCupContents, updateMyWorldCupContents } from '@/services/ManageWorldCupService';
 import { getAccessToken } from '@/utils/TokenManager';
 import Image from 'next/image';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface IProps {
     contents: any;

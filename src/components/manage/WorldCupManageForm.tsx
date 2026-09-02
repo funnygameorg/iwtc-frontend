@@ -1,6 +1,4 @@
 'use client';
-import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
-import { WorldCupManageContext } from '@/hooks/WorldCupManageContext';
 import { createWorldCup } from '@/services/ManageWorldCupService';
 import { getAccessToken } from '@/utils/TokenManager';
 import { useMutation } from '@tanstack/react-query';
