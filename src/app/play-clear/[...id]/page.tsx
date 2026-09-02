@@ -148,10 +148,10 @@ const Page = ({ params }: { params: { id: string[] } }) => {
                                 <div className="max-w-2xl mx-auto px-4">
                                     <div className="flex justify-between items-center mb-6">
                                         <h2 className="text-lg lg:text-2xl font-bold text-white dark:text-white">
-                                            댓글 ({reply.data.length})
+                                            댓글 ({reply?.data.length ?? 0})
                                         </h2>
                                     </div>
-                                    {reply.data.map((items: any, idx: number) => {
+                                    {reply?.data.map((items, idx) => {
                                         return <ReplyList key={idx} replyData={items} />;
                                     })}
                                 </div>

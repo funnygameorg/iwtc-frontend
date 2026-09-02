@@ -2,14 +2,7 @@ import { getPassedTimeMessage } from '@/utils/Time';
 import moment from 'moment';
 import React, { useState } from 'react';
 import ReplyPopup from './ReplyPopup';
-
-interface ReplyData {
-    body: string;
-    commentId: number;
-    commentWriterId: any;
-    createdAt: string;
-    writerNickname: string;
-}
+import { ReplyData } from '@/services/ReplyService';
 
 interface IProps {
     replyData: ReplyData;

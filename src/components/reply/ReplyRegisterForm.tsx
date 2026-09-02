@@ -1,6 +1,6 @@
 import { worldCupGameReplyRegister } from '@/services/ReplyService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { useAuth } from '@/providers/AuthProvider';
 import { getUserInfo } from '@/stores/LocalStore';
 import * as shortid from 'shortid';
@@ -34,7 +34,7 @@ const ReplyRegisterForm = ({ worldcupId, contentsId }: IProps) => {
         };
         replyRegister(params);
     };
-    const onChangeText = (e: any) => {
+    const onChangeText = (e: ChangeEvent<HTMLTextAreaElement>) => {
         const comment = e.target.value;
         setText(comment);
     };
