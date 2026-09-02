@@ -2,7 +2,6 @@
 
 import { getMyWorldCupList, useQueryGetMyWorldCupList } from '@/services/ManageWorldCupService';
 import { getAccessToken } from '@/utils/TokenManager';
-import { get } from 'http';
 import { useEffect, useState } from 'react';
 import MyWorldCupCard from './MyWorldCupCard';
 

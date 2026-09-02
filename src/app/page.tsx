@@ -1,4 +1,3 @@
-import HomeLoginForm from '@/components/Register/HomeLoginForm';
 import Sidebar from '@/components/common/Sidebar';
 import HydratedWCList from '@/components/home/HydratedWCList';
 

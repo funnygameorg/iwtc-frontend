@@ -1,7 +1,6 @@
 import { deleteMyWorldCup } from '@/services/ManageWorldCupService';
 import { getAccessToken } from '@/utils/TokenManager';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import exp from 'constants';
 import Link from 'next/link';
 
 const MyWorldCupCard = ({ myWorldCup, refetch }: any) => {

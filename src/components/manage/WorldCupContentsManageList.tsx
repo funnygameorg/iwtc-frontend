@@ -2,7 +2,6 @@
 import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
-import { type } from 'os';
 import ManageCardWrapper from './contentsListCard/ManageCardWrapper';
 import AlertPopup from '../popup/AlertPopup';
 import { PopupContext } from '../PopupProvider';

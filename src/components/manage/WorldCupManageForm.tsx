@@ -5,7 +5,6 @@ import { createWorldCup } from '@/services/ManageWorldCupService';
 import { getAccessToken } from '@/utils/TokenManager';
 import { useMutation } from '@tanstack/react-query';
 import React, { useContext, useEffect, useState } from 'react';
-import { isContext } from 'vm';
 import AlertPopup from '../popup/AlertPopup';
 import { PopupContext } from '../PopupProvider';
 

@@ -3,7 +3,6 @@ import { WorldCupContentsManageContext } from '@/hooks/WorldCupContentsManageCon
 import { WorldCupIdManageContext } from '@/hooks/WorldCupIdManageContext';
 import { removeMyWorldCupContents, updateMyWorldCupContents } from '@/services/ManageWorldCupService';
 import { getAccessToken } from '@/utils/TokenManager';
-import exp from 'constants';
 import Image from 'next/image';
 import { useContext, useEffect, useState } from 'react';
 

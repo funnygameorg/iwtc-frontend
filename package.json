@@ -8,7 +8,8 @@
         "build:prod": "env-cmd -f .env.production next build",
         "build": "env-cmd -f .env.production next build",
         "start": "next start -p 8080",
-        "lint": "next lint"
+        "lint": "next lint",
+        "typecheck": "tsc --noEmit"
     },
     "dependencies": {
         "@ffmpeg/core": "^0.10.0",
