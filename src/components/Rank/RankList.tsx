@@ -6,9 +6,9 @@ interface IProps {
     contentsName: string;
     rank: number;
     imgUrl: string;
-    fileType: string;
-    videoStartTime?: any;
-    videoPlayDuration?: any;
+    fileType?: string;
+    videoStartTime?: string;
+    videoPlayDuration?: number;
     gameScore: number;
 }
 

@@ -2,13 +2,17 @@ import React, { useEffect, useState } from 'react';
 import RankList from './RankList';
 import { useQueryGetWorldCupGameResultRankList } from '@/services/WorldCupService';
 import { mappingMediaFile } from '@/utils/common';
+import { MappedMediaContent } from '@/domain/game/mediaFile';
+import { WorldCupRankContent } from '@/interfaces/models/world-cup/WcGameData';
 interface IProps {
     contentsId: number;
 }
 
+type RankContentView = MappedMediaContent<WorldCupRankContent>;
+
 const RankListWrapper = ({ contentsId }: IProps) => {
     const { data: allRankList, isSuccess: allRankIsSuccess } = useQueryGetWorldCupGameResultRankList(contentsId);
-    const [lastResult, setLastResult] = useState<any>([]);
+    const [lastResult, setLastResult] = useState<RankContentView[]>([]);
     const rankData = allRankList?.data;
 
     useEffect(() => {
@@ -38,7 +42,7 @@ const RankListWrapper = ({ contentsId }: IProps) => {
             <div className="">
                 {allRankIsSuccess ? (
                     <ul className="divide-y divide-zinc-600  w-full h-auto ">
-                        {lastResult.map((items: any, index: number) => {
+                        {lastResult.map((items, index) => {
                             const {
                                 contentsName,
                                 gameRank,

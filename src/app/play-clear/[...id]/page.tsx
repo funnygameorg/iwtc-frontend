@@ -8,9 +8,13 @@ import { isMP4, mappingMediaFile } from '@/utils/common';
 import { useMutation } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import CustomYoutubePlayer from '@/components/youtubePlayer/CustomYoutubePlayer';
+import { MappedMediaContent } from '@/domain/game/mediaFile';
+import { WorldCupClearContent } from '@/interfaces/models/world-cup/WcGameData';
+
+type ClearContentView = MappedMediaContent<WorldCupClearContent>;
 
 const Page = ({ params }: { params: { id: string[] } }) => {
-    const [rankList, setRankList] = useState<any>();
+    const [rankList, setRankList] = useState<ClearContentView[]>();
     const { id } = params;
     const worldCupId = Number(id[0]);
     const clearPathParams = id.join('/');
@@ -43,7 +47,7 @@ const Page = ({ params }: { params: { id: string[] } }) => {
                                 {/* <div className="w-1/4 bg-gray-100 max-w-2xl mx-auto h-full rounded-md shadow-md p-2 h-5/6 flex flex-col justify-center items-center"> */}
                                 {/* 세로로 이미지 4개 배치 */}
                                 <ul className=" w-1/4 bg-gray-100 rounded-md shadow-md bg-zinc-900 border border-zinc-600 ">
-                                    {rankList.map((items: any) => {
+                                    {rankList.map((items) => {
                                         if (items.rank !== 1) {
                                             return items.fileType === 'INTERNET_VIDEO_URL' ? (
                                                 <li className="w-full h-1/3 text-center " key={items.contentsId}>
@@ -91,7 +95,7 @@ const Page = ({ params }: { params: { id: string[] } }) => {
                                 </ul>
                                 {/* </div> */}
                                 <ul className="w-full bg-gray-100 rounded-md shadow-md  bg-zinc-900 border border-zinc-600">
-                                    {rankList.map((items: any) => {
+                                    {rankList.map((items) => {
                                         if (items.rank === 1) {
                                             return items.fileType === 'INTERNET_VIDEO_URL' ? (
                                                 <li className="w-full h-full flex justify-center items-center">
@@ -120,7 +124,7 @@ const Page = ({ params }: { params: { id: string[] } }) => {
                                                         {/* <span>{items.rank}</span> */}
                                                         <img
                                                             src={items.imgUrl}
-                                                            alt={items.contentsId}
+                                                            alt={String(items.contentsId)}
                                                             className="h-5/6"
                                                         />
                                                     </li>
