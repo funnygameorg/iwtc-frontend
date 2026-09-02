@@ -3,7 +3,7 @@ import { userSignOut } from '@/services/MemberService';
 import React, { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { localStorageClear } from '@/stores/LocalStore';
-import { useAuth } from '../AuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
 import { PopupContext } from '../PopupProvider';
 import AlertPopup from '../popup/AlertPopup';
 

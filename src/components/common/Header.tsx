@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React, { useContext } from 'react';
 import SignInUpButton from '../header/SignInUpButton';
 import { getUserInfo } from '@/stores/LocalStore';
-import { useAuth } from '../AuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
 import { PopupContext } from '../PopupProvider';
 import AlertPopup from '../popup/AlertPopup';
 import { VERSION } from '@/consts/Version';

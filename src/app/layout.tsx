@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import RouteHandler from '@/components/RouteHandler';
 import QueryProvider from '@/providers/QueryProvider';
-import { AuthProvider } from '@/components/AuthProvider';
+import { AuthProvider } from '@/providers/AuthProvider';
 import Header from '@/components/common/Header';
 import { getSelectorsByUserAgent } from 'react-device-detect';
 import { headers } from 'next/headers';

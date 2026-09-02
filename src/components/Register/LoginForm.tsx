@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { setToken } from '@/utils/TokenManager';
 import { useRouter } from 'next/navigation';
 import { setUserInfo } from '@/stores/LocalStore';
-import { useAuth } from '../AuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
 import AlertPopup from '../popup/AlertPopup';
 import { PopupContext } from '../PopupProvider';
 interface FormTypes {

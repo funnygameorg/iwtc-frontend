@@ -8,7 +8,7 @@ import { userMeSummary, userSignIn } from '@/services/MemberService';
 import Link from 'next/link';
 import { getUserInfo, setUserInfo } from '@/stores/LocalStore';
 import { setToken } from '@/utils/TokenManager';
-import { useAuth } from '../AuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
 
 interface FormTypes {
     username: string;

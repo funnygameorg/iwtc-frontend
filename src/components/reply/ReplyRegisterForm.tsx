@@ -1,7 +1,7 @@
 import { worldCupGameReplyRegister } from '@/services/ReplyService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../AuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
 import { getUserInfo } from '@/stores/LocalStore';
 import * as shortid from 'shortid';
 
