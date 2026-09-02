@@ -1,5 +1,5 @@
 import { dehydrate, Hydrate } from '@tanstack/react-query';
-import getQueryClient from '@/app/getQueryClient';
+import getQueryClient from '@/lib/react-query/getQueryClient';
 import { worldCupAllList } from '@/services/WorldCupService';
 import WorldCup from './worldcup/WorldCupWrapper';
 import { mappingMediaFile2 } from '@/utils/common';

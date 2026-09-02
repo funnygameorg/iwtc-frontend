@@ -3,7 +3,7 @@ import '../styles/globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import RouteHandler from '@/components/RouteHandler';
-import Providers from '@/hooks/Provider';
+import QueryProvider from '@/providers/QueryProvider';
 import { AuthProvider } from '@/components/AuthProvider';
 import Header from '@/components/common/Header';
 import { getSelectorsByUserAgent } from 'react-device-detect';
@@ -47,7 +47,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                     {isMobile ? (
                         <MobileView />
                     ) : (
-                        <Providers>
+                        <QueryProvider>
                             <AuthProvider>
                                 <PopupProvider>
                                     {/* TODO: 공통 header적용 */}
@@ -56,7 +56,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                                     {children}
                                 </PopupProvider>
                             </AuthProvider>
-                        </Providers>
+                        </QueryProvider>
                     )}
                 </body>
             </html>
