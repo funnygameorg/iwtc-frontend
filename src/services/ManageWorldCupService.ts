@@ -30,6 +30,10 @@ interface ManagedWorldCupListResponse {
     data: ManagedWorldCupSummary[];
 }
 
+interface ManagedWorldCupDetailResponse {
+    data: ManagedWorldCupSummary;
+}
+
 const createHeader = (token: string) => {
     return {
         'Content-Type': 'application/json',
@@ -113,20 +117,17 @@ export const getMyWorldCup = async (worldCupId: number) => {
     const authHeaders = createHeader(getAccessToken());
 
     // const response = await ajaxGet(`/world-cups/me/${worldCupId}`, {
-    const response = await ajaxGet(`me/game-manage/world-cups/${worldCupId}`, {
+    const response = await ajaxGet<ManagedWorldCupDetailResponse>(`me/game-manage/world-cups/${worldCupId}`, {
         headers: authHeaders,
         timeout: 5000,
     });
 
     console.log('response ===>', response);
-
-    if (response) {
-        return response;
-    }
+    return response;
 };
 
 export const useQueryGetMyWorldCup = (worldcupId: number) => {
-    return useQuery<any, Error>(manageWorldCupQueryKeys.detail(worldcupId), () => getMyWorldCup(worldcupId), {
+    return useQuery(manageWorldCupQueryKeys.detail(worldcupId), () => getMyWorldCup(worldcupId), {
         retry: 0,
         refetchOnWindowFocus: false,
         staleTime: 3000,

@@ -1,5 +1,5 @@
 'use client';
-import { createWorldCup } from '@/services/ManageWorldCupService';
+import { createWorldCup, ManagedWorldCupSummary } from '@/services/ManageWorldCupService';
 import { getAccessToken } from '@/utils/TokenManager';
 import { useMutation } from '@tanstack/react-query';
 import React, { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 'react';
@@ -9,11 +9,7 @@ import { PopupContext } from '@/providers/PopupProvider';
 interface IProps {
     setIsCreateWorldCup: (isCreated: boolean) => void;
     setWorldCupId: (worldCupId: number) => void;
-    myWorldCupData?: {
-        title: string;
-        description: string;
-        visibleType: string;
-    };
+    myWorldCupData?: Pick<ManagedWorldCupSummary, 'title' | 'description' | 'visibleType'>;
     isCreateWorldCup: boolean;
 }
 /**

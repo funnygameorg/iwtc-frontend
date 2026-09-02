@@ -9,8 +9,8 @@ import { normalizePersistedManagedContent } from '@/domain/manage/persistedConte
 /*
     월드컵 관리 페이지를 표현합니다.
 */
-const ManageForm = ({ params }: any) => {
-    const { id } = params;
+const ManageForm = ({ params }: { params: { id: string } }) => {
+    const id = Number(params.id);
     const { data: myWorldCupData, isSuccess: isMyWorldCupSuccess } = useQueryGetMyWorldCup(id);
     const { data: myWorldCupContentsList, isSuccess: isMyWorldCupContentsList } = useQueryGetMyWorldCupContentsList(id);
     // myWorldCupContentsList.data.data가 API이고 이거와, worldCupContentsList 비교를 해서 다르면 변경사항 적용
