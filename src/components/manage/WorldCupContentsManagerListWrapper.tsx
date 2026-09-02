@@ -214,7 +214,6 @@ const WorldCupContentsManageListWrapper = ({
                         <WorldCupContentsManageList
                             worldCupContentsList={worldCupContentsList}
                             setWorldCupContentsList={setWorldCupContentsList}
-                            worldCupId={worldCupId}
                             setModifyList={setModifyList}
                             setDeleteList={setDeleteList}
                             setNewList={setNewList}

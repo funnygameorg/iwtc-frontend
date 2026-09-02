@@ -30,7 +30,6 @@ import {
 interface IProps {
     worldCupContentsList: ManagedContent[];
     setWorldCupContentsList: Dispatch<SetStateAction<ManagedContent[]>>;
-    worldCupId: number;
     setModifyList?: Dispatch<SetStateAction<PersistedManagedContentView[]>>;
     setDeleteList?: Dispatch<SetStateAction<PersistedManagedContentView[]>>;
     setNewList?: Dispatch<SetStateAction<ManagedContent[]>>;
@@ -40,7 +39,6 @@ interface IProps {
 const WorldCupContentsManageList = ({
     worldCupContentsList,
     setWorldCupContentsList,
-    worldCupId,
     setModifyList,
     setDeleteList,
     setNewList,
@@ -271,7 +269,6 @@ const WorldCupContentsManageList = ({
                         key={index}
                         contents={contents}
                         index={contents.id}
-                        worldCupId={worldCupId}
                         setWorldCupContentsList={setWorldCupContentsList}
                         setModifyList={setModifyList}
                         setDeleteList={setDeleteList}

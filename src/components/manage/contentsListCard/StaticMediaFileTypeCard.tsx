@@ -1,53 +1,69 @@
-import { removeMyWorldCupContents, updateMyWorldCupContents } from '@/services/ManageWorldCupService';
-import { getAccessToken } from '@/utils/TokenManager';
+import { ManagedContent, PersistedManagedContentView } from '@/domain/manage/persistedContent';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 interface IProps {
-    contents: any;
-    index?: any;
-    worldCupId: any;
-    setWorldCupContentsList: any;
-    setModifyList?: any;
-    setDeleteList?: any;
-    setNewList?: any;
-    newList?: any;
+    contents: ManagedContent | '';
+    index: number;
+    setWorldCupContentsList: Dispatch<SetStateAction<ManagedContent[]>>;
+    setModifyList?: Dispatch<SetStateAction<PersistedManagedContentView[]>>;
+    setDeleteList?: Dispatch<SetStateAction<PersistedManagedContentView[]>>;
+    setNewList?: Dispatch<SetStateAction<ManagedContent[]>>;
+    newList: ManagedContent[];
 }
+
+interface StaticMediaContentState {
+    contentsId?: number;
+    contentsName: string;
+    originalName?: string;
+    visibleType: string;
+    mediaData: string;
+    videoStartTime?: string;
+    videoPlayDuration?: number | string;
+    imgType?: string | boolean;
+    mp4Type?: string | boolean;
+    detailFileType?: string;
+    mediaFileId?: number;
+}
+
+const createStaticMediaContentState = (contents: ManagedContent | ''): StaticMediaContentState => ({
+    contentsId: contents ? contents.contentsId : undefined,
+    contentsName: contents ? contents.contentsName : '',
+    originalName: contents ? contents.originalName : undefined,
+    visibleType: contents ? contents.visibleType : '',
+    mediaData: contents ? contents.mediaData || '' : '',
+    videoStartTime: contents ? contents.videoStartTime : undefined,
+    videoPlayDuration: contents ? contents.videoPlayDuration : undefined,
+    imgType: contents ? contents.imgType : undefined,
+    mp4Type: contents ? contents.mp4Type : undefined,
+    detailFileType: contents ? contents.detailFileType : undefined,
+    mediaFileId: contents ? contents.mediaFileId : undefined,
+});
+
+const hasPersistedContentId = (contents: ManagedContent): contents is PersistedManagedContentView =>
+    Boolean(contents.contentsId);
 
 const StaticMediaFileTypeCard = ({
     contents,
     index,
-    worldCupId,
     setWorldCupContentsList,
     setModifyList,
     setDeleteList,
     setNewList,
     newList,
 }: IProps) => {
-    // const [image, setImage] = useState<any>('');
-    const [mediaData, setMediaData] = useState<any>({});
+    const [mediaData, setMediaData] = useState<StaticMediaContentState>(() =>
+        createStaticMediaContentState(contents)
+    );
     const [isUpdateMode, setIsUpdateMode] = useState(false);
     useEffect(() => {
-        setMediaData({
-            contentsId: contents.contentsId,
-            contentsName: contents.contentsName,
-            originalName: contents.originalName,
-            visibleType: contents.visibleType,
-            mediaData: contents.mediaData,
-            videoStartTime: contents.videoStartTime,
-            videoPlayDuration: contents.videoPlayDuration,
-            imgType: contents.imgType,
-            mp4Type: contents.mp4Type,
-            detailFileType: contents.detailFileType,
-            mediaFileId: contents.mediaFileId,
-        });
-        // setImage(contents.mediaData);
+        setMediaData(createStaticMediaContentState(contents));
     }, [contents]);
 
-    const handleMediaData = (e: any) => {
+    const handleMediaData = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
-        setMediaData((prevData: any) => ({
+        setMediaData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
@@ -55,29 +71,30 @@ const StaticMediaFileTypeCard = ({
 
     // 해당 요소 삭제
     const removeContents = async () => {
-        let deleteContent: any = null;
+        const deleteResult: { content?: ManagedContent } = {};
 
-        setWorldCupContentsList((prev: any) => {
+        setWorldCupContentsList((prev) => {
             // 먼저 삭제할 컨텐츠를 식별합니다.
-            const foundContent = prev.find((contents: any) => contents.id === index);
+            const foundContent = prev.find((contents) => contents.id === index);
             if (foundContent) {
-                deleteContent = { ...foundContent };
+                deleteResult.content = { ...foundContent };
             }
 
             // 삭제할 컨텐츠를 제외하고 리스트를 반환합니다.
             return prev
-                .filter((contents: any) => contents.id !== index)
-                .map((contents: any, newIndex: number) => ({ ...contents, id: newIndex }));
+                .filter((contents) => contents.id !== index)
+                .map((contents, newIndex) => ({ ...contents, id: newIndex }));
         });
+        const deleteContent = deleteResult.content;
 
         if (deleteContent && setNewList && setDeleteList) {
             // newList에서 deleteContent와 일치하는 항목을 제외하고 새로운 배열을 생성합니다.
             //새롭게 추가된 컨텐츠는 deleteList에 넣으면 안된다. 네임과 미디어패스로 구분 이후 수정할 때 newList도 수정해줘야함
-            if (!deleteContent.contentsId) {
+            if (!hasPersistedContentId(deleteContent)) {
                 if (newList.length > 0) {
-                    setNewList((prev: any) =>
+                    setNewList((prev) =>
                         prev.filter(
-                            (item: any) =>
+                            (item) =>
                                 item.contentsName !== deleteContent.contentsName &&
                                 item.mediaPath !== deleteContent.mediaPath
                         )
@@ -85,7 +102,7 @@ const StaticMediaFileTypeCard = ({
                     // setNewList((prev: any) => prev.filter((item: any) => item.contentsName !== deleteContent.contentsName));
                 }
             } else {
-                setDeleteList((prev: any) => [...prev, deleteContent]);
+                setDeleteList((prev) => [...prev, deleteContent]);
             }
 
             // deleteContent가 newList에 존재하지 않는 경우에만 setDeleteList를 업데이트합니다.
@@ -116,22 +133,23 @@ const StaticMediaFileTypeCard = ({
     };
 
     const applyUpdateContents = async () => {
-        let modifiedContent: any = null;
+        const updateResult: { content?: ManagedContent } = {};
 
         setWorldCupContentsList(
-            (prev: any) =>
-                prev.map((contents: any) => {
+            (prev) =>
+                prev.map((contents) => {
                     if (contents.id === index) {
                         // 수정 조건을 만족하는 경우, 수정된 컨텐츠 정보를 저장
                         if (
                             contents.contentsName !== mediaData.contentsName ||
                             contents.mediaData !== mediaData.mediaData
                         ) {
-                            modifiedContent = {
+                            const modifiedContent = {
                                 ...contents,
                                 contentsName: mediaData.contentsName,
                                 mediaData: mediaData.mediaData,
                             };
+                            updateResult.content = modifiedContent;
 
                             return modifiedContent;
                         }
@@ -144,19 +162,20 @@ const StaticMediaFileTypeCard = ({
             //         : contents
             // )
         );
+        const modifiedContent = updateResult.content;
 
         if (modifiedContent && setNewList && setModifyList) {
             //새로 추가된 컨텐츠
-            if (!modifiedContent.contentsId) {
+            if (!hasPersistedContentId(modifiedContent)) {
                 if (newList.length) {
-                    setNewList((prevList: any[]) =>
+                    setNewList((prevList) =>
                         prevList.map((item) =>
                             item.absoluteName === modifiedContent.absoluteName ? modifiedContent : item
                         )
                     );
                 }
             } else {
-                setModifyList((prev: any[]) => {
+                setModifyList((prev) => {
                     // 수정하려는 컨텐츠의 오리지널 네임을 찾음. 없으면 -1을 반환합니다.
                     const existingIndex = prev.findIndex((item) => item.originalName === modifiedContent.originalName);
 
@@ -193,20 +212,28 @@ const StaticMediaFileTypeCard = ({
         setIsUpdateMode(false);
     };
 
-    const changeImage = (e: any) => {
-        const imageFile = e.target.files[0];
+    const changeImage = (e: ChangeEvent<HTMLInputElement>) => {
+        const imageFile = e.target.files?.[0];
+        if (!imageFile) {
+            return;
+        }
+
         const reader = new FileReader();
         reader.addEventListener('load', (e: ProgressEvent<FileReader>) => {
-            // setImage(e?.target?.result);
-            setMediaData((prevData: any) => ({
+            const mediaData = e.target?.result;
+            if (typeof mediaData !== 'string') {
+                return;
+            }
+
+            setMediaData((prevData) => ({
                 ...prevData,
-                mediaData: e?.target?.result,
+                mediaData,
             }));
         });
 
         reader.readAsDataURL(imageFile);
 
-        setMediaData((prevData: any) => ({
+        setMediaData((prevData) => ({
             ...prevData,
             originalName: imageFile.name,
         }));

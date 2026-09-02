@@ -7,7 +7,6 @@ import { ManagedContent, PersistedManagedContentView } from '@/domain/manage/per
 interface IProps {
     contents: ManagedContent;
     index: number;
-    worldCupId: number;
     setWorldCupContentsList: Dispatch<SetStateAction<ManagedContent[]>>;
     setModifyList?: Dispatch<SetStateAction<PersistedManagedContentView[]>>;
     setDeleteList?: Dispatch<SetStateAction<PersistedManagedContentView[]>>;
@@ -18,7 +17,6 @@ interface IProps {
 const ManageCardWrapper = ({
     contents,
     index,
-    worldCupId,
     setWorldCupContentsList,
     setModifyList,
     setDeleteList,
@@ -52,7 +50,6 @@ const ManageCardWrapper = ({
             <StaticMediaFileTypeCard
                 index={index}
                 contents={mediaData}
-                worldCupId={worldCupId}
                 setWorldCupContentsList={setWorldCupContentsList}
                 setModifyList={setModifyList}
                 setDeleteList={setDeleteList}
