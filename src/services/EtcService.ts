@@ -19,7 +19,7 @@ export const getMediaFileAPI = async (mediaFileId: number, type?: string) => {
     };
     if (!mediaFileId) return;
     try {
-        const response = await ajaxGet(`/media-files/${mediaFileId}`, { params });
+        const response = await ajaxGet<ManagedMediaFileResponse>(`/media-files/${mediaFileId}`, { params });
         return response.data;
     } catch (e) {
         console.log('E');

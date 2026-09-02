@@ -23,6 +23,8 @@
         "src/domain/game/clear.test.ts",
         "src/domain/game/play.ts",
         "src/domain/game/play.test.ts",
+        "src/domain/game/mediaFile.ts",
+        "src/domain/game/mediaFile.test.ts",
         "src/domain/manage/content.ts",
         "src/domain/manage/content.test.ts",
         "src/domain/manage/persistedContent.ts",

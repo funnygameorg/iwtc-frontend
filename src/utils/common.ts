@@ -1,4 +1,5 @@
 import { getMediaFileAPI } from '@/services/EtcService';
+import { MediaMappableContent, mergeMediaFile } from '@/domain/game/mediaFile';
 
 export { getMimeType, isMP4 } from './media';
 
@@ -10,25 +11,17 @@ export { getMimeType, isMP4 } from './media';
 //     return encodedArray;
 // };
 
-export const mappingMediaFile = async (gameList: any) => {
-    if (gameList) {
-        const promises = gameList.map(async (item: any) => {
-            try {
-                const response = await getMediaFileAPI(item.mediaFileId); // API 호출
-                item.imgUrl = response.data.mediaData;
-                item.fileType = response.data.fileType;
-                item.videoStartTime = response.data.videoStartTime;
-                item.videoPlayDuration = response.data.videoPlayDuration;
-                return item; // 응답을 객체에 추가
-            } catch (error) {
-                item.imgUrl = '/images/default.png'; // 에러 발생 시 처리
-                return item;
-            }
-        });
+export const mappingMediaFile = async <T extends MediaMappableContent>(gameList: T[]): Promise<T[]> => {
+    const promises = gameList.map(async (item) => {
+        try {
+            const response = await getMediaFileAPI(item.mediaFileId); // API 호출
+            return mergeMediaFile(item, response?.data);
+        } catch (error) {
+            return mergeMediaFile(item, undefined);
+        }
+    });
 
-        const newGameList = await Promise.all(promises);
-        return newGameList;
-    }
+    return Promise.all(promises);
 };
 
 export const mappingMediaFile2 = async (gameList: any) => {
