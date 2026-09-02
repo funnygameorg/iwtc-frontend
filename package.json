@@ -9,7 +9,8 @@
         "build": "env-cmd -f .env.production next build",
         "start": "next start -p 8080",
         "lint": "next lint",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit",
+        "test": "tsc -p tsconfig.test.json && node --test .test-dist/utils/media.test.js"
     },
     "dependencies": {
         "@ffmpeg/core": "^0.10.0",

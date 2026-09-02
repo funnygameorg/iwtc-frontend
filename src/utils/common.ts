@@ -1,5 +1,7 @@
 import { getMediaFileAPI } from '@/services/EtcService';
 
+export { getMimeType, isMP4 } from './media';
+
 // export const getEncodedArray = (myArray) => {
 //     const encodedArray = myArray.map((element) => {
 //         return encodeURIComponent(element);
@@ -65,29 +67,5 @@ export const mappingMediaFile2 = async (gameList: any) => {
 
         const newGameList = await Promise.all(promises);
         return newGameList;
-    }
-};
-
-export const getMimeType = (mediaData: string) => {
-    const dataPrefix = 'data:';
-    const mimeIndex = mediaData.indexOf(dataPrefix);
-    if (mimeIndex === -1) {
-        return null; // MIME 타입이 없는 경우
-    }
-
-    const mimeTypeAndBase64 = mediaData.substring(mimeIndex + dataPrefix.length);
-    const mimeType = mimeTypeAndBase64.split(';')[0]; // MIME 타입 추출
-
-    return mimeType;
-};
-
-export const isMP4 = (mediaData: string) => {
-    if (mediaData) {
-        const mimeType = getMimeType(mediaData);
-        if (mimeType === null) {
-            return false; // MIME 타입이 없는 경우
-        }
-
-        return mimeType === 'video/mp4'; // MP4인지 확인
     }
 };
