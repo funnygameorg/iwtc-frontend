@@ -1,4 +1,9 @@
 import { ajaxGet } from './BaseService';
+import { ManagedMediaFile } from '@/domain/manage/persistedContent';
+
+interface ManagedMediaFileResponse {
+    data: ManagedMediaFile;
+}
 
 // export const useQueryGetMediaFiles = (worldcupId: number) => {
 //     return useQuery<any, Error>(['MediaFiles'], () => worldCupGameRound(worldcupId), {
@@ -25,10 +30,8 @@ export const getMediaFile = async (mediaFileId: number) => {
     // const params = {
     //     size: 'divide2',
     // };
-    const response = await ajaxGet(`/media-files/${mediaFileId}`);
+    const response = await ajaxGet<ManagedMediaFileResponse>(`/media-files/${mediaFileId}`);
 
     // console.log("조회 데이터", response?.data.data.mediaData);
-    if (response) {
-        return response;
-    }
+    return response;
 };

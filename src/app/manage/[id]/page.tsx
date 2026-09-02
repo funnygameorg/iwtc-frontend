@@ -4,7 +4,7 @@ import WorldCupManageForm from '@/components/manage/WorldCupManageForm';
 import WorldCupContentsManageListWrapper from '@/components/manage/WorldCupContentsManagerListWrapper';
 import { useQueryGetMyWorldCup, useQueryGetMyWorldCupContentsList } from '@/services/ManageWorldCupService';
 import { getMediaFile } from '@/services/EtcService';
-import { normalizePersistedManagedContent } from '@/domain/manage/persistedContent';
+import { ManagedContent, normalizePersistedManagedContent } from '@/domain/manage/persistedContent';
 
 /*
     월드컵 관리 페이지를 표현합니다.
@@ -14,7 +14,7 @@ const ManageForm = ({ params }: { params: { id: string } }) => {
     const { data: myWorldCupData, isSuccess: isMyWorldCupSuccess } = useQueryGetMyWorldCup(id);
     const { data: myWorldCupContentsList, isSuccess: isMyWorldCupContentsList } = useQueryGetMyWorldCupContentsList(id);
     // myWorldCupContentsList.data.data가 API이고 이거와, worldCupContentsList 비교를 해서 다르면 변경사항 적용
-    const [worldCupContentsList, setWorldCupContentsList] = useState([]); // 최초 수정페이지에서 컨텐츠가 담기는 배열
+    const [worldCupContentsList, setWorldCupContentsList] = useState<ManagedContent[]>([]); // 최초 수정페이지에서 컨텐츠가 담기는 배열
     const [worldCupId, setWorldCupId] = useState(id ? id : 0);
     const [isCreateWorldCup, setIsCreateWorldCup] = useState(false);
     const [modifyList, setModifyList] = useState([]);
@@ -33,8 +33,8 @@ const ManageForm = ({ params }: { params: { id: string } }) => {
         const fetchData = async () => {
             if (worldCupContentsList.length < 1 && isMyWorldCupContentsList && id && persistedContents) {
                 try {
-                    const newData: any = await Promise.all(
-                        persistedContents.map(async (items: any, index: number) => {
+                    const newData = await Promise.all(
+                        persistedContents.map(async (items, index) => {
                             const data = await getMediaFile(items.mediaFileId);
                             return normalizePersistedManagedContent(items, data?.data.data, index);
                         })

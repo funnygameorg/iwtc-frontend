@@ -1,6 +1,6 @@
 import { isMP4 } from '../../utils/media';
 
-interface PersistedContent {
+export interface PersistedManagedContent {
     worldCupId?: number;
     contentsName: string;
     videoStartTime?: string;
@@ -8,14 +8,14 @@ interface PersistedContent {
     visibleType?: string;
     fileType?: string;
     mediaPath?: string;
-    mediaFileId?: number;
+    mediaFileId: number;
     mp4Type?: string | boolean;
     imgType?: string | boolean;
     detailFileType?: string;
     originalName?: string;
 }
 
-interface MediaFile {
+export interface ManagedMediaFile {
     videoStartTime?: string;
     videoPlayDuration?: number;
     visibleType?: string;
@@ -26,11 +26,27 @@ interface MediaFile {
     originalName?: string;
 }
 
+export interface ManagedContent {
+    id: number;
+    contentsId?: number;
+    contentsName: string;
+    videoStartTime?: string;
+    videoPlayDuration?: number;
+    visibleType?: string;
+    fileType?: string;
+    mediaData?: string;
+    mediaFileId?: number;
+    mp4Type?: string | boolean;
+    imgType?: string | boolean;
+    detailFileType?: string;
+    originalName?: string;
+}
+
 export const normalizePersistedManagedContent = (
-    content: PersistedContent,
-    mediaFile: MediaFile | undefined,
+    content: PersistedManagedContent,
+    mediaFile: ManagedMediaFile | undefined,
     index: number
-) => ({
+): ManagedContent => ({
     id: index,
     contentsId: content.worldCupId,
     contentsName: content.contentsName,

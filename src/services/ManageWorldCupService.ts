@@ -2,6 +2,7 @@ import { ajaxDelete, ajaxGet, ajaxPost, ajaxPut } from './BaseService';
 import { useQuery } from '@tanstack/react-query';
 import { getAccessToken } from '@/utils/TokenManager';
 import { manageWorldCupQueryKeys } from '@/lib/react-query/queryKeys';
+import { PersistedManagedContent } from '@/domain/manage/persistedContent';
 
 interface CreateWorldCupRequest {
     title: string;
@@ -32,6 +33,10 @@ interface ManagedWorldCupListResponse {
 
 interface ManagedWorldCupDetailResponse {
     data: ManagedWorldCupSummary;
+}
+
+interface ManagedWorldCupContentsResponse {
+    data: PersistedManagedContent[];
 }
 
 const createHeader = (token: string) => {
@@ -139,20 +144,20 @@ export const useQueryGetMyWorldCup = (worldcupId: number) => {
 export const getMyWorldCupContentsList = async (worldCupId: number) => {
     const authHeaders = createHeader(getAccessToken());
 
-    const response = await ajaxGet(`/me/game-contents-manage/world-cups/${worldCupId}/manage-contents`, {
-        headers: authHeaders,
-        timeout: 5000,
-    });
+    const response = await ajaxGet<ManagedWorldCupContentsResponse>(
+        `/me/game-contents-manage/world-cups/${worldCupId}/manage-contents`,
+        {
+            headers: authHeaders,
+            timeout: 5000,
+        }
+    );
 
     console.log('response ===>', response);
-
-    if (response) {
-        return response;
-    }
+    return response;
 };
 
 export const useQueryGetMyWorldCupContentsList = (worldcupId: number) => {
-    return useQuery<any, Error>(
+    return useQuery(
         manageWorldCupQueryKeys.contents(worldcupId),
         () => getMyWorldCupContentsList(worldcupId),
         {
