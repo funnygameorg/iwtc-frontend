@@ -1,5 +1,5 @@
 'use client';
-import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import ManageCardWrapper from './contentsListCard/ManageCardWrapper';
@@ -10,6 +10,11 @@ import SelectFileType from './SelectFileType';
 import SelectVisibleType from './SelectVisibleType';
 import ImageTypeLayout from './ImageTypeLayout';
 import YoutubeTypeLayout from './YoutubeTypeLayout';
+import {
+    ManagedContent,
+    ManagedContentDraft,
+    PersistedManagedContentView,
+} from '@/domain/manage/persistedContent';
 
 /*
     게임 관리 폼에서 월드컵 게임 컨텐츠에 관한 내용을 표현하는 폼
@@ -23,13 +28,13 @@ import YoutubeTypeLayout from './YoutubeTypeLayout';
 //     log: true,
 // });
 interface IProps {
-    worldCupContentsList: any;
-    setWorldCupContentsList: any;
-    worldCupId: any;
-    setModifyList?: any;
-    setDeleteList?: any;
-    setNewList?: any;
-    newList?: any;
+    worldCupContentsList: ManagedContent[];
+    setWorldCupContentsList: Dispatch<SetStateAction<ManagedContent[]>>;
+    worldCupId: number;
+    setModifyList?: Dispatch<SetStateAction<PersistedManagedContentView[]>>;
+    setDeleteList?: Dispatch<SetStateAction<PersistedManagedContentView[]>>;
+    setNewList?: Dispatch<SetStateAction<ManagedContent[]>>;
+    newList?: ManagedContent[];
 }
 
 const WorldCupContentsManageList = ({
@@ -43,14 +48,14 @@ const WorldCupContentsManageList = ({
 }: IProps) => {
     const { showPopup, hidePopup } = useContext(PopupContext);
 
-    const imgRef = useRef<any>(null);
-    const videoRef = useRef<any>(null);
+    const imgRef = useRef<HTMLImageElement>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
 
     const [mediaFileType, setMediaFileType] = useState('');
     const [isImageLoaded, setIsImageLoaded] = useState(false);
 
     // 컨텐츠 데이터
-    const [worldCupContents, setWorldCupContents] = useState({
+    const [worldCupContents, setWorldCupContents] = useState<ManagedContentDraft>({
         contentsName: '',
         visibleType: '',
         fileType: '',
@@ -74,7 +79,7 @@ const WorldCupContentsManageList = ({
     //     setReady(true);
     // };
 
-    const handleCreateWorldCupContents = (e: any) => {
+    const handleCreateWorldCupContents = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
 
         setWorldCupContents((prevWorldCupContents) => ({
@@ -85,14 +90,18 @@ const WorldCupContentsManageList = ({
     };
 
     // 비디오 형식 컨텐츠 데이터 검증
-    const verifyVideoTypeContents = ({ videoStartTime, videoPlayDuration }: any) => {
+    const verifyVideoTypeContents = ({
+        videoStartTime,
+        videoPlayDuration,
+    }: Pick<ManagedContentDraft, 'videoStartTime' | 'videoPlayDuration'>) => {
         const size5AndOnlyNumberRegex = /^\d{5}$/;
+        const playDuration = Number(videoPlayDuration);
         if (!size5AndOnlyNumberRegex.test(videoStartTime)) {
             showAlertPopup("'영상 시작 시간'은 '00000'의 형식입니다. \n 예 : 10분 1초 -> 01001, 0분 30초 -> 00030");
             return false;
         }
 
-        if (!(3 <= videoPlayDuration && videoPlayDuration <= 5)) {
+        if (!(3 <= playDuration && playDuration <= 5)) {
             showAlertPopup('반복 시간은 3~5초로 설정해주세요.');
             return false;
         }
@@ -100,7 +109,10 @@ const WorldCupContentsManageList = ({
     };
 
     // 파일 형식 컨텐츠 데이터 검증
-    const verifyFileTypeContents = ({ mediaPath, originalName }: any) => {
+    const verifyFileTypeContents = ({
+        mediaPath,
+        originalName,
+    }: Pick<ManagedContentDraft, 'mediaPath' | 'originalName'>) => {
         if (mediaPath === '' || originalName === '') {
             showAlertPopup('파일이 존재하지 않습니다.');
             return false;
@@ -146,30 +158,23 @@ const WorldCupContentsManageList = ({
             }
 
             handleMediaFileType('');
-            // let updatedContents: any;
-            // setWorldCupContentsList((prev: any) => [...prev, worldCupContents]);
-            let updatedContents: any;
-            setWorldCupContentsList((prev: any) => {
-                const id = prev.length; // 이 예제에서는 배열의 길이를 인덱스로 사용
-                updatedContents = { ...worldCupContents, id };
-                return [...prev, updatedContents];
-            });
-            if (setNewList) {
-                setNewList((prev: any) => {
-                    return [...prev, updatedContents];
-                });
-            }
+            const updatedContents: ManagedContent = {
+                ...worldCupContents,
+                id: worldCupContentsList.length,
+            };
+            setWorldCupContentsList((prev) => [...prev, updatedContents]);
+            setNewList?.((prev) => [...prev, updatedContents]);
         }
     };
 
-    const handleVisibleType = (value: any) => {
+    const handleVisibleType = (value: string) => {
         setWorldCupContents((prevWorldCupContents) => ({
             ...prevWorldCupContents,
             visibleType: value,
         }));
     };
 
-    const handleMediaFileType = (value: any) => {
+    const handleMediaFileType = (value: string) => {
         setWorldCupContents({
             contentsName: '',
             visibleType: 'PUBLIC',
@@ -261,7 +266,7 @@ const WorldCupContentsManageList = ({
                 )}
             </div>
             {worldCupContentsList.length > 0 &&
-                worldCupContentsList.map((contents: any, index: number) => (
+                worldCupContentsList.map((contents, index) => (
                     <ManageCardWrapper
                         key={index}
                         contents={contents}

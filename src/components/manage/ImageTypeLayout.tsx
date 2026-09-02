@@ -1,11 +1,12 @@
-import React from 'react';
+import { ManagedContentDraft } from '@/domain/manage/persistedContent';
+import React, { Dispatch, RefObject, SetStateAction } from 'react';
 
 interface IProps {
-    isImageLoaded: any;
-    setIsImageLoaded: any;
-    setWorldCupContents: any;
-    fowardVideoRef: any;
-    fowardImgRef: any;
+    isImageLoaded: boolean;
+    setIsImageLoaded: Dispatch<SetStateAction<boolean>>;
+    setWorldCupContents: Dispatch<SetStateAction<ManagedContentDraft>>;
+    fowardVideoRef: RefObject<HTMLVideoElement>;
+    fowardImgRef: RefObject<HTMLImageElement>;
     mp4Type: string;
     imgType: string;
 }
@@ -30,7 +31,7 @@ const ImageTypeLayout = ({
         reader.addEventListener('load', (e: ProgressEvent<FileReader>) => {
             if (!e || !e.target) return;
             // if (typeof e.target.result !== 'string' || !imgRef.current) return;
-            let type = e.target.result as string;
+            const type = typeof e.target.result === 'string' ? e.target.result : '';
             // TODO: YOUTUBE 라이브러리와 변환 라이브러리 같이 적용 X 문제로 인해 주석처리
             // if (imageFile.type === 'image/gif') {
             //     setWorldCupContents((prevWorldCupContents: any) => ({
@@ -41,11 +42,11 @@ const ImageTypeLayout = ({
             //         mp4Type: type,
             //     }));
             // } else {
-            setWorldCupContents((prevWorldCupContents: any) => ({
+            setWorldCupContents((prevWorldCupContents) => ({
                 ...prevWorldCupContents,
                 originalName: imageFile.name,
                 absoluteName: imageFile.name,
-                mediaPath: e?.target?.result,
+                mediaPath: type,
                 imgType: type,
                 detailFileType: removeImagePrefixAndConvertToUpperCase(imageFile.type),
                 // fileType

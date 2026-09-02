@@ -48,6 +48,20 @@ export interface PersistedManagedContentView extends ManagedContent {
     contentsId: number;
 }
 
+export interface ManagedContentDraft {
+    contentsName: string;
+    visibleType: string;
+    fileType: string;
+    mediaPath: string;
+    originalName: string;
+    absoluteName: string;
+    videoStartTime: string;
+    videoPlayDuration: string;
+    mp4Type: string;
+    imgType: string;
+    detailFileType: string;
+}
+
 export const normalizePersistedManagedContent = (
     content: PersistedManagedContent,
     mediaFile: ManagedMediaFile | undefined,

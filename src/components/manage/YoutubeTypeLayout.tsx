@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import YoutubePlayer from '../youtubePlayer/YoutubePlayer';
 
 interface IProps {
     mediaPath: string;
     videoStartTime: string;
     videoPlayDuration: string;
-    handleCreateWorldCupContents: (e: any) => void;
+    handleCreateWorldCupContents: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const YoutubeTypeLayout = ({ mediaPath, videoStartTime, videoPlayDuration, handleCreateWorldCupContents }: IProps) => {
