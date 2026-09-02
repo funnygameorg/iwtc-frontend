@@ -17,9 +17,7 @@ const ManageForm = () => {
                 <div className="flex-none m-5">
                     <WorldCupManageForm
                         setIsCreateWorldCup={setIsCreateWorldCup}
-                        worldCupContentsList={worldCupContentsList}
                         setWorldCupId={setWorldCupId}
-                        worldCupId={worldCupId}
                         isCreateWorldCup={isCreateWorldCup}
                     />
                 </div>

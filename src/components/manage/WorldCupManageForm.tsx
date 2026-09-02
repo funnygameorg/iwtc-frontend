@@ -2,17 +2,19 @@
 import { createWorldCup } from '@/services/ManageWorldCupService';
 import { getAccessToken } from '@/utils/TokenManager';
 import { useMutation } from '@tanstack/react-query';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 'react';
 import AlertPopup from '../popup/AlertPopup';
 import { PopupContext } from '@/providers/PopupProvider';
 
 interface IProps {
-    setIsCreateWorldCup: any;
-    worldCupContentsList: any;
-    setWorldCupId: any;
-    worldCupId: any;
-    myWorldCupData?: any;
-    isCreateWorldCup: any;
+    setIsCreateWorldCup: (isCreated: boolean) => void;
+    setWorldCupId: (worldCupId: number) => void;
+    myWorldCupData?: {
+        title: string;
+        description: string;
+        visibleType: string;
+    };
+    isCreateWorldCup: boolean;
 }
 /**
  * 게임 관리 폼에서 월드컵 게임에 관한 내용을 표현하는 폼
@@ -21,9 +23,7 @@ interface IProps {
  */
 const WorldCupManageForm = ({
     setIsCreateWorldCup,
-    worldCupContentsList,
     setWorldCupId,
-    worldCupId,
     myWorldCupData,
     isCreateWorldCup,
 }: IProps) => {
@@ -36,15 +36,15 @@ const WorldCupManageForm = ({
     });
 
     useEffect(() => {
-        setWorldCuptInfo((prevWorldCup: any) => ({
+        setWorldCuptInfo((prevWorldCup) => ({
             ...prevWorldCup,
-            visibleType: myWorldCupData ? myWorldCupData.visibleType : 'PUBLIC',
+            visibleType: prevWorldCup.visibleType || 'PUBLIC',
         }));
     }, []);
 
     useEffect(() => {
         if (myWorldCupData) {
-            setWorldCuptInfo((prevWorldCup: any) => ({
+            setWorldCuptInfo((prevWorldCup) => ({
                 ...prevWorldCup,
                 title: myWorldCupData.title,
                 description: myWorldCupData.description,
@@ -70,9 +70,9 @@ const WorldCupManageForm = ({
 
     // const { title, description, visibleType } = worldCup;
 
-    const handleChange = (e: any) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setWorldCuptInfo((prevWorldCup: any) => ({
+        setWorldCuptInfo((prevWorldCup) => ({
             ...prevWorldCup,
             [name]: value,
         }));
@@ -96,7 +96,7 @@ const WorldCupManageForm = ({
         showPopup(<AlertPopup message={maeeage} hidePopup={hidePopup} />);
     };
 
-    const handleCreateWorldCup = (e: any) => {
+    const handleCreateWorldCup = (e: MouseEvent<HTMLButtonElement>) => {
         const { title, description, visibleType } = worldCupInfo;
         if (description.length > 100 || description === '') {
             showAlertPopup('월드컵 설명 1자 이상 100자 이하입니다.');

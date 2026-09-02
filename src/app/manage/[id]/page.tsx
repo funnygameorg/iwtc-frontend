@@ -64,10 +64,8 @@ const ManageForm = ({ params }: any) => {
                 <div className="flex-none m-5">
                     <WorldCupManageForm
                         setIsCreateWorldCup={setIsCreateWorldCup}
-                        worldCupContentsList={worldCupContentsList}
                         setWorldCupId={setWorldCupId}
-                        worldCupId={worldCupId}
-                        myWorldCupData={isMyWorldCupSuccess && myWorldCupData.data.data}
+                        myWorldCupData={isMyWorldCupSuccess ? myWorldCupData.data.data : undefined}
                         isCreateWorldCup={isCreateWorldCup}
                     />
                 </div>
