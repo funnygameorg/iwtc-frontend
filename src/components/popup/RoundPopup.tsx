@@ -20,7 +20,6 @@ const RoundPopup = ({ roundList, onSelectRound }: IProps) => {
 
     return (
         <>
-            {/* <!-- Main modal --> */}
             <div
                 id="crypto-modal"
                 tabIndex={-1}
@@ -30,7 +29,6 @@ const RoundPopup = ({ roundList, onSelectRound }: IProps) => {
                 } grid place-items-center fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full`}
             >
                 <div className="relative w-full max-w-md max-h-full">
-                    {/* <!-- Modal content --> */}
                     <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                         <button
                             type="button"
@@ -55,13 +53,11 @@ const RoundPopup = ({ roundList, onSelectRound }: IProps) => {
                             </svg>
                             <span className="sr-only">Close modal</span>
                         </button>
-                        {/* <!-- Modal header --> */}
                         <div className="px-6 py-4 border-b rounded-t dark:border-gray-600">
                             <h3 className="text-base font-semibold text-gray-900 lg:text-xl dark:text-white">
                                 몇강을 하실지 선택하세요.
                             </h3>
                         </div>
-                        {/* <!-- Modal body --> */}
                         <div className="p-6">
                             <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
                                 아래 중 하나를 선택하세요.

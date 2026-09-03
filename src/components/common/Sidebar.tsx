@@ -2,12 +2,6 @@ import React from 'react';
 //https://flowbite.com/docs/components/sidebar/#sidebar-with-navbar
 
 function Sidebar() {
-    {
-        /* TODO button */
-    }
-    {
-        /* // -translate-x-full side 숨기기 */
-    }
     return (
         <>
             <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">

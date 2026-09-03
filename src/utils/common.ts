@@ -5,14 +5,6 @@ import { WCListDataType, WCListViewData } from '@/interfaces/models/world-cup/Wc
 
 export { getMimeType, isMP4 } from './media';
 
-// export const getEncodedArray = (myArray) => {
-//     const encodedArray = myArray.map((element) => {
-//         return encodeURIComponent(element);
-//     });
-//     console.log('encodedArray', encodedArray);
-//     return encodedArray;
-// };
-
 export const mappingMediaFile = async <T extends MediaMappableContent>(
     gameList: T[]
 ): Promise<MappedMediaContent<T>[]> => {

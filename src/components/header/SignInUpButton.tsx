@@ -12,18 +12,8 @@ const SignInUpButton = () => {
     const { isLoggedIn, logout } = useAuth();
     const { showPopup, hidePopup } = useContext(PopupContext);
 
-    // const { mutate } = useMutation(userSignOut2, {
-    //     onSuccess: (data) => {
-    //         console.log('로그아웃 성공', data);
-    //     },
-    //     onError: (error) => {
-    //         console.log('에러', error);
-    //     },
-    // });
-
     const onClickHandler = async (isLogin: boolean) => {
         if (isLogin) {
-            //TODO: return 받아서 이후 로직처리 필요
             const response = await userSignOut();
             if (response) {
                 localStorageClear();
@@ -35,7 +25,6 @@ const SignInUpButton = () => {
         }
     };
 
-    //TODO: 컴포넌트화
     if (isLoggedIn) {
         return (
             <div onClick={() => onClickHandler(true)}>
@@ -52,7 +41,6 @@ const SignInUpButton = () => {
         );
     }
 
-    // TODO: 로그인정보 확인
     return (
         <div onClick={() => onClickHandler(false)}>
             <a

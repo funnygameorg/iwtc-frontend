@@ -57,9 +57,6 @@ const WorldCupContentsManageListWrapper = ({
      * 수정된 월드컵 컨텐츠 서버에 전송
      */
     const createNewWorldCupContentsList = () => {
-        // console.log('데이터 전 ', worldCupContentsList);
-        // const newContentsList = worldCupContentsList.filter((item: any) => item.id === undefined);
-
         const bindingNewWorldCupContents = createWorldCupContentRequests(worldCupContentsList);
         if (bindingNewWorldCupContents.length === 0) {
             showAlertPopup('새로운 컨텐츠가 없습니다.');
@@ -82,7 +79,6 @@ const WorldCupContentsManageListWrapper = ({
 
         const accessToken = getAccessToken();
 
-        // 모든 비동기 작업을 동시에 실행하고, 모든 작업이 완료될 때까지 기다립니다.
         await saveWorldCupContentChanges(
             { worldCupId, accessToken, deleteList, modifyList, newList },
             {
@@ -92,11 +88,9 @@ const WorldCupContentsManageListWrapper = ({
             }
         )
             .then(() => {
-                // queryClient.invalidateQueries(['MyWorldCupContentsList', worldcupId], { refetchInactive: false })
                 setDeleteList?.([]);
                 setModifyList?.([]);
                 setNewList?.([]);
-                // setWorldCupContentsList([]);
                 queryClient.invalidateQueries({ queryKey: ['MyWorldCupContentsList'] });
                 showAlertPopup('수정이 완료되었습니다.');
             })
@@ -109,10 +103,8 @@ const WorldCupContentsManageListWrapper = ({
         onSuccess: () => {
             showAlertPopup('성공');
             router.push('/');
-            //TODO: 초기화
-            // window.location.reload();
         },
-        onError: (error) => {
+        onError: () => {
             showAlertPopup('error');
         },
     });

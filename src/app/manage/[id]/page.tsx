@@ -17,7 +17,6 @@ const ManageForm = ({ params }: { params: { id: string } }) => {
     const id = Number(params.id);
     const { data: myWorldCupData, isSuccess: isMyWorldCupSuccess } = useQueryGetMyWorldCup(id);
     const { data: myWorldCupContentsList, isSuccess: isMyWorldCupContentsList } = useQueryGetMyWorldCupContentsList(id);
-    // myWorldCupContentsList.data.data가 API이고 이거와, worldCupContentsList 비교를 해서 다르면 변경사항 적용
     const [worldCupContentsList, setWorldCupContentsList] = useState<ManagedContent[]>([]); // 최초 수정페이지에서 컨텐츠가 담기는 배열
     const [worldCupId, setWorldCupId] = useState(id ? id : 0);
     const [isCreateWorldCup, setIsCreateWorldCup] = useState(false);

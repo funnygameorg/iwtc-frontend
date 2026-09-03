@@ -13,7 +13,6 @@ import WorldCupContentCreateForm from './WorldCupContentCreateForm';
 
 /*
     게임 관리 폼에서 월드컵 게임 컨텐츠에 관한 내용을 표현하는 폼
-    TODO : 리스트의 Card 내용을 컴포넌트로 따로 분리하기
 */
 
 interface IProps {
