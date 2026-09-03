@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getAccessToken } from '@/utils/TokenManager';
 import { manageWorldCupQueryKeys } from '@/lib/react-query/queryKeys';
 import { PersistedManagedContent } from '@/domain/manage/persistedContent';
+import { CreateWorldCupContentRequest, UpdateWorldCupContentRequest } from '@/domain/manage/content';
 
 interface CreateWorldCupRequest {
     title: string;
@@ -60,36 +61,13 @@ export const createWorldCup = async ({ title, description, visibleType, token }:
 };
 
 // 이상형 컨텐츠 생성
-export type createWorldCupContentsType = {
-    contentsName: string;
-    visibleType: string;
-    createMediaFileRequest: {
-        fileType: string;
-        mediaData?: string;
-        originalName?: string;
-        videoStartTime?: string;
-        videoPlayDuration?: number | string;
-        detailFileType?: string;
-    };
-}[];
-
-interface UpdateWorldCupContentRequest {
-    contentsName: string;
-    originalName: string;
-    mediaData?: string;
-    videoStartTime: string | null;
-    videoPlayDuration: number | string | null;
-    visibleType: string;
-    detailFileType?: string;
-}
-
 export const createWorldCupContents = async ({
     worldCupId,
     params,
     token,
 }: {
     worldCupId: number;
-    params: createWorldCupContentsType;
+    params: CreateWorldCupContentRequest[];
     token: string;
 }) => {
     const authHeaders = createHeader(token);

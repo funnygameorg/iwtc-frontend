@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { normalizeClientManagedContent, validateManagedContentDraft } from './content';
+import {
+    createUpdateWorldCupContentRequest,
+    createWorldCupContentRequests,
+    normalizeClientManagedContent,
+    validateManagedContentDraft,
+} from './content';
 import { ManagedContentDraft } from './persistedContent';
 
 const createDraft = (overrides: Partial<ManagedContentDraft> = {}): ManagedContentDraft => ({
@@ -105,6 +110,84 @@ describe('validateManagedContentDraft', () => {
                 createDraft({ fileType: 'file', mediaPath: 'data:image/png;base64,example', originalName: 'a.png' })
             ),
             null
+        );
+    });
+});
+
+describe('world cup content requests', () => {
+    it('maps file content to the existing create request contract', () => {
+        assert.deepEqual(
+            createWorldCupContentRequests([
+                {
+                    id: 1,
+                    contentsName: '후보 A',
+                    visibleType: 'PUBLIC',
+                    fileType: 'file',
+                    mediaPath: 'data:image/png;base64,example',
+                    originalName: 'candidate.png',
+                    detailFileType: 'PNG',
+                },
+            ]),
+            [
+                {
+                    contentsName: '후보 A',
+                    visibleType: 'PUBLIC',
+                    createMediaFileRequest: {
+                        fileType: 'STATIC_MEDIA_FILE',
+                        mediaData: 'data:image/png;base64,example',
+                        originalName: 'candidate.png',
+                        videoStartTime: undefined,
+                        videoPlayDuration: undefined,
+                        detailFileType: 'PNG',
+                    },
+                },
+            ]
+        );
+    });
+
+    it('maps video content and preserves its fallback original name', () => {
+        const [result] = createWorldCupContentRequests([
+            {
+                id: 1,
+                contentsName: '후보 B',
+                visibleType: 'PRIVATE',
+                fileType: 'video',
+                mediaData: 'youtube-url',
+                absoluteName: 'generated-name',
+                videoStartTime: '00030',
+                videoPlayDuration: '3',
+            },
+        ]);
+
+        assert.deepEqual(result.createMediaFileRequest, {
+            fileType: 'INTERNET_VIDEO_URL',
+            mediaData: 'youtube-url',
+            originalName: 'generated-name',
+            videoStartTime: '00030',
+            videoPlayDuration: '3',
+            detailFileType: 'YOU_TUBE_URL',
+        });
+    });
+
+    it('maps optional update values to the existing fallbacks', () => {
+        assert.deepEqual(
+            createUpdateWorldCupContentRequest({
+                id: 1,
+                contentsName: '후보 C',
+                visibleType: 'PUBLIC',
+                fileType: 'file',
+                videoStartTime: '',
+                videoPlayDuration: 0,
+            }),
+            {
+                contentsName: '후보 C',
+                originalName: 'No_NAME',
+                mediaData: undefined,
+                videoStartTime: null,
+                videoPlayDuration: null,
+                visibleType: 'PUBLIC',
+                detailFileType: undefined,
+            }
         );
     });
 });

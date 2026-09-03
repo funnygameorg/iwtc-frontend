@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction, useContext } from 'react';
 import WorldCupContentsManageList from './WorldCupContentsManageList';
 import {
     createWorldCupContents,
-    createWorldCupContentsType,
     removeMyWorldCupContents,
     updateMyWorldCupContents,
 } from '@/services/ManageWorldCupService';
@@ -13,6 +12,7 @@ import { PopupContext } from '@/providers/PopupProvider';
 import NotCreateWorldCupLogo from './NotCreateWorldCupLogo';
 import { useRouter } from 'next/navigation';
 import { ManagedContent, PersistedManagedContentView } from '@/domain/manage/persistedContent';
+import { createUpdateWorldCupContentRequest, createWorldCupContentRequests } from '@/domain/manage/content';
 
 interface IProps {
     isCreateWorldCup: boolean;
@@ -55,29 +55,11 @@ const WorldCupContentsManageListWrapper = ({
     /**
      * 수정된 월드컵 컨텐츠 서버에 전송
      */
-    const transformToCreateWorldCupContentsType = (contextData: ManagedContent[]): createWorldCupContentsType => {
-        return contextData.map((item) => ({
-            contentsName: item.contentsName,
-            visibleType: item.visibleType,
-            createMediaFileRequest: {
-                fileType: item.fileType === 'file' ? 'STATIC_MEDIA_FILE' : 'INTERNET_VIDEO_URL',
-                mediaData: item.mediaPath || item.mediaData,
-                originalName: item.originalName ? item.originalName : item.absoluteName,
-                videoStartTime: item.videoStartTime,
-                videoPlayDuration: item.videoPlayDuration,
-                detailFileType:
-                    item.fileType === 'file' || item.fileType === 'STATIC_MEDIA_FILE'
-                        ? item.detailFileType
-                        : 'YOU_TUBE_URL',
-            },
-        }));
-    };
-
     const createNewWorldCupContentsList = () => {
         // console.log('데이터 전 ', worldCupContentsList);
         // const newContentsList = worldCupContentsList.filter((item: any) => item.id === undefined);
 
-        const bindingNewWorldCupContents = transformToCreateWorldCupContentsType(worldCupContentsList);
+        const bindingNewWorldCupContents = createWorldCupContentRequests(worldCupContentsList);
         if (bindingNewWorldCupContents.length === 0) {
             showAlertPopup('새로운 컨텐츠가 없습니다.');
             return;
@@ -111,15 +93,7 @@ const WorldCupContentsManageListWrapper = ({
         // 업데이트 작업을 promises 배열에 추가
         if (modifyList.length > 0) {
             const updatePromises = modifyList.map((item) => {
-                const requestBody = {
-                    contentsName: item.contentsName,
-                    originalName: item.originalName || 'No_NAME',
-                    mediaData: item.mediaData,
-                    videoStartTime: item.videoStartTime ? item.videoStartTime : null,
-                    videoPlayDuration: item.videoPlayDuration ? item.videoPlayDuration : null,
-                    visibleType: item.visibleType,
-                    detailFileType: item.detailFileType,
-                };
+                const requestBody = createUpdateWorldCupContentRequest(item);
                 return updateMyWorldCupContents(worldCupId, item.contentsId, requestBody, accessToken);
             });
             promises.push(...updatePromises);
@@ -127,7 +101,7 @@ const WorldCupContentsManageListWrapper = ({
 
         // 새 컨텐츠 추가 작업을 promises 배열에 추가 (이 부분은 실제 실행 시점에 따라 조정이 필요할 수 있음)
         if (newList.length > 0) {
-            const bindingNewWorldCupContents = transformToCreateWorldCupContentsType(newList);
+            const bindingNewWorldCupContents = createWorldCupContentRequests(newList);
             const newContentPromise = createWorldCupContents({
                 // 가정: mutateAsync 메서드 사용
                 worldCupId: worldCupId,
