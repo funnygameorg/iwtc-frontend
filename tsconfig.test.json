@@ -31,6 +31,8 @@
         "src/domain/manage/content.test.ts",
         "src/domain/manage/save.ts",
         "src/domain/manage/save.test.ts",
+        "src/domain/manage/mediaInput.ts",
+        "src/domain/manage/mediaInput.test.ts",
         "src/domain/manage/persistedContent.ts",
         "src/domain/manage/persistedContent.test.ts",
         "src/interfaces/models/world-cup/WcListData.ts",
