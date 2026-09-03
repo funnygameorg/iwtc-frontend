@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { createWorldCupGameRequest } from './play';
+import { createWorldCupGameRequest, resolveGameSelection } from './play';
 
 describe('createWorldCupGameRequest', () => {
     it('creates the initial round request without exclusions', () => {
@@ -20,6 +20,26 @@ describe('createWorldCupGameRequest', () => {
             sliceContents: 1,
             excludeContentsIds: '3,7,9',
             initialRound: 16,
+        });
+    });
+});
+
+describe('resolveGameSelection', () => {
+    const contents = [{ contentsId: 10 }, { contentsId: 20 }] as const;
+
+    it('selects the left candidate and excludes the right candidate', () => {
+        assert.deepEqual(resolveGameSelection(contents, 0, [3]), {
+            winnerContentId: 10,
+            loserContentId: 20,
+            nextExcludedContents: [3, 20],
+        });
+    });
+
+    it('selects the right candidate and excludes the left candidate', () => {
+        assert.deepEqual(resolveGameSelection(contents, 1, [3]), {
+            winnerContentId: 20,
+            loserContentId: 10,
+            nextExcludedContents: [3, 10],
         });
     });
 });

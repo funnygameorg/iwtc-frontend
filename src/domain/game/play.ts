@@ -6,6 +6,32 @@ export interface WorldCupGameRequest {
     initialRound: number;
 }
 
+interface SelectableGameContent {
+    contentsId: number;
+}
+
+export interface GameSelectionResult {
+    winnerContentId: number;
+    loserContentId: number;
+    nextExcludedContents: number[];
+}
+
+export const resolveGameSelection = (
+    contents: readonly [SelectableGameContent, SelectableGameContent, ...SelectableGameContent[]],
+    selectedIndex: 0 | 1,
+    excludedContentsIds: number[]
+): GameSelectionResult => {
+    const loserIndex = selectedIndex === 0 ? 1 : 0;
+    const winnerContentId = contents[selectedIndex].contentsId;
+    const loserContentId = contents[loserIndex].contentsId;
+
+    return {
+        winnerContentId,
+        loserContentId,
+        nextExcludedContents: excludedContentsIds.concat(loserContentId),
+    };
+};
+
 export const createWorldCupGameRequest = (
     worldCupId: number,
     currentRound: number,

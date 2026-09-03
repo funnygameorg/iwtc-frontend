@@ -10,7 +10,7 @@ import { animated, useSpring } from '@react-spring/web';
 import CustomYoutubePlayer from '@/components/youtubePlayer/CustomYoutubePlayer';
 import Spiner from '@/components/common/Spiner';
 import { createRoundLabels, getRoundProgressIncrement } from '@/domain/game/round';
-import { createWorldCupGameRequest } from '@/domain/game/play';
+import { createWorldCupGameRequest, resolveGameSelection } from '@/domain/game/play';
 import { MappedMediaContent } from '@/domain/game/mediaFile';
 import { WorldCupGameContent } from '@/interfaces/models/world-cup/WcGameData';
 
@@ -117,25 +117,28 @@ const Page = ({ params }: { params: { id: string } }) => {
         };
     }, []);
 
-    const handleSelection = async (index: number) => {
+    const handleSelection = async (selectedIndex: 0 | 1) => {
         if (isSwapping) return;
         setIsSwapping(true);
-        if (index === 1) {
+        if (selectedIndex === 0) {
             handleLeftImageClick(400, 2000);
         } else {
             handleRightImageClick(400, 2000);
         }
-        const loseConetentId = gameList[index].contentsId;
-        const winContentId = gameList[index === 1 ? 0 : 1].contentsId;
-        const nextExcludedContents = saveClickContents.concat(loseConetentId);
+        const [firstContent, secondContent] = gameList;
+        const { loserContentId, winnerContentId, nextExcludedContents } = resolveGameSelection(
+            [firstContent, secondContent],
+            selectedIndex,
+            saveClickContents
+        );
         // selectRound가 2이면 결승
         setSaveClickContents(nextExcludedContents);
         if (selectRound === 4) {
             if (rankContents.fourthWinnerContentsId !== 0) {
-                const updatedRankContents = { ...rankContents, thirdWinnerContentsId: loseConetentId };
+                const updatedRankContents = { ...rankContents, thirdWinnerContentsId: loserContentId };
                 setRankContents(updatedRankContents);
             } else {
-                const updatedRankContents = { ...rankContents, fourthWinnerContentsId: loseConetentId };
+                const updatedRankContents = { ...rankContents, fourthWinnerContentsId: loserContentId };
                 setRankContents(updatedRankContents);
             }
         }
@@ -143,8 +146,8 @@ const Page = ({ params }: { params: { id: string } }) => {
         if (selectRound === 2) {
             const updatedRankContents = {
                 ...rankContents,
-                firstWinnerContentsId: winContentId,
-                secondWinnerContentsId: loseConetentId,
+                firstWinnerContentsId: winnerContentId,
+                secondWinnerContentsId: loserContentId,
             };
             // setRankContents(updatedRankContents);
             router.push(
@@ -239,7 +242,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                             style={{
                                 ...left,
                             }}
-                            onClick={() => handleSelection(1)}
+                            onClick={() => handleSelection(0)}
                         >
                             {leftGame.fileType === 'INTERNET_VIDEO_URL' ? (
                                 <div className="flex items-center justify-center h-full">
@@ -306,7 +309,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                             style={{
                                 ...light,
                             }}
-                            onClick={() => handleSelection(0)}
+                            onClick={() => handleSelection(1)}
                         >
                             {rightGame.fileType === 'INTERNET_VIDEO_URL' ? (
                                 <div className="flex items-center justify-center h-full">
