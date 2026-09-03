@@ -47,7 +47,7 @@ npm test
 npm run build
 ```
 
-- 테스트: 46개, 18 suites
+- 테스트: 49개, 19 suites
 - 테스트 도구: 별도 라이브러리 없이 Node.js `node:test`
 - production build는 `.env.production`을 사용한다.
 - lint에는 기존 `@next/next/no-img-element` 경고 3건이 남아 있다.
@@ -101,10 +101,12 @@ npm run build
 - 관리 컨텐츠 생성 폼의 공통·YouTube·파일 검증 규칙을 순수 함수로 분리했다.
 - 관리 컨텐츠 생성 폼과 미디어 입력 UI를 목록 관리 컴포넌트에서 분리했다.
 - 신규·수정 컨텐츠의 API 요청 payload 구성 규칙을 도메인 함수로 분리했다.
+- 삭제·수정·신규 생성 API를 병렬로 실행하는 저장 요청 조합을 분리하고 실패 전파를 테스트했다.
 
 최근 작업 커밋:
 
 ```text
+933a67d refactor: 관리 컨텐츠 저장 요청 조합 분리
 b6afb78 refactor: 관리 컨텐츠 요청 데이터 구성 분리
 6d8b64c refactor: 관리 컨텐츠 생성 폼 분리
 e75daad refactor: 관리 컨텐츠 검증 로직 분리
@@ -214,7 +216,7 @@ rg -n "\\bany\\b" src --glob '*.{ts,tsx}'
 - `WorldCupContentsManageList.tsx`의 검증 책임 분리 (완료)
 - `WorldCupContentsManageList.tsx`의 생성 폼·미디어 입력 책임 분리 (완료)
 - `WorldCupContentsManagerListWrapper.tsx`의 신규·수정 요청 payload 구성 분리 (완료)
-- `WorldCupContentsManagerListWrapper.tsx`의 생성/수정/삭제 요청 실행 조합 분리
+- `WorldCupContentsManagerListWrapper.tsx`의 생성/수정/삭제 요청 실행 조합 분리 (완료)
 - 이미지와 MP4 변환 로직 분리
 - FFmpeg 관련 코드는 의존성과 브라우저 동작 영향이 크므로 가장 마지막에 진행
 
