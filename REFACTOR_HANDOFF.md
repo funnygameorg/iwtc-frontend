@@ -47,7 +47,7 @@ npm test
 npm run build
 ```
 
-- 테스트: 28개, 12 suites
+- 테스트: 34개, 14 suites
 - 테스트 도구: 별도 라이브러리 없이 Node.js `node:test`
 - production build는 `.env.production`을 사용한다.
 - lint에는 기존 `@next/next/no-img-element` 경고 3건이 남아 있다.
@@ -86,10 +86,24 @@ npm run build
 - 미디어 조회 실패 시 `/images/default.png`를 사용하는 기존 동작과 객체 참조 유지 동작을 테스트로 고정했다.
 - 게임 진행 화면, 종료 화면, 랭킹 목록, 라운드 팝업의 상태 타입을 API DTO부터 연결했다.
 - YouTube 플레이어 두 종류의 활성 `any`를 제거했다.
+- 후보 선택 시 승자·패자 ID와 다음 제외 목록을 계산하는 로직을 순수 함수로 분리했다.
+
+### 홈 목록·공통 타입 경계
+
+- 월드컵 목록 API 모델과 미디어가 결합된 화면 모델을 분리했다.
+- `mappingMediaFile2`, Infinite Query, 목록 카드 props의 활성 `any`를 제거했다.
+- 홈 목록 미디어 좌·우 요청의 4가지 성공/실패 조합을 테스트로 고정했다.
+- `BaseService` 메서드의 기본 응답 타입을 `any`에서 `unknown`으로 축소하고, 제네릭을 생략했던 활성 호출부에 응답·요청 타입을 연결했다.
+- 인증 폼, 헤더, 관리 폼, 검증 메시지, 댓글 Popper의 활성 `any`를 제거했다.
 
 최근 작업 커밋:
 
 ```text
+f97d3ce refactor: 게임 후보 선택 로직 분리
+6b1ba50 refactor: 폼과 표시 컴포넌트 타입 연결
+05bfd7a refactor: API 기본 응답 타입 축소
+bf9a9c9 refactor: 홈 목록 미디어 타입 연결
+1f155aa fix: 인증 폼 import 경로 대소문자 정정
 5e97c52 refactor: 유튜브 iframe 컴포넌트 타입 연결
 bada21a refactor: 게임 결과 화면 상태 타입 연결
 9c5ce0d refactor: 게임 화면 상태 타입 연결
@@ -104,11 +118,9 @@ a161087 refactor: 관리 콘텐츠 조회 타입 연결
 5399ce6 refactor: 관리 월드컵 상세 타입 연결
 ```
 
-## 다음 작업 순서
+## 작업 순서와 현재 상태
 
-### 1. 홈 목록 미디어 매핑 타입 연결
-
-가장 먼저 진행할 영역이다.
+### 1. 홈 목록 미디어 매핑 타입 연결 (완료)
 
 관련 파일:
 
@@ -118,14 +130,14 @@ a161087 refactor: 관리 콘텐츠 조회 타입 연결
 - `src/components/home/worldcup/WorldCupList.tsx`
 - `src/components/home/HydratedWCList.tsx`
 
-현재 문제:
+완료 전 문제:
 
 - `mappingMediaFile2`, Infinite Query 응답, 목록 렌더 props에 `any`가 남아 있다.
 - API의 숫자 media file ID를 화면용 미디어 문자열로 같은 필드에 덮어써 데이터 경계가 불명확하다.
 - `Promise.allSettled` 결과에서 성공 항목만 필터링한 뒤 좌우 응답으로 다시 배치한다. 왼쪽 요청만 실패하면 오른쪽 응답이 왼쪽에 들어갈 가능성이 있다.
 - 실패 경로에서 일부 필드만 변경된 객체가 반환될 수 있으므로, 타입만 맞추기 위해 동작을 임의 변경하면 안 된다.
 
-진행 방법:
+완료 기준:
 
 1. 좌/우 모두 성공, 왼쪽만 실패, 오른쪽만 실패, 모두 실패하는 조합의 기존 동작을 테스트로 먼저 고정한다.
 2. 원본 API 목록 모델과 화면용 미디어가 결합된 모델을 구분한다.
@@ -133,11 +145,11 @@ a161087 refactor: 관리 콘텐츠 조회 타입 연결
 4. Infinite Query와 `WorldCupList` props의 `any`를 제거한다.
 5. 실패 시 좌우 위치 문제를 실제 버그로 수정할 필요가 있다면 타입 정리와 별도 커밋으로 분리한다.
 
-### 2. BaseService 기본 제네릭의 `any` 제거
+### 2. BaseService 기본 제네릭의 `any` 제거 (완료)
 
 관련 파일: `src/services/BaseService.ts`
 
-현재 `ajaxGet`, `ajaxPost`, `ajaxPut`, `ajaxDelete`의 기본 응답 타입이 `any`다.
+완료 전에는 `ajaxGet`, `ajaxPost`, `ajaxPut`, `ajaxDelete`의 기본 응답 타입이 `any`였다.
 
 - 바로 `unknown`으로 일괄 변경하지 말고 아직 제네릭을 지정하지 않은 호출부를 먼저 찾는다.
 - 각 서비스에서 실제 DTO를 연결한 뒤 기본 타입을 `unknown`으로 좁힌다.
@@ -150,32 +162,32 @@ rg -n "ajax(Get|Post|Put|Delete)" src/services
 rg -n "\\bany\\b" src --glob '*.{ts,tsx}'
 ```
 
-### 3. 인증·폼·표시 컴포넌트의 잔여 `any`
+### 3. 인증·폼·표시 컴포넌트의 잔여 `any` (완료)
 
-활성 코드 기준 주요 위치:
+정리한 주요 위치:
 
-- `src/components/register/HomeLoginForm.tsx`: 입력 이벤트
-- `src/components/register/LoginForm.tsx`: mutation 오류와 입력 이벤트
-- `src/components/register/RegisterForm.tsx`: 입력 이벤트
+- `src/components/Register/HomeLoginForm.tsx`: 입력 이벤트
+- `src/components/Register/LoginForm.tsx`: mutation 오류와 입력 이벤트
+- `src/components/Register/RegisterForm.tsx`: 입력 이벤트
 - `src/components/common/Header.tsx`: 클릭 이벤트
 - `src/components/manage/WorldCupManageForm.tsx`: mutation 오류
 - `src/components/ValidateMessage/index.tsx`: 검증 결과 구조
 - `src/components/reply/ReplyPopup.tsx`: style 객체
 
-권장 타입:
+적용한 타입:
 
 - 입력: `ChangeEvent<HTMLInputElement>` 등 실제 DOM 이벤트 타입
 - mutation 오류: 우선 `unknown`, 필요한 경우 Axios 오류 판별 함수 사용
 - style 객체: `StylesConfig` 또는 라이브러리가 제공하는 공개 타입을 기존 설치 버전에서 확인
 - 검증 결과: 실제 react-hook-form/yup 사용처를 확인한 뒤 필요한 필드만 모델링
 
-### 4. 게임 페이지 책임 분리
+### 4. 게임 페이지 책임 분리 (다음 시작점)
 
 `src/app/play-game/[id]/page.tsx`는 타입 경계와 순수 계산 테스트는 확보됐지만 아직 크고 책임이 많다.
 
 다음 후보:
 
-- 후보 선택과 승자/패자 ID 계산
+- 후보 선택과 승자/패자 ID 계산 (완료)
 - 다음 라운드 요청 시점과 제외 ID 누적
 - 애니메이션 제어
 - 후보 미디어 렌더링
@@ -200,6 +212,7 @@ rg -n "\\bany\\b" src --glob '*.{ts,tsx}'
 
 - Query Key 배열 값은 테스트로 고정되어 있다. 키 변경이 필요하면 캐시 영향과 테스트를 함께 검토한다.
 - `mappingMediaFile`은 전달받은 항목 객체 자체를 갱신한다. 객체 참조 유지가 테스트에 포함되어 있다.
+- 홈 목록 미디어 요청에서 왼쪽 Promise만 reject되면 오른쪽 응답이 왼쪽으로 이동하는 기존 동작이 테스트에 고정되어 있다. 이를 수정할 때는 타입 리팩터링과 분리한 버그 수정 커밋으로 진행한다.
 - 관리 콘텐츠에서 `contentsId`가 없는 항목은 신규 목록, 있는 항목은 수정·삭제 목록으로 분기한다.
 - `contentsId: 0`은 신규 콘텐츠 정규화 과정에서 `undefined`가 되는 기존 규칙이 테스트로 고정되어 있다.
 - 관리 카드의 직접 저장 API 코드는 주석 처리된 과거 구현이며, 실제 저장은 상위 wrapper가 목록을 모아 실행한다.
