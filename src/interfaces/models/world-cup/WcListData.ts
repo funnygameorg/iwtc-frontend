@@ -10,6 +10,17 @@ export interface WCListDataType {
     rightImgMediaFileNo: number;
 }
 
+export interface WCListViewData extends Omit<WCListDataType, 'reftImgMediaFileNo' | 'rightImgMediaFileNo'> {
+    reftImgMediaFileNo: string;
+    reftFileType: string;
+    reftVideoStartTime?: string;
+    reftVideoPlayDuration?: number;
+    rightImgMediaFileNo: string;
+    rightFileType: string;
+    rightVideoStartTime?: string;
+    rightVideoPlayDuration?: number;
+}
+
 interface WCListApiItem {
     contentsName1: string;
     contentsName2: string;
@@ -41,6 +52,10 @@ export interface WCListParent {
     totalCount: number;
     list: WCListDataType[];
     pageable: WCListPageable;
+}
+
+export interface WCListViewPage extends Omit<WCListParent, 'list'> {
+    list: WCListViewData[];
 }
 
 export const loadWCListData = (data: WCListApiPage): WCListParent => {

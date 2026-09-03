@@ -8,21 +8,19 @@ import SearchBar from '@/components/search';
 import RankSelect from '@/components/button/RankSelect';
 import Order from '@/components/dropdown/Order';
 import { mappingMediaFile2 } from '@/utils/common';
+import { WCListViewData, WCListViewPage } from '@/interfaces/models/world-cup/WcListData';
 
 const WorldCupWrapper = () => {
     const [keyword, setKeyword] = useState<undefined | string>(undefined);
     const [order, setOrder] = useState<string>('id');
     const [rank, setRank] = useState<string>('ALL');
 
-    const { data, fetchNextPage, hasNextPage, isSuccess } = useInfiniteQuery(
+    const { data, fetchNextPage, hasNextPage, isSuccess } = useInfiniteQuery<WCListViewPage>(
         ['wclist', order, keyword, rank],
         async ({ pageParam = 0 }) => {
-            const response: any = await worldCupAllList(pageParam, 20, order, keyword, rank);
-            if (response) {
-                const newlist = await mappingMediaFile2(response.list);
-                response.list = newlist;
-                return response;
-            }
+            const response = await worldCupAllList(pageParam, 20, order, keyword, rank);
+            const newlist = await mappingMediaFile2(response.list);
+            return { ...response, list: newlist };
         },
         {
             getNextPageParam: (lastPage) => {
@@ -54,8 +52,8 @@ const WorldCupWrapper = () => {
                 {isSuccess && (
                     <InfiniteScroll loadMore={() => fetchNextPage()} hasMore={hasNextPage}>
                         <div className="flex flex-wrap justify-center mt-10overflow-auto">
-                            {data?.pages.map((page: any) => {
-                                return page.list.map((items: any, idx: number) => {
+                            {data?.pages.map((page) => {
+                                return page.list.map((items: WCListViewData, idx: number) => {
                                     return <WorldCupList wcList={items} key={idx} />;
                                 });
                             })}

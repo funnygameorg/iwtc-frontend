@@ -2,8 +2,13 @@ import CustomYoutubePlayer from '@/components/youtubePlayer/CustomYoutubePlayer'
 import { isMP4 } from '@/utils/common';
 import Image from 'next/image';
 import Link from 'next/link';
+import { WCListViewData } from '@/interfaces/models/world-cup/WcListData';
 
-const WorldCupList = ({ wcList }: any) => {
+interface WorldCupListProps {
+    wcList: WCListViewData;
+}
+
+const WorldCupList = ({ wcList }: WorldCupListProps) => {
     const {
         gameTitle,
         reftContentName,
