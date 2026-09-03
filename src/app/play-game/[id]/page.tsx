@@ -6,13 +6,14 @@ import RoundPopup from '@/components/popup/RoundPopup';
 import { useMutation } from '@tanstack/react-query';
 import { isMP4, mappingMediaFile } from '@/utils/common';
 import { useRouter } from 'next/navigation';
-import { animated, useSpring } from '@react-spring/web';
+import { animated } from '@react-spring/web';
 import CustomYoutubePlayer from '@/components/youtubePlayer/CustomYoutubePlayer';
 import Spiner from '@/components/common/Spiner';
 import { createRoundLabels, getRoundProgressIncrement } from '@/domain/game/round';
 import { createWorldCupGameRequest, resolveGameContinuation, resolveGameSelection } from '@/domain/game/play';
 import { MappedMediaContent } from '@/domain/game/mediaFile';
 import { WorldCupGameContent } from '@/interfaces/models/world-cup/WcGameData';
+import { useGameSelectionAnimation } from '@/hooks/useGameSelectionAnimation';
 
 type GameContentView = MappedMediaContent<WorldCupGameContent>;
 
@@ -37,6 +38,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     const [progressPercentage, setProgressPercentage] = useState<number>(0);
     const [roundLabels, setRoundLabels] = useState<Record<string, number>>({});
     const [isLoding, setIsLoding] = useState<boolean>(true);
+    const { leftStyle, rightStyle, animateSelection, resetSelectionAnimation } = useGameSelectionAnimation();
 
     const applyGameList = (list: GameContentView[], initialRound: number) => {
         setGameList(list);
@@ -64,29 +66,6 @@ const Page = ({ params }: { params: { id: string } }) => {
             setRoundLabels(newRoundLabels);
         }
     }, [firstSelectedRound]);
-
-    const useSpringAnimation = (from: number, to: number) => {
-        return useSpring(() => ({
-            from: { x: from },
-            to: { x: to },
-            loop: {
-                reset: true,
-            },
-        }));
-    };
-
-    const [left, leftApi] = useSpringAnimation(0, 0);
-    const [light, lightApi] = useSpringAnimation(0, 0);
-
-    const handleLeftImageClick = (left: number, light: number) => {
-        leftApi.start({ to: { x: left } });
-        lightApi.start({ to: { x: light } });
-    };
-
-    const handleRightImageClick = (light: number, left: number) => {
-        lightApi.start({ to: { x: -light } });
-        leftApi.start({ to: { x: -left } });
-    };
 
     const getGame = useMutation(worldCupGamePlay, {
         onSuccess: async (data, variables) => {
@@ -120,11 +99,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     const handleSelection = async (selectedIndex: 0 | 1) => {
         if (isSwapping) return;
         setIsSwapping(true);
-        if (selectedIndex === 0) {
-            handleLeftImageClick(400, 2000);
-        } else {
-            handleRightImageClick(400, 2000);
-        }
+        animateSelection(selectedIndex);
         const [firstContent, secondContent] = gameList;
         const { loserContentId, winnerContentId, nextExcludedContents } = resolveGameSelection(
             [firstContent, secondContent],
@@ -163,8 +138,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             // 최종 선택 API 호출 후 return
         }
         setTimeout(() => {
-            handleRightImageClick(0, 0);
-            handleLeftImageClick(0, 0);
+            resetSelectionAnimation();
             if (continuation.type === 'request-next-round') {
                 setSelectRound(continuation.nextRound);
                 requestGameRound(
@@ -242,7 +216,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <animated.div
                             className={'flex items-start mx-auto left-0 right-0 w-full'}
                             style={{
-                                ...left,
+                                ...leftStyle,
                             }}
                             onClick={() => handleSelection(0)}
                         >
@@ -309,7 +283,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <animated.div
                             className={'flex items-end mx-auto left-0 right-0 w-full'}
                             style={{
-                                ...light,
+                                ...rightStyle,
                             }}
                             onClick={() => handleSelection(1)}
                         >
