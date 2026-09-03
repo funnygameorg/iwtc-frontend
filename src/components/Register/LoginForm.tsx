@@ -105,22 +105,6 @@ const LoginForm = () => {
                     >
                         로그인
                     </button>
-
-                    {/* <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
-          <p className="text-center font-semibold mx-4 mb-0">OR</p>
-        </div> */}
-
-                    {/* <div className="flex justify-between">
-        <SocialButton src="/assets/google_logo.svg" />
-        <SocialButton
-          src="/assets/github_logo.svg"
-          backgroundColor="bg-black"
-        />
-        <SocialButton
-          src="/assets/kakao_logo.svg"
-          backgroundColor="bg-kakao"
-        />
-      </div> */}
                 </form>
             </div>
             <div className="text-center mt-4">

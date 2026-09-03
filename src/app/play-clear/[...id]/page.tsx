@@ -38,21 +38,16 @@ const Page = ({ params }: { params: { id: string[] } }) => {
         return (
             <>
                 <div className="flex h-screen bg-zinc-950 text-white">
-                    {/* 왼쪽 영역 */}
                     <div className="w-8/12 h-auto p-4 overflow-auto" style={{ height: '100%' }}>
                         <h1 className="text-2xl font-bold mb-4 text-center">월드컵 우승</h1>
                         <div className="h-full flex flex-col ">
-                            {/* 여기에 왼쪽 영역 컨텐츠를 넣으세요 */}
                             <div className="flex h-2/3 bg-zinc-900 border-zinc-400">
-                                {/* <div className="w-1/4 bg-gray-100 max-w-2xl mx-auto h-full rounded-md shadow-md p-2 h-5/6 flex flex-col justify-center items-center"> */}
-                                {/* 세로로 이미지 4개 배치 */}
                                 <ul className=" w-1/4 bg-gray-100 rounded-md shadow-md bg-zinc-900 border border-zinc-600 ">
                                     {rankList.map((items) => {
                                         if (items.rank !== 1) {
                                             return items.fileType === 'INTERNET_VIDEO_URL' ? (
                                                 <li className="w-full h-1/3 text-center " key={items.contentsId}>
                                                     <span>{items.rank}등</span>
-                                                    {/* <div className="flex justify-center items-center mb-2"> */}
                                                     <CustomYoutubePlayer
                                                         videoUrl={items.imgUrl}
                                                         time={items.videoStartTime}
@@ -61,7 +56,6 @@ const Page = ({ params }: { params: { id: string[] } }) => {
                                                         isAutoPlay={false}
                                                         playDuration={items.videoPlayDuration}
                                                     />
-                                                    {/* </div> */}
                                                 </li>
                                             ) : isMP4(items.imgUrl) ? (
                                                 <li className="w-full h-1/3 text-center " key={items.contentsId}>
@@ -80,7 +74,6 @@ const Page = ({ params }: { params: { id: string[] } }) => {
                                             ) : (
                                                 <li className="w-full h-1/3 text-center" key={items.contentsId}>
                                                     <span>{items.rank}등</span>
-                                                    {/* <Image src={09rl} alt={items.contentsName} className="mb-2"/> */}
                                                     <div className="flex justify-center items-center w-full h-full">
                                                         <img
                                                             src={items.imgUrl}
@@ -93,7 +86,6 @@ const Page = ({ params }: { params: { id: string[] } }) => {
                                         }
                                     })}
                                 </ul>
-                                {/* </div> */}
                                 <ul className="w-full bg-gray-100 rounded-md shadow-md  bg-zinc-900 border border-zinc-600">
                                     {rankList.map((items) => {
                                         if (items.rank === 1) {
@@ -121,7 +113,6 @@ const Page = ({ params }: { params: { id: string[] } }) => {
                                             ) : (
                                                 <>
                                                     <li className="w-full h-full flex justify-center items-center ">
-                                                        {/* <span>{items.rank}</span> */}
                                                         <img
                                                             src={items.imgUrl}
                                                             alt={String(items.contentsId)}
@@ -133,7 +124,6 @@ const Page = ({ params }: { params: { id: string[] } }) => {
                                         }
                                     })}
                                 </ul>
-                                {/* 예시로 h-96 사용 */}
                             </div>
                             <div className="flex h-full">
                                 <RankListWrapper contentsId={worldCupId} />
@@ -142,12 +132,10 @@ const Page = ({ params }: { params: { id: string[] } }) => {
                     </div>
 
                     <div className="w-4/12 p-4" style={{ height: '100%' }}>
-                        {/* 여기에 오른쪽 영역 컨텐츠를 넣으세요 */}
                         <h1 className="text-2xl font-bold mb-4 text-center">댓글</h1>
                         <div className="h-full flex flex-col">
                             <section
                                 className=" bg-zinc-900 border border-zinc-600 rounded-md shadow-md py-8 antialiased h-full"
-                                // style={{ height: 'auto' }}
                             >
                                 <div className="max-w-2xl mx-auto px-4">
                                     <div className="flex justify-between items-center mb-6">
@@ -164,10 +152,6 @@ const Page = ({ params }: { params: { id: string[] } }) => {
                                 <ReplyRegisterForm worldcupId={worldCupId} contentsId={Number(id[1])} />
                             </div>
                         </div>
-
-                        {/* <div className="h-1/4 bg-gray-400 mt-10">
-                            <span>그래프영역</span>
-                        </div> */}
                     </div>
                 </div>
             </>

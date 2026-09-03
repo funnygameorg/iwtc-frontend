@@ -6,7 +6,6 @@ import ValidateMessage from '../ValidateMessage';
 import { useMutation } from '@tanstack/react-query';
 import { userSignUp } from '@/services/MemberService';
 import { useRouter } from 'next/navigation';
-import { BASE_URL } from '@/consts';
 import { PopupContext } from '@/providers/PopupProvider';
 import AlertPopup from '../popup/AlertPopup';
 
@@ -59,12 +58,6 @@ const RegisterForm = () => {
             placeholder: '비밀번호를 다시 입력해주세요.',
             inputText: 'passwordConfirm',
         },
-        // {
-        //   id: 4,
-        //   type: "text",
-        //   placeholder: "email을 입력해주세요.",
-        //   inputText: "email",
-        // },
         {
             id: 4,
             type: 'text',
@@ -73,7 +66,7 @@ const RegisterForm = () => {
         },
     ];
 
-    const { mutate, isLoading, error, isSuccess } = useMutation(userSignUp, {
+    const { mutate } = useMutation(userSignUp, {
         onSuccess: () => {
             router.push('/sign-in');
             showPopup(<AlertPopup message={'회원가입에 성공하셨습니다.'} hidePopup={hidePopup} />);
@@ -98,14 +91,12 @@ const RegisterForm = () => {
             nickname,
         };
         mutate(userInfo);
-        // mutate 사용
     };
 
     return (
         <div className="p-4">
             <form className="max-w-sm mx-auto">
                 <div className="grid gap-y-2 mb-6">
-                    {/* TODO: errors 확인 */}
                     {inputList.map((items, index) => (
                         <>
                             <input

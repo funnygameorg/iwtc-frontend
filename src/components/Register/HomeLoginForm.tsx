@@ -2,10 +2,8 @@
 import React, { ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import { getLoginFormSchema } from '@/utils/validations/loginValidation';
-import ValidateMessage from '../ValidateMessage';
 import { useMutation } from '@tanstack/react-query';
 import { userMeSummary, userSignIn } from '@/services/MemberService';
-import Link from 'next/link';
 import { getUserInfo, setUserInfo } from '@/stores/LocalStore';
 import { setToken } from '@/utils/TokenManager';
 import { useAuth } from '@/providers/AuthProvider';
@@ -21,7 +19,6 @@ const HomeLoginForm = () => {
         watch,
         setValue,
         handleSubmit,
-        formState: { errors },
     } = useForm<FormTypes>({
         resolver: getLoginFormSchema(),
     });
@@ -77,9 +74,6 @@ const HomeLoginForm = () => {
             <div className="p-4 h-32">
                 <form className="flex max-w-sm mx-auto">
                     <div className="grid gap-y-2 mb-6 mr-1" style={{ width: '8.6rem' }}>
-                        {/* <div className="flex"> */}
-                        {/* <div className="flex max-w-sm mx-auto"> */}
-                        {/* <div className=""> */}
                         <input
                             type="text"
                             className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded focus:text-gray-700 focus:bg-white focus:border-yellow-400 focus:outline-none"
@@ -88,7 +82,6 @@ const HomeLoginForm = () => {
                             onChange={handleChange('username')}
                             style={{ width: '100%' }}
                         />
-                        {/* {errors.username && <ValidateMessage result={errors.username} />} */}
 
                         <input
                             type="password"
@@ -98,7 +91,6 @@ const HomeLoginForm = () => {
                             onChange={handleChange('password')}
                             style={{ width: '100%' }}
                         />
-                        {/* {errors.password && <ValidateMessage result={errors.password} />} */}
                     </div>
                     <button
                         type="submit"
@@ -107,28 +99,8 @@ const HomeLoginForm = () => {
                     >
                         로그인
                     </button>
-                    {/* </div> */}
-                    {/* </div> */}
-                    {/* <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
-          <p className="text-center font-semibold mx-4 mb-0">OR</p>
-        </div> */}
-
-                    {/* <div className="flex justify-between">
-        <SocialButton src="/assets/google_logo.svg" />
-        <SocialButton
-          src="/assets/github_logo.svg"
-          backgroundColor="bg-black"
-        />
-        <SocialButton
-          src="/assets/kakao_logo.svg"
-          backgroundColor="bg-kakao"
-        />
-      </div> */}
                 </form>
             </div>
-            {/* <div className="text-center mt-4">
-        <Link href="/sign-up">회원가입 </Link>
-      </div> */}
         </>
     );
 };
