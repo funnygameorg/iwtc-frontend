@@ -1,6 +1,22 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { normalizeClientManagedContent } from './content';
+import { normalizeClientManagedContent, validateManagedContentDraft } from './content';
+import { ManagedContentDraft } from './persistedContent';
+
+const createDraft = (overrides: Partial<ManagedContentDraft> = {}): ManagedContentDraft => ({
+    contentsName: '후보 A',
+    visibleType: 'PUBLIC',
+    fileType: 'video',
+    mediaPath: 'https://youtube.com/watch?v=example',
+    originalName: '',
+    absoluteName: '',
+    videoStartTime: '00030',
+    videoPlayDuration: '3',
+    mp4Type: '',
+    imgType: '',
+    detailFileType: '',
+    ...overrides,
+});
 
 describe('normalizeClientManagedContent', () => {
     it('maps newly added content to the card model', () => {
@@ -53,6 +69,42 @@ describe('normalizeClientManagedContent', () => {
                 0
             ).contentsId,
             undefined
+        );
+    });
+});
+
+describe('validateManagedContentDraft', () => {
+    it('validates common fields before media-specific fields', () => {
+        assert.equal(
+            validateManagedContentDraft(createDraft({ contentsName: '', videoStartTime: 'invalid' })),
+            '컨텐츠 이름이 없습니다.'
+        );
+        assert.equal(validateManagedContentDraft(createDraft({ visibleType: '' })), '공개 여부를 선택해주세요.');
+        assert.equal(validateManagedContentDraft(createDraft({ fileType: '' })), '파일 타입이 존재하지 않음');
+    });
+
+    it('preserves video time and duration validation', () => {
+        assert.equal(
+            validateManagedContentDraft(createDraft({ videoStartTime: '0030' })),
+            "'영상 시작 시간'은 '00000'의 형식입니다. \n 예 : 10분 1초 -> 01001, 0분 30초 -> 00030"
+        );
+        assert.equal(
+            validateManagedContentDraft(createDraft({ videoPlayDuration: '2' })),
+            '반복 시간은 3~5초로 설정해주세요.'
+        );
+        assert.equal(validateManagedContentDraft(createDraft()), null);
+    });
+
+    it('requires both file data and its original name', () => {
+        assert.equal(
+            validateManagedContentDraft(createDraft({ fileType: 'file', mediaPath: '', originalName: '' })),
+            '파일이 존재하지 않습니다.'
+        );
+        assert.equal(
+            validateManagedContentDraft(
+                createDraft({ fileType: 'file', mediaPath: 'data:image/png;base64,example', originalName: 'a.png' })
+            ),
+            null
         );
     });
 });

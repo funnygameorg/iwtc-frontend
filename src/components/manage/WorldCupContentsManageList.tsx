@@ -15,6 +15,7 @@ import {
     ManagedContentDraft,
     PersistedManagedContentView,
 } from '@/domain/manage/persistedContent';
+import { validateManagedContentDraft } from '@/domain/manage/content';
 
 /*
     게임 관리 폼에서 월드컵 게임 컨텐츠에 관한 내용을 표현하는 폼
@@ -87,82 +88,25 @@ const WorldCupContentsManageList = ({
         }));
     };
 
-    // 비디오 형식 컨텐츠 데이터 검증
-    const verifyVideoTypeContents = ({
-        videoStartTime,
-        videoPlayDuration,
-    }: Pick<ManagedContentDraft, 'videoStartTime' | 'videoPlayDuration'>) => {
-        const size5AndOnlyNumberRegex = /^\d{5}$/;
-        const playDuration = Number(videoPlayDuration);
-        if (!size5AndOnlyNumberRegex.test(videoStartTime)) {
-            showAlertPopup("'영상 시작 시간'은 '00000'의 형식입니다. \n 예 : 10분 1초 -> 01001, 0분 30초 -> 00030");
-            return false;
-        }
-
-        if (!(3 <= playDuration && playDuration <= 5)) {
-            showAlertPopup('반복 시간은 3~5초로 설정해주세요.');
-            return false;
-        }
-        return true;
-    };
-
-    // 파일 형식 컨텐츠 데이터 검증
-    const verifyFileTypeContents = ({
-        mediaPath,
-        originalName,
-    }: Pick<ManagedContentDraft, 'mediaPath' | 'originalName'>) => {
-        if (mediaPath === '' || originalName === '') {
-            showAlertPopup('파일이 존재하지 않습니다.');
-            return false;
-        }
-        return true;
-    };
-
-    // 컨텐츠 데이터 검증 공통 파트
-    const verifyAllTypeContents = () => {
-        const { contentsName, visibleType, fileType } = worldCupContents;
-        if (contentsName === '') {
-            showAlertPopup('컨텐츠 이름이 없습니다.');
-            return;
-        }
-
-        if (!(visibleType === 'PUBLIC' || visibleType === 'PRIVATE')) {
-            showAlertPopup('공개 여부를 선택해주세요.');
-            return;
-        }
-
-        if (!(fileType === 'video' || fileType === 'file')) {
-            showAlertPopup('파일 타입이 존재하지 않음');
-            return;
-        }
-        return true;
-    };
-
     const showAlertPopup = (message: string) => {
         showPopup(<AlertPopup message={message} hidePopup={hidePopup} />);
     };
 
     // 새로운 컨텐츠를 리스트 추가
     const applyNewContents = () => {
-        const { fileType, videoStartTime, videoPlayDuration, mediaPath, originalName } = worldCupContents;
-        const isVerify = verifyAllTypeContents();
-        if (isVerify) {
-            if (fileType === 'video') {
-                if (!verifyVideoTypeContents({ videoStartTime, videoPlayDuration })) return;
-            }
-
-            if (fileType === 'file') {
-                if (!verifyFileTypeContents({ mediaPath, originalName })) return;
-            }
-
-            handleMediaFileType('');
-            const updatedContents: ManagedContent = {
-                ...worldCupContents,
-                id: worldCupContentsList.length,
-            };
-            setWorldCupContentsList((prev) => [...prev, updatedContents]);
-            setNewList?.((prev) => [...prev, updatedContents]);
+        const validationMessage = validateManagedContentDraft(worldCupContents);
+        if (validationMessage) {
+            showAlertPopup(validationMessage);
+            return;
         }
+
+        handleMediaFileType('');
+        const updatedContents: ManagedContent = {
+            ...worldCupContents,
+            id: worldCupContentsList.length,
+        };
+        setWorldCupContentsList((prev) => [...prev, updatedContents]);
+        setNewList?.((prev) => [...prev, updatedContents]);
     };
 
     const handleVisibleType = (value: string) => {
