@@ -1,19 +1,18 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { useQueryGetWorldCupGameRound, worldCupGamePlay } from '@/services/WorldCupService';
 import RoundPopup from '@/components/popup/RoundPopup';
 import { useMutation } from '@tanstack/react-query';
-import { isMP4, mappingMediaFile } from '@/utils/common';
+import { mappingMediaFile } from '@/utils/common';
 import { useRouter } from 'next/navigation';
 import { animated } from '@react-spring/web';
-import CustomYoutubePlayer from '@/components/youtubePlayer/CustomYoutubePlayer';
 import Spiner from '@/components/common/Spiner';
 import { createRoundLabels, getRoundProgressIncrement } from '@/domain/game/round';
 import { createWorldCupGameRequest, resolveGameContinuation, resolveGameSelection } from '@/domain/game/play';
 import { MappedMediaContent } from '@/domain/game/mediaFile';
 import { WorldCupGameContent } from '@/interfaces/models/world-cup/WcGameData';
 import { useGameSelectionAnimation } from '@/hooks/useGameSelectionAnimation';
+import GameCandidateMedia from '@/components/game/GameCandidateMedia';
 
 type GameContentView = MappedMediaContent<WorldCupGameContent>;
 
@@ -220,42 +219,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                             }}
                             onClick={() => handleSelection(0)}
                         >
-                            {leftGame.fileType === 'INTERNET_VIDEO_URL' ? (
-                                <div className="flex items-center justify-center h-full">
-                                    <CustomYoutubePlayer
-                                        videoUrl={leftGame.imgUrl}
-                                        time={leftGame.internetMovieStartPlayTime}
-                                        width={'750'}
-                                        height={'500'}
-                                        playDuration={leftGame.videoPlayDuration}
-                                    />
-                                </div>
-                            ) : isMP4(leftGame.imgUrl) ? (
-                                <div className="flex items-center justify-center h-full">
-                                    <video src={leftGame.imgUrl} width={'700'} height={'300'} autoPlay muted loop />
-                                </div>
-                            ) : (
-                                <>
-                                    {/* {isLeftImageLoding && (
-                                        <ImageSpiner
-                                            style={
-                                                'flex items-center justify-center mx-auto left-0 right-0 w-full h-full'
-                                            }
-                                        />
-                                    )} */}
-                                    <Image
-                                        className="h-full w-full"
-                                        src={leftGame.imgUrl}
-                                        width={'750'}
-                                        height={'500'}
-                                        alt={leftGame.name}
-                                        // onLoadingComplete={() => setIsLeftImageLoding(false)}
-                                        // onError={() => setIsLeftImageLoding(true)}
-                                        // style={{ display: isLeftImageLoding ? 'none' : 'block' }}
-                                        // placeholder="blur"
-                                    />
-                                </>
-                            )}
+                            <GameCandidateMedia content={leftGame} />
                             <div className="absolute bottom-10 left-10">
                                 <div className="bg-white text-6xl font-bold text-black px-3 py-3 rounded-md">
                                     {leftGame.name}
@@ -287,30 +251,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                             }}
                             onClick={() => handleSelection(1)}
                         >
-                            {rightGame.fileType === 'INTERNET_VIDEO_URL' ? (
-                                <div className="flex items-center justify-center h-full">
-                                    <CustomYoutubePlayer
-                                        videoUrl={rightGame.imgUrl}
-                                        time={rightGame.internetMovieStartPlayTime}
-                                        width={'750'}
-                                        height={'500'}
-                                        playDuration={rightGame.videoPlayDuration}
-                                    />
-                                </div>
-                            ) : isMP4(rightGame.imgUrl) ? (
-                                <div className="flex items-center justify-center h-full">
-                                    <video src={rightGame.imgUrl} width={'700'} height={'300'} autoPlay muted loop />
-                                </div>
-                            ) : (
-                                <Image
-                                    className="h-full w-full"
-                                    src={rightGame.imgUrl}
-                                    width={'750'}
-                                    height={'500'}
-                                    alt={rightGame.name}
-                                    // placeholder="blur"
-                                />
-                            )}
+                            <GameCandidateMedia content={rightGame} />
                             <div className="absolute bottom-10 right-10">
                                 <div className="bg-white text-6xl font-bold text-black px-3 py-3 rounded-md">
                                     {rightGame.name}
