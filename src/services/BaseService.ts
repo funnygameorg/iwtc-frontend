@@ -43,7 +43,6 @@ instance.interceptors.response.use(
         }
     },
     async (error: AxiosError) => {
-        console.log('response error', error);
         if (error.response!.status === 401) {
             const newToken = await newAccessToken();
             if (newToken.code === 1010101) {

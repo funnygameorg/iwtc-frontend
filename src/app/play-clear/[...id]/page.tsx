@@ -25,9 +25,6 @@ const Page = ({ params }: { params: { id: string[] } }) => {
             const mappingLsit = await mappingMediaFile(data.data);
             setRankList(mappingLsit);
         },
-        onError: (error) => {
-            console.log('에러', error);
-        },
     });
 
     useEffect(() => {

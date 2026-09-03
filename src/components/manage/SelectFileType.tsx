@@ -6,7 +6,6 @@ interface IProps {
 }
 
 const SelectFileType = ({ mediaFileType, handleMediaFileType }: IProps) => {
-    console.log('mediaFileType', mediaFileType);
     return (
         <div className="mb-2">
             <div className="mb-3">

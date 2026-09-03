@@ -1,5 +1,5 @@
 'use client';
-import React, { ChangeEvent, useContext, useEffect } from 'react';
+import React, { ChangeEvent, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { getRegisterFormSchema } from '@/utils/validations/registerValidation';
 import ValidateMessage from '../ValidateMessage';
@@ -70,9 +70,6 @@ const RegisterForm = () => {
         onSuccess: () => {
             router.push('/sign-in');
             showPopup(<AlertPopup message={'회원가입에 성공하셨습니다.'} hidePopup={hidePopup} />);
-        },
-        onError: (error) => {
-            console.log('에러', error);
         },
     });
 

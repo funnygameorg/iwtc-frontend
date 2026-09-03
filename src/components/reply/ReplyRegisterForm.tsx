@@ -20,9 +20,6 @@ const ReplyRegisterForm = ({ worldcupId, contentsId }: IProps) => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: replyQueryKeys.lists(), refetchType: 'all' });
         },
-        onError: (error) => {
-            console.log('에러', error);
-        },
     });
 
     const onClickRegister = () => {
