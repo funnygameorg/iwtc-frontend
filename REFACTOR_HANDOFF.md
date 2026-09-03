@@ -1,6 +1,7 @@
 # iwtc-frontend 리팩터링 인수인계
 
 작성일: 2026-09-02
+최종 통합 검수일: 2026-09-03
 
 ## 시작 지점
 
@@ -43,6 +44,7 @@ npm ci
 ```bash
 npm run lint
 npm run typecheck
+npx tsc --noEmit --noUnusedLocals --noUnusedParameters
 npm test
 npm run build
 ```
@@ -50,6 +52,7 @@ npm run build
 - 테스트: 55개, 21 suites
 - 테스트 도구: 별도 라이브러리 없이 Node.js `node:test`
 - production build는 `.env.production`을 사용한다.
+- `prod/v1.0` 대비 107개 파일, 원격 작업 브랜치 대비 69개 파일의 변경과 로컬 커밋 35개의 목적을 최종 검토했다.
 - lint에는 기존 `@next/next/no-img-element` 경고 3건이 남아 있다.
   - `src/app/play-clear/[...id]/page.tsx`: 2건
   - `src/components/manage/ImageTypeLayout.tsx`: 1건
@@ -257,12 +260,14 @@ rg -n "\\bany\\b" src --glob '*.{ts,tsx}'
 - 응답 없는 네트워크 오류, 요청 설정 없는 401, 일반 서버 오류, 재시도 가능한 401을 테스트로 고정했다.
 - 기존 `@next/next/no-img-element` 경고 3건은 동적 data URL·미디어 렌더 동작을 보존하기 위해 유지했다.
 
-### 8. 최종 통합 검수 (다음 시작점)
+### 8. 최종 통합 검수 (완료)
 
-- `prod/v1.0` 및 원격 작업 브랜치 대비 전체 변경 통계와 커밋 목적을 검토한다.
-- 전체 변경에서 API endpoint·payload, Query Key, UI 구조가 의도치 않게 바뀐 부분이 없는지 확인한다.
-- 깨끗한 작업 트리에서 lint, typecheck, 강화된 미사용 검사, 55개 테스트, production build를 다시 실행한다.
-- 원격 push는 사용자가 명시적으로 요청할 때만 진행한다.
+- `prod/v1.0` 및 원격 작업 브랜치 대비 전체 변경 통계와 커밋 목적을 검토했다.
+- 활성 API endpoint는 기존 문자열과 동일하며, 생성·수정·삭제·게임 진행 request payload 구성은 순수 함수 테스트로 기존 계약을 확인했다.
+- Query Key는 기존 값을 유지한다. 유일한 의미 변경은 서로 다른 월드컵의 랭킹 캐시 공유를 막기 위해 랭킹 키에 월드컵 ID를 추가한 건이며 테스트로 고정했다.
+- 게임 화면의 좌·우 선택 규칙과 애니메이션 방향, 미디어 렌더 속성, 관리 생성 폼의 입력·버튼·스타일이 추출 전과 동일함을 비교했다. 실제 UI에서는 주석 처리된 마크업만 제거됐다.
+- 깨끗한 작업 트리에서 lint, typecheck, 강화된 미사용 검사, 55개 테스트, production build를 다시 실행해 모두 통과했다.
+- 계획한 리팩터링과 최종 안전성 검수는 완료됐다. 원격 push는 사용자가 명시적으로 요청할 때만 진행한다.
 
 ## 작업 시 주의할 기존 동작
 
