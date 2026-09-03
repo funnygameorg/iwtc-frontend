@@ -7,7 +7,6 @@ import { mappingMediaFile } from '@/utils/common';
 import { useRouter } from 'next/navigation';
 import { animated } from '@react-spring/web';
 import Spiner from '@/components/common/Spiner';
-import { createRoundLabels, getRoundProgressIncrement } from '@/domain/game/round';
 import {
     createGameClearPath,
     createWorldCupGameRequest,
@@ -20,6 +19,7 @@ import { MappedMediaContent } from '@/domain/game/mediaFile';
 import { WorldCupGameContent } from '@/interfaces/models/world-cup/WcGameData';
 import { useGameSelectionAnimation } from '@/hooks/useGameSelectionAnimation';
 import GameCandidateMedia from '@/components/game/GameCandidateMedia';
+import { useGameProgress } from '@/hooks/useGameProgress';
 
 type GameContentView = MappedMediaContent<WorldCupGameContent>;
 
@@ -40,38 +40,16 @@ const Page = ({ params }: { params: { id: string } }) => {
         fourthWinnerContentsId: 0,
     });
     const [isSwapping, setIsSwapping] = useState<boolean>(false);
-    const [firstSelectedRound, setFirstSelectedRound] = useState<number>(0);
-    const [progressPercentage, setProgressPercentage] = useState<number>(0);
-    const [roundLabels, setRoundLabels] = useState<Record<string, number>>({});
     const [isLoding, setIsLoding] = useState<boolean>(true);
     const { leftStyle, rightStyle, animateSelection, resetSelectionAnimation } = useGameSelectionAnimation();
+    const { initialRound, progressPercentage, roundLabels, initializeProgress, advanceProgress } =
+        useGameProgress();
 
     const applyGameList = (list: GameContentView[], initialRound: number) => {
         setGameList(list);
 
-        // 8강 기준 4번의 게임을 하면 4강으로 진출 71.4286
-        // (100 / 7 ) * (4 + 1)
-        // 16강 기준 8번의 게임을 하면 8강으로 진출
-        // (100 / 15) * (8 + 1)
-        // 8강에서 4강 계산 총 12번 클릭
-        //
-        //결승은 1
-        // 4강은 2번
-        // 8강은 6번
-        // 16강은 14번에 결승 15번에 끝
-        //32강은 30번에 결승 31번에 끝
-        if (initialRound !== 0) {
-            const percentage = getRoundProgressIncrement(initialRound);
-            setProgressPercentage((prev) => prev + percentage);
-        }
+        advanceProgress(initialRound);
     };
-
-    useEffect(() => {
-        if (firstSelectedRound !== 0) {
-            const newRoundLabels = createRoundLabels(firstSelectedRound);
-            setRoundLabels(newRoundLabels);
-        }
-    }, [firstSelectedRound]);
 
     const getGame = useMutation(worldCupGamePlay, {
         onSuccess: async (data, variables) => {
@@ -88,7 +66,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
     const handleRoundSelect = (round: number) => {
         setSelectRound(round);
-        setFirstSelectedRound(round);
+        initializeProgress(round);
         requestGameRound(round, [], round);
     };
 
@@ -116,7 +94,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             gameList,
             selectRound,
             nextExcludedContents,
-            firstSelectedRound
+            initialRound
         );
         // selectRound가 2이면 결승
         setSaveClickContents(nextExcludedContents);
@@ -144,7 +122,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     continuation.initialRound
                 );
             } else {
-                applyGameList(continuation.remainingContents, firstSelectedRound);
+                applyGameList(continuation.remainingContents, initialRound);
             }
             setIsSwapping(false);
         }, 1000);
