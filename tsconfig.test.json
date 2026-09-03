@@ -29,6 +29,8 @@
         "src/domain/home/worldCupListMedia.test.ts",
         "src/domain/manage/content.ts",
         "src/domain/manage/content.test.ts",
+        "src/domain/manage/save.ts",
+        "src/domain/manage/save.test.ts",
         "src/domain/manage/persistedContent.ts",
         "src/domain/manage/persistedContent.test.ts",
         "src/interfaces/models/world-cup/WcListData.ts",

@@ -12,7 +12,8 @@ import { PopupContext } from '@/providers/PopupProvider';
 import NotCreateWorldCupLogo from './NotCreateWorldCupLogo';
 import { useRouter } from 'next/navigation';
 import { ManagedContent, PersistedManagedContentView } from '@/domain/manage/persistedContent';
-import { createUpdateWorldCupContentRequest, createWorldCupContentRequests } from '@/domain/manage/content';
+import { createWorldCupContentRequests } from '@/domain/manage/content';
+import { saveWorldCupContentChanges } from '@/domain/manage/save';
 
 interface IProps {
     isCreateWorldCup: boolean;
@@ -80,39 +81,16 @@ const WorldCupContentsManageListWrapper = ({
         }
 
         const accessToken = getAccessToken();
-        const promises = [];
-
-        // 삭제 작업을 promises 배열에 추가
-        if (deleteList.length > 0) {
-            const deletePromises = deleteList.map((item) =>
-                removeMyWorldCupContents(worldCupId, item.contentsId, accessToken)
-            );
-            promises.push(...deletePromises);
-        }
-
-        // 업데이트 작업을 promises 배열에 추가
-        if (modifyList.length > 0) {
-            const updatePromises = modifyList.map((item) => {
-                const requestBody = createUpdateWorldCupContentRequest(item);
-                return updateMyWorldCupContents(worldCupId, item.contentsId, requestBody, accessToken);
-            });
-            promises.push(...updatePromises);
-        }
-
-        // 새 컨텐츠 추가 작업을 promises 배열에 추가 (이 부분은 실제 실행 시점에 따라 조정이 필요할 수 있음)
-        if (newList.length > 0) {
-            const bindingNewWorldCupContents = createWorldCupContentRequests(newList);
-            const newContentPromise = createWorldCupContents({
-                // 가정: mutateAsync 메서드 사용
-                worldCupId: worldCupId,
-                params: bindingNewWorldCupContents,
-                token: accessToken,
-            });
-            promises.push(newContentPromise);
-        }
 
         // 모든 비동기 작업을 동시에 실행하고, 모든 작업이 완료될 때까지 기다립니다.
-        await Promise.all(promises)
+        await saveWorldCupContentChanges(
+            { worldCupId, accessToken, deleteList, modifyList, newList },
+            {
+                removeContent: removeMyWorldCupContents,
+                updateContent: updateMyWorldCupContents,
+                createContents: createWorldCupContents,
+            }
+        )
             .then(() => {
                 // queryClient.invalidateQueries(['MyWorldCupContentsList', worldcupId], { refetchInactive: false })
                 setDeleteList?.([]);
