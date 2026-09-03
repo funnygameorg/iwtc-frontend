@@ -3,6 +3,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, RawAxiosRequestHe
 import { newAccessToken, userSignOut } from './MemberService';
 import { localStorageClear } from '@/stores/LocalStore';
 import { removeToken, setToken } from '@/utils/TokenManager';
+import { hasRetryableUnauthorizedRequest } from './axiosError';
 
 const instance = axios.create({
     baseURL: `${BASE_URL}api/`,
@@ -43,7 +44,7 @@ instance.interceptors.response.use(
         }
     },
     async (error: AxiosError) => {
-        if (error.response!.status === 401) {
+        if (hasRetryableUnauthorizedRequest(error)) {
             const newToken = await newAccessToken();
             if (newToken.code === 1010101) {
                 const response = await userSignOut();
@@ -58,8 +59,8 @@ instance.interceptors.response.use(
                 const { newAccessToken, refreshToken } = newToken.data;
                 setToken('ACCESS_TOKEN', newAccessToken);
                 setToken('REFRESH_TOKEN', refreshToken);
-                error.config!.headers['access-token'] = `${newAccessToken}`;
-                return axios.request(error.config!);
+                error.config.headers['access-token'] = `${newAccessToken}`;
+                return axios.request(error.config);
             }
             return;
         }
