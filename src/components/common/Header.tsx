@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import React, { useContext } from 'react';
+import React, { MouseEvent, useContext } from 'react';
 import SignInUpButton from '../header/SignInUpButton';
 import { getUserInfo } from '@/stores/LocalStore';
 import { useAuth } from '@/providers/AuthProvider';
@@ -14,7 +14,7 @@ const Header = () => {
     const userInfo = getUserInfo();
     const userId = userInfo != null ? userInfo.memberId : '';
 
-    const handleLoginBaseService = (e: any) => {
+    const handleLoginBaseService = (e: MouseEvent<HTMLAnchorElement>) => {
         if (!isLoggedIn) {
             e.preventDefault(); // 링크의 기본 동작을 방지합니다.
             showPopup(<AlertPopup message="로그인이 필요한 서비스입니다." hidePopup={hidePopup} />);

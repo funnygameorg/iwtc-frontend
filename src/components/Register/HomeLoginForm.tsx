@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import { getLoginFormSchema } from '@/utils/validations/loginValidation';
 import ValidateMessage from '../ValidateMessage';
@@ -47,9 +47,8 @@ const HomeLoginForm = () => {
     /**
      * handlers
      */
-    const handleChange = (e: any) => {
-        const { name, value } = e.target;
-        setValue(name, value, { shouldValidate: true });
+    const handleChange = (field: keyof FormTypes) => (e: ChangeEvent<HTMLInputElement>) => {
+        setValue(field, e.target.value, { shouldValidate: true });
     };
     const handleLogin = () => {
         const { username, password } = watch();
@@ -86,7 +85,7 @@ const HomeLoginForm = () => {
                             className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded focus:text-gray-700 focus:bg-white focus:border-yellow-400 focus:outline-none"
                             placeholder="Username을 입력해주세요."
                             {...register('username')}
-                            onChange={handleChange}
+                            onChange={handleChange('username')}
                             style={{ width: '100%' }}
                         />
                         {/* {errors.username && <ValidateMessage result={errors.username} />} */}
@@ -96,7 +95,7 @@ const HomeLoginForm = () => {
                             className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded focus:text-gray-700 focus:bg-white focus:border-yellow-400 focus:outline-none"
                             placeholder="비밀번호를 입력해주세요."
                             {...register('password')}
-                            onChange={handleChange}
+                            onChange={handleChange('password')}
                             style={{ width: '100%' }}
                         />
                         {/* {errors.password && <ValidateMessage result={errors.password} />} */}

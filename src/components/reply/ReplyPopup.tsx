@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { CSSProperties, useState } from 'react';
 import { usePopper } from 'react-popper';
 
 interface IProps {
@@ -6,8 +6,8 @@ interface IProps {
     isPopup: boolean;
 }
 const ReplyPopup = ({ commentId, isPopup }: IProps) => {
-    const [referenceElement, setReferenceElement] = useState(null);
-    const [popperElement, setPopperElement] = useState(null);
+    const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(null);
+    const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
     const { styles, attributes } = usePopper(referenceElement, popperElement, {
         placement: 'bottom',
         modifiers: [
@@ -20,7 +20,7 @@ const ReplyPopup = ({ commentId, isPopup }: IProps) => {
         ],
     });
 
-    const customStyles: any = {
+    const customStyles: CSSProperties = {
         position: 'absolute',
         inset: '0px auto auto 0px',
         margin: '0px',

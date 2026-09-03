@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext } from 'react';
+import React, { ChangeEvent, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { getLoginFormSchema } from '@/utils/validations/loginValidation';
 import ValidateMessage from '../ValidateMessage';
@@ -12,9 +12,15 @@ import { setUserInfo } from '@/stores/LocalStore';
 import { useAuth } from '@/providers/AuthProvider';
 import AlertPopup from '../popup/AlertPopup';
 import { PopupContext } from '@/providers/PopupProvider';
+import { isAxiosError } from 'axios';
 interface FormTypes {
     username: string;
     password: string;
+}
+
+interface LoginErrorResponse {
+    errorCode: number;
+    message: string;
 }
 
 const LoginForm = () => {
@@ -45,8 +51,8 @@ const LoginForm = () => {
             login();
             router.push('/');
         },
-        onError: (error: any) => {
-            if (error.response.data) {
+        onError: (error: unknown) => {
+            if (isAxiosError<LoginErrorResponse>(error) && error.response?.data) {
                 const { errorCode, message } = error.response.data;
                 if (errorCode === 5003) {
                     showPopup(<AlertPopup message={message} hidePopup={hidePopup} />);
@@ -58,9 +64,8 @@ const LoginForm = () => {
     /**
      * handlers
      */
-    const handleChange = (e: any) => {
-        const { name, value } = e.target;
-        setValue(name, value, { shouldValidate: true });
+    const handleChange = (field: keyof FormTypes) => (e: ChangeEvent<HTMLInputElement>) => {
+        setValue(field, e.target.value, { shouldValidate: true });
     };
     const handleLogin = () => {
         const { username, password } = watch();
@@ -81,7 +86,7 @@ const LoginForm = () => {
                             className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded focus:text-gray-700 focus:bg-white focus:border-yellow-400 focus:outline-none"
                             placeholder="Username을 입력해주세요."
                             {...register('username')}
-                            onChange={handleChange}
+                            onChange={handleChange('username')}
                         />
                         {errors.username && <ValidateMessage result={errors.username} />}
                         <input
@@ -89,7 +94,7 @@ const LoginForm = () => {
                             className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded focus:text-gray-700 focus:bg-white focus:border-yellow-400 focus:outline-none"
                             placeholder="비밀번호를 입력해주세요."
                             {...register('password')}
-                            onChange={handleChange}
+                            onChange={handleChange('password')}
                         />
                         {errors.password && <ValidateMessage result={errors.password} />}
                     </div>

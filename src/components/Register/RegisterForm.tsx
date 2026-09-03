@@ -1,5 +1,5 @@
 'use client';
-import React, { useContext, useEffect } from 'react';
+import React, { ChangeEvent, useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { getRegisterFormSchema } from '@/utils/validations/registerValidation';
 import ValidateMessage from '../ValidateMessage';
@@ -86,9 +86,8 @@ const RegisterForm = () => {
     /**
      * handlers
      */
-    const handleChange = (e: any) => {
-        const { name, value } = e.target;
-        setValue(name, value, { shouldValidate: true });
+    const handleChange = (field: keyof FormTypes) => (e: ChangeEvent<HTMLInputElement>) => {
+        setValue(field, e.target.value, { shouldValidate: true });
     };
 
     const handleRegister = () => {
@@ -115,7 +114,7 @@ const RegisterForm = () => {
                                 type={items.type}
                                 placeholder={items.placeholder}
                                 {...register(items.inputText)}
-                                onChange={handleChange}
+                                onChange={handleChange(items.inputText)}
                             />
                             {errors[items.inputText] && <ValidateMessage result={errors[items.inputText]} />}
                         </>

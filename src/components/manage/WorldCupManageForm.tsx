@@ -5,12 +5,18 @@ import { useMutation } from '@tanstack/react-query';
 import React, { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 'react';
 import AlertPopup from '../popup/AlertPopup';
 import { PopupContext } from '@/providers/PopupProvider';
+import { isAxiosError } from 'axios';
 
 interface IProps {
     setIsCreateWorldCup: (isCreated: boolean) => void;
     setWorldCupId: (worldCupId: number) => void;
     myWorldCupData?: Pick<ManagedWorldCupSummary, 'title' | 'description' | 'visibleType'>;
     isCreateWorldCup: boolean;
+}
+
+interface ManageWorldCupErrorResponse {
+    errorCode: number;
+    message: string;
 }
 /**
  * 게임 관리 폼에서 월드컵 게임에 관한 내용을 표현하는 폼
@@ -80,9 +86,9 @@ const WorldCupManageForm = ({
             setIsCreateWorldCup(true);
         },
 
-        onError: (error: any) => {
-            const { errorCode, message } = error?.response.data;
-            if (errorCode) {
+        onError: (error: unknown) => {
+            if (isAxiosError<ManageWorldCupErrorResponse>(error) && error.response?.data.errorCode) {
+                const { message } = error.response.data;
                 showAlertPopup(message);
             }
         },
