@@ -109,10 +109,14 @@ npm run build
 - 서비스의 교체된 Query·endpoint·토큰 처리 주석과 인증 헤더·응답 디버그 로그를 제거했다.
 - 화면 컴포넌트의 이전 SSR·수동 조회·모바일 버튼·게임 레이아웃·폼 마크업과 주석에서만 쓰이던 상태·import를 제거했다.
 - 유틸리티의 과거 쿠키·localStorage 구현과 FFmpeg용 교차 출처 격리 설정을 포함한 잔여 코드형 주석을 제거했다.
+- import 그래프와 Git 이력을 확인해 `HomeLoginForm`, `Sidebar`, `ReplyPopup`, `SessionStore`를 제거하고 Popper 패키지의 중복 직접 선언을 제거했다.
+- 강화된 TypeScript 미사용 검사까지 통과하도록 빈 핸들러·미사용 import와 개발용 `console.log`를 제거했다.
 
 최근 작업 커밋:
 
 ```text
+89a1114 refactor: 미사용 핸들러와 개발 로그 정리
+7039141 refactor: 미참조 모듈 제거
 c2136a3 refactor: 잔여 레거시 주석 정리
 9d5fd22 refactor: 미사용 화면 마크업 정리
 0de4967 refactor: 화면 과거 구현 정리
@@ -197,13 +201,13 @@ rg -n "\\bany\\b" src --glob '*.{ts,tsx}'
 
 정리한 주요 위치:
 
-- `src/components/Register/HomeLoginForm.tsx`: 입력 이벤트
+- `src/components/Register/HomeLoginForm.tsx`: 입력 이벤트 (후속 미참조 확인 후 파일 제거)
 - `src/components/Register/LoginForm.tsx`: mutation 오류와 입력 이벤트
 - `src/components/Register/RegisterForm.tsx`: 입력 이벤트
 - `src/components/common/Header.tsx`: 클릭 이벤트
 - `src/components/manage/WorldCupManageForm.tsx`: mutation 오류
 - `src/components/ValidateMessage/index.tsx`: 검증 결과 구조
-- `src/components/reply/ReplyPopup.tsx`: style 객체
+- `src/components/reply/ReplyPopup.tsx`: style 객체 (후속 미참조 확인 후 파일 제거)
 
 적용한 타입:
 
@@ -236,13 +240,19 @@ rg -n "\\bany\\b" src --glob '*.{ts,tsx}'
 - 비활성 GIF→MP4 변환 코드의 유지·제거 여부 확인 (제거 완료)
 - Git 이력상 2024-01-15부터 YouTube 라이브러리와의 충돌로 비활성 상태였고, import·동적 import·설정 참조가 없어 관련 주석 코드와 의존성·런타임을 함께 제거했다.
 
-### 6. dead code·unused dependency 확인 (진행 중, 다음 시작점)
+### 6. dead code·unused dependency 확인 (완료)
 
 - 관리 카드의 주석 처리된 직접 저장 구현과 개발용 로그는 제거했다.
 - 직접 의존성의 소스·설정 참조를 점검했고, `recoil`과 중복 선언된 `@types/prop-types`를 제거했다.
 - 서비스·화면·유틸리티·설정 파일의 코드형 주석은 Git 이력과 활성 흐름을 확인한 뒤 제거했다.
-- 다음에는 실제 import가 없는 모듈·컴포넌트와 활성 개발 로그를 확인한다. 공개 export나 라우트 진입점은 파일명 검색 결과만으로 삭제하지 않는다.
-- dependency 추가 삭제가 필요하면 import, 동적 import, 빌드 설정 참조를 다시 모두 검색한다.
+- 실제 import가 없는 모듈·컴포넌트는 문자열·동적 참조와 Git 이력을 확인한 뒤 제거했다. 삭제 후 import 그래프에 고립된 모듈이 없음을 재확인했다.
+- 활성 `console.log`와 TypeScript 미사용 진단을 정리했다. 비동기 작업 실패를 알리는 `console.error` 2건은 유지했다.
+
+### 7. 최종 안전성 점검 (다음 시작점)
+
+- 활성 `any`, 타입 오류 억제 주석, 이중 assertion은 현재 검색 결과가 없다.
+- `src/services/BaseService.ts`의 Axios 오류 처리에 non-null assertion 2건이 남아 있다. 네트워크 오류처럼 `response`가 없는 경우의 동작을 테스트로 고정한 뒤 guard로 좁힌다.
+- 기존 `@next/next/no-img-element` 경고 3건은 data URL·미디어 렌더 동작에 영향이 없는지 확인하기 전에는 기계적으로 `next/image`로 바꾸지 않는다.
 
 ## 작업 시 주의할 기존 동작
 
