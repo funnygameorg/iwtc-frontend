@@ -35,15 +35,11 @@ export const userMeSummary = async (token: string) => {
         'Content-Type': 'application/json',
         'access-token': `${token}`,
     };
-    // try {
     const response = await ajaxGet<UserSummaryResponse>(`/members/me/summary`, {
         headers: headers,
         timeout: 5000,
     });
     return response.data;
-    // } catch (e) {
-    //     console.log('eeee', e);
-    // }
 };
 
 export const newAccessToken = async () => {

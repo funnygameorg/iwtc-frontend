@@ -52,35 +52,21 @@ instance.interceptors.response.use(
                     removeToken('ACCESS_TOKEN');
                     removeToken('REFRESH_TOKEN');
                     localStorageClear();
-                    // logout();
                     window.alert('로그인이 만료되었습니다. 다시 로그인을 해주세요.');
                     window.location.href = '/sign-in';
                 }
             } else {
                 const { newAccessToken, refreshToken } = newToken.data;
-                // // ACCESS_TOKEN 저장
                 setToken('ACCESS_TOKEN', newAccessToken);
                 setToken('REFRESH_TOKEN', refreshToken);
                 error.config!.headers['access-token'] = `${newAccessToken}`;
                 return axios.request(error.config!);
-                // const userInfo = await userMeSummary(token);
-                // setUserInfo(userInfo.data);
             }
             return;
         }
-        // if (typeof window !== 'undefined') {
-        //     window.alert('다시 시도해주세요!');
-        // }
         return Promise.reject(error);
     }
 );
-
-// // header에 token 셋팅
-// export const setAuthToken = (token: string) => {
-//   instance.defaults.headers.common['X-Auth-Token'] = token;
-//   // LocalStorage.setAuthToken(token);
-//   // SessionStorage.setAuthToken(token);
-// };
 
 export const ajaxGet = async <T = unknown>(subUrl: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> => {
     return instance.get(subUrl, config);

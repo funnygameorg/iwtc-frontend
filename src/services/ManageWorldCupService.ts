@@ -52,11 +52,9 @@ export const createWorldCup = async ({ title, description, visibleType, token }:
     const authHeaders = createHeader(token);
 
     const param = { title, description, visibleType };
-    console.log('월드컵 생성 시 요청값 ', authHeaders, param);
     const response = await ajaxPost<CreateWorldCupResponse, typeof param>(`/me/game-manage/world-cups`, param, {
         headers: authHeaders,
     });
-    console.log('response ===>', response);
     return response.data;
 };
 
@@ -79,8 +77,6 @@ export const createWorldCupContents = async ({
         { headers: authHeaders }
     );
 
-    console.log('response ===>', response);
-
     return response.data;
 };
 
@@ -93,7 +89,6 @@ export const getMyWorldCupList = async (token: string) => {
         timeout: 5000,
     });
 
-    console.log('response ===>', response);
     return response;
 };
 
@@ -110,13 +105,11 @@ export const useQueryGetMyWorldCupList = (token: string) => {
 export const getMyWorldCup = async (worldCupId: number) => {
     const authHeaders = createHeader(getAccessToken());
 
-    // const response = await ajaxGet(`/world-cups/me/${worldCupId}`, {
     const response = await ajaxGet<ManagedWorldCupDetailResponse>(`me/game-manage/world-cups/${worldCupId}`, {
         headers: authHeaders,
         timeout: 5000,
     });
 
-    console.log('response ===>', response);
     return response;
 };
 
@@ -141,7 +134,6 @@ export const getMyWorldCupContentsList = async (worldCupId: number) => {
         }
     );
 
-    console.log('response ===>', response);
     return response;
 };
 
@@ -165,10 +157,8 @@ export const updateMyWorldCupContents = async (
     params: UpdateWorldCupContentRequest,
     token: string
 ) => {
-    console.log('test ===>', params);
     const authHeaders = createHeader(token);
 
-    // const response = await ajaxPut(`/world-cups/me/${worldCupId}/contents/${contentsId}`, params, {
     const response = await ajaxPut<void, UpdateWorldCupContentRequest>(
         `/me/game-contents-manage/world-cups/${worldCupId}/contents/${contentsId}`,
         params,
@@ -177,8 +167,6 @@ export const updateMyWorldCupContents = async (
             timeout: 5000,
         }
     );
-
-    console.log('response ===>', response);
 
     if (response) {
         return response;
@@ -189,13 +177,11 @@ export const updateMyWorldCupContents = async (
 export const removeMyWorldCupContents = async (worldCupId: number, contentsId: number, token: string) => {
     const authHeaders = createHeader(token);
 
-    // const response = await ajaxDelete(`/world-cups/me/${worldCupId}/contents/${contentsId}`, null, authHeaders);
     const response = await ajaxDelete<void>(
         `/me/game-contents-manage/world-cups/${worldCupId}/contents/${contentsId}`,
         null,
         authHeaders
     );
-    console.log('response ===>', response);
 
     if (response) {
         return response;
@@ -210,8 +196,6 @@ export const deleteMyWorldCup = async ({ worldCupId, token }: DeleteMyWorldCupRe
         null,
         authHeaders
     );
-
-    console.log('response ===>', response);
 
     if (response) {
         return response;

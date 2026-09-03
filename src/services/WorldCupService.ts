@@ -11,20 +11,11 @@ import {
     WorldCupRoundResponse,
 } from '@/interfaces/models/world-cup/WcGameData';
 
-// export const useQueryGetWorldCupAllList = (page: number, size: number, sort: number) => {
-//     return useQuery<any, Error>(['WorldCupList', page, size, sort], () => worldCupAllList(page, size, sort), {
-//         retry: 0,
-//         refetchOnWindowFocus: false,
-//         staleTime: 1000,
-//     });
-// };
-
 export const worldCupAllList = async (
     page: number,
     size: number,
     sort: string,
     keyword?: string,
-    // memberId?: number,
     dateRange = 'ALL'
 ): Promise<WCListParent> => {
     const param = {
@@ -33,7 +24,6 @@ export const worldCupAllList = async (
         sort: `${sort},DESC`,
         keyword,
         dateRange,
-        // memberId,
     };
     const response = await ajaxGet<WCListApiEnvelope>('/world-cups', { params: param });
     return loadWCListData(response.data.data);
