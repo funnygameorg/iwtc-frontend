@@ -1,33 +1,21 @@
 'use client';
-import React, { ChangeEvent, Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import Image from 'next/image';
+import React, { ChangeEvent, Dispatch, SetStateAction, useContext, useRef, useState } from 'react';
 import ManageCardWrapper from './contentsListCard/ManageCardWrapper';
 import AlertPopup from '../popup/AlertPopup';
 import { PopupContext } from '@/providers/PopupProvider';
-import { FFmpeg, createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
-import SelectFileType from './SelectFileType';
-import SelectVisibleType from './SelectVisibleType';
-import ImageTypeLayout from './ImageTypeLayout';
-import YoutubeTypeLayout from './YoutubeTypeLayout';
 import {
     ManagedContent,
     ManagedContentDraft,
     PersistedManagedContentView,
 } from '@/domain/manage/persistedContent';
 import { validateManagedContentDraft } from '@/domain/manage/content';
+import WorldCupContentCreateForm from './WorldCupContentCreateForm';
 
 /*
     게임 관리 폼에서 월드컵 게임 컨텐츠에 관한 내용을 표현하는 폼
     TODO : 리스트의 Card 내용을 컴포넌트로 따로 분리하기
 */
 
-// const ffmpeg: FFmpeg = createFFmpeg({
-//     // corePath: '../../node_modules/@ffmpeg/core/dist/ffmpeg-core.js',
-//     // corePath: '/ffmpeg/core@0.11.0/ffmpeg-core.js',
-//     corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
-//     log: true,
-// });
 interface IProps {
     worldCupContentsList: ManagedContent[];
     setWorldCupContentsList: Dispatch<SetStateAction<ManagedContent[]>>;
@@ -67,16 +55,6 @@ const WorldCupContentsManageList = ({
         imgType: '',
         detailFileType: '',
     });
-
-    useEffect(() => {
-        //ffmpeg load
-        // load();
-    }, []);
-
-    // const load = async () => {
-    //     await ffmpeg.load();
-    //     setReady(true);
-    // };
 
     const handleCreateWorldCupContents = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -139,74 +117,19 @@ const WorldCupContentsManageList = ({
 
     return (
         <div>
-            <div className="w-full h-full mb-4 p-4 border rounded-xl shadow bg-gray-200">
-                <div>
-                    <SelectFileType mediaFileType={mediaFileType} handleMediaFileType={handleMediaFileType} />
-                </div>
-                {mediaFileType && (
-                    <div className="flex justify-between">
-                        <div className="flex min-w-0 gap-x-4">
-                            <div className="flex-1 min-w-0">
-                                <div className="mb-2">
-                                    <strong className="ml-1">이상형 이름</strong>
-                                    <div className="flex flex-col space-y-2">
-                                        <input
-                                            id="textInput"
-                                            type="text"
-                                            className="p-1 border rounded-xl"
-                                            placeholder="이상형 이름"
-                                            name="contentsName"
-                                            value={worldCupContents.contentsName}
-                                            onChange={handleCreateWorldCupContents}
-                                        />
-                                    </div>
-                                </div>
-                                {mediaFileType === 'file' ? (
-                                    <ImageTypeLayout
-                                        isImageLoaded={isImageLoaded}
-                                        setIsImageLoaded={setIsImageLoaded}
-                                        setWorldCupContents={setWorldCupContents}
-                                        fowardVideoRef={videoRef}
-                                        fowardImgRef={imgRef}
-                                        mp4Type={worldCupContents.mp4Type}
-                                        imgType={worldCupContents.imgType}
-                                    />
-                                ) : (
-                                    <YoutubeTypeLayout
-                                        mediaPath={worldCupContents.mediaPath}
-                                        videoStartTime={worldCupContents.videoStartTime}
-                                        videoPlayDuration={worldCupContents.videoPlayDuration}
-                                        handleCreateWorldCupContents={handleCreateWorldCupContents}
-                                    />
-                                )}
-                                <SelectVisibleType
-                                    visibleType={worldCupContents.visibleType}
-                                    handleVisibleType={handleVisibleType}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="sm:flex sm:flex-col sm:items-end">
-                            <div>
-                                <button
-                                    className="bg-green-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded"
-                                    onClick={() => applyNewContents()}
-                                >
-                                    추가하기
-                                </button>
-                            </div>
-                            <div>
-                                <button
-                                    className="bg-orange-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded"
-                                    onClick={() => handleMediaFileType('')}
-                                >
-                                    돌아가기
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </div>
+            <WorldCupContentCreateForm
+                mediaFileType={mediaFileType}
+                contents={worldCupContents}
+                isImageLoaded={isImageLoaded}
+                setIsImageLoaded={setIsImageLoaded}
+                setContents={setWorldCupContents}
+                videoRef={videoRef}
+                imageRef={imgRef}
+                onContentsChange={handleCreateWorldCupContents}
+                onVisibleTypeChange={handleVisibleType}
+                onMediaFileTypeChange={handleMediaFileType}
+                onAdd={applyNewContents}
+            />
             {worldCupContentsList.length > 0 &&
                 worldCupContentsList.map((contents, index) => (
                     <ManageCardWrapper
