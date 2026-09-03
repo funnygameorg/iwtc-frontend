@@ -47,7 +47,7 @@ npm test
 npm run build
 ```
 
-- 테스트: 51개, 20 suites
+- 테스트: 55개, 21 suites
 - 테스트 도구: 별도 라이브러리 없이 Node.js `node:test`
 - production build는 `.env.production`을 사용한다.
 - lint에는 기존 `@next/next/no-img-element` 경고 3건이 남아 있다.
@@ -111,10 +111,12 @@ npm run build
 - 유틸리티의 과거 쿠키·localStorage 구현과 FFmpeg용 교차 출처 격리 설정을 포함한 잔여 코드형 주석을 제거했다.
 - import 그래프와 Git 이력을 확인해 `HomeLoginForm`, `Sidebar`, `ReplyPopup`, `SessionStore`를 제거하고 Popper 패키지의 중복 직접 선언을 제거했다.
 - 강화된 TypeScript 미사용 검사까지 통과하도록 빈 핸들러·미사용 import와 개발용 `console.log`를 제거했다.
+- Axios 401 재시도 조건을 타입 가드로 분리해 응답·요청 설정이 모두 있을 때만 재발급하며, 응답 없는 네트워크 오류를 포함한 4개 경로를 테스트했다.
 
 최근 작업 커밋:
 
 ```text
+11ab4ab refactor: Axios 재시도 오류 조건 안전화
 89a1114 refactor: 미사용 핸들러와 개발 로그 정리
 7039141 refactor: 미참조 모듈 제거
 c2136a3 refactor: 잔여 레거시 주석 정리
@@ -248,11 +250,19 @@ rg -n "\\bany\\b" src --glob '*.{ts,tsx}'
 - 실제 import가 없는 모듈·컴포넌트는 문자열·동적 참조와 Git 이력을 확인한 뒤 제거했다. 삭제 후 import 그래프에 고립된 모듈이 없음을 재확인했다.
 - 활성 `console.log`와 TypeScript 미사용 진단을 정리했다. 비동기 작업 실패를 알리는 `console.error` 2건은 유지했다.
 
-### 7. 최종 안전성 점검 (다음 시작점)
+### 7. 최종 안전성 점검 (완료)
 
 - 활성 `any`, 타입 오류 억제 주석, 이중 assertion은 현재 검색 결과가 없다.
-- `src/services/BaseService.ts`의 Axios 오류 처리에 non-null assertion 2건이 남아 있다. 네트워크 오류처럼 `response`가 없는 경우의 동작을 테스트로 고정한 뒤 guard로 좁힌다.
-- 기존 `@next/next/no-img-element` 경고 3건은 data URL·미디어 렌더 동작에 영향이 없는지 확인하기 전에는 기계적으로 `next/image`로 바꾸지 않는다.
+- `src/services/BaseService.ts`의 Axios 오류 처리에 있던 non-null assertion 2건을 제거했다.
+- 응답 없는 네트워크 오류, 요청 설정 없는 401, 일반 서버 오류, 재시도 가능한 401을 테스트로 고정했다.
+- 기존 `@next/next/no-img-element` 경고 3건은 동적 data URL·미디어 렌더 동작을 보존하기 위해 유지했다.
+
+### 8. 최종 통합 검수 (다음 시작점)
+
+- `prod/v1.0` 및 원격 작업 브랜치 대비 전체 변경 통계와 커밋 목적을 검토한다.
+- 전체 변경에서 API endpoint·payload, Query Key, UI 구조가 의도치 않게 바뀐 부분이 없는지 확인한다.
+- 깨끗한 작업 트리에서 lint, typecheck, 강화된 미사용 검사, 55개 테스트, production build를 다시 실행한다.
+- 원격 push는 사용자가 명시적으로 요청할 때만 진행한다.
 
 ## 작업 시 주의할 기존 동작
 
