@@ -32,48 +32,11 @@ const ImageTypeLayout = ({
         reader.addEventListener('load', (e: ProgressEvent<FileReader>) => {
             if (!e || !e.target) return;
             const readerResult = e.target.result;
-            // TODO: YOUTUBE 라이브러리와 변환 라이브러리 같이 적용 X 문제로 인해 주석처리
-            // if (imageFile.type === 'image/gif') {
-            //     setWorldCupContents((prevWorldCupContents: any) => ({
-            //         ...prevWorldCupContents,
-            //         originalName: imageFile.name,
-            //         absoluteName: imageFile.name,
-            //         mediaPath: e?.target?.result,
-            //         mp4Type: type,
-            //     }));
-            // } else {
             setWorldCupContents((prevWorldCupContents) => ({
                 ...prevWorldCupContents,
                 ...createImageDraftFields(imageFile, readerResult),
-                // fileType
             }));
-            // }
         });
-
-        // if (imageFile.type === 'image/gif') {
-        //     ffmpeg.FS('writeFile', imageFile.name, await fetchFile(imageFile));
-        //     await ffmpeg.run('-i', imageFile.name, 'output.mp4');
-        //     // await ffmpeg.run(
-        //     //     '-f',
-        //     //     'gif',
-        //     //     '-i',
-        //     //     imageFile.name,
-        //     //     '-movflags',
-        //     //     '+faststart',
-        //     //     '-pix_fmt',
-        //     //     'yuv420p',
-        //     //     '-vf',
-        //     //     'scale=trunc(iw/2)*2:trunc(ih/2)*2',
-        //     //     'output.mp4'
-        //     // );
-
-        //     const data = ffmpeg.FS('readFile', 'output.mp4');
-        //     // const url = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
-        //     const url = new Blob([data.buffer], { type: 'video/mp4' });
-
-        //     reader.readAsDataURL(url);
-        //     return;
-        // }
 
         reader.readAsDataURL(imageFile);
     };

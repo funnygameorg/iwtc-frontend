@@ -13,9 +13,6 @@
         "test": "tsc -p tsconfig.test.json && node --test .test-dist/utils/*.test.js .test-dist/domain/game/*.test.js .test-dist/domain/home/*.test.js .test-dist/domain/manage/*.test.js .test-dist/interfaces/models/world-cup/*.test.js .test-dist/lib/react-query/*.test.js"
     },
     "dependencies": {
-        "@ffmpeg/core": "^0.10.0",
-        "@ffmpeg/ffmpeg": "^0.11.6",
-        "@ffmpeg/util": "^0.12.1",
         "@hookform/resolvers": "^3.3.1",
         "@popperjs/core": "^2.11.8",
         "@react-spring/web": "^9.7.3",
