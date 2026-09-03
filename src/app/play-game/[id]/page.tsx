@@ -10,7 +10,7 @@ import { animated, useSpring } from '@react-spring/web';
 import CustomYoutubePlayer from '@/components/youtubePlayer/CustomYoutubePlayer';
 import Spiner from '@/components/common/Spiner';
 import { createRoundLabels, getRoundProgressIncrement } from '@/domain/game/round';
-import { createWorldCupGameRequest, resolveGameSelection } from '@/domain/game/play';
+import { createWorldCupGameRequest, resolveGameContinuation, resolveGameSelection } from '@/domain/game/play';
 import { MappedMediaContent } from '@/domain/game/mediaFile';
 import { WorldCupGameContent } from '@/interfaces/models/world-cup/WcGameData';
 
@@ -131,6 +131,12 @@ const Page = ({ params }: { params: { id: string } }) => {
             selectedIndex,
             saveClickContents
         );
+        const continuation = resolveGameContinuation(
+            gameList,
+            selectRound,
+            nextExcludedContents,
+            firstSelectedRound
+        );
         // selectRound가 2이면 결승
         setSaveClickContents(nextExcludedContents);
         if (selectRound === 4) {
@@ -143,7 +149,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             }
         }
 
-        if (selectRound === 2) {
+        if (continuation.type === 'finish') {
             const updatedRankContents = {
                 ...rankContents,
                 firstWinnerContentsId: winnerContentId,
@@ -156,23 +162,19 @@ const Page = ({ params }: { params: { id: string } }) => {
             return;
             // 최종 선택 API 호출 후 return
         }
-        // 배열을 2개씩 자름 결국 2개 남았을 때 클릭 하면 다음 라운드 진출
-        if (gameList.length === 2) {
-            setTimeout(() => {
-                handleRightImageClick(0, 0);
-                handleLeftImageClick(0, 0);
-                const nextRound = selectRound / 2;
-                setSelectRound(nextRound);
-                requestGameRound(nextRound, nextExcludedContents, firstSelectedRound);
-                setIsSwapping(false);
-            }, 1000);
-            return;
-        }
         setTimeout(() => {
             handleRightImageClick(0, 0);
             handleLeftImageClick(0, 0);
-            const newGameList = gameList.slice(2);
-            applyGameList(newGameList, firstSelectedRound);
+            if (continuation.type === 'request-next-round') {
+                setSelectRound(continuation.nextRound);
+                requestGameRound(
+                    continuation.nextRound,
+                    continuation.excludedContentsIds,
+                    continuation.initialRound
+                );
+            } else {
+                applyGameList(continuation.remainingContents, firstSelectedRound);
+            }
             setIsSwapping(false);
         }, 1000);
         // useSpringAnimation(0, 0);
