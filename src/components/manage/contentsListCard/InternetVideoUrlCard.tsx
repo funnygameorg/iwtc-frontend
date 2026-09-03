@@ -64,9 +64,7 @@ const InternetVideoUrlCard = ({
 
         setWorldCupContentsList((prev) => {
             // 먼저 삭제할 컨텐츠를 식별합니다.
-            console.log('prev', prev);
             const foundContent = prev.find((contents) => contents.id === index);
-            console.log('prev2', foundContent, index);
 
             if (foundContent) {
                 deleteResult.content = { ...foundContent };
@@ -78,43 +76,17 @@ const InternetVideoUrlCard = ({
                 .map((contents, newIndex) => ({ ...contents, id: newIndex }));
         });
         const deleteContent = deleteResult.content;
-        // setWorldCupContentsList((prev: any) =>
-        //     prev
-        //         .filter((contents: any) => contents.id !== index)
-        //         .map((contents: any, newIndex: number) => ({ ...contents, id: newIndex }))
-        // );
-        // if (mediaData.contentsId) {
-        //     const accessToken = getAccessToken();
 
-        //     removeMyWorldCupContents(worldCupId, mediaData.contentsId, accessToken);
-        // }
-        console.log('deleteContent', deleteContent, setNewList, setDeleteList);
         if (deleteContent && setNewList && setDeleteList) {
             // newList에서 deleteContent와 일치하는 항목을 제외하고 새로운 배열을 생성합니다.
             //새롭게 추가된 컨텐츠는 deleteList에 넣으면 안된다. 네임과 미디어패스로 구분 이후 수정할 때 newList도 수정해줘야함
             if (!hasPersistedContentId(deleteContent)) {
                 if (newList.length > 0) {
-                    setNewList((prev) =>
-                        prev.filter(
-                            (item) => item.absoluteName !== deleteContent.absoluteName
-                            // &&
-                            // item.mediaPath !== deleteContent.mediaPath
-                        )
-                    );
-                    // setNewList((prev: any) => prev.filter((item: any) => item.contentsName !== deleteContent.contentsName));
+                    setNewList((prev) => prev.filter((item) => item.absoluteName !== deleteContent.absoluteName));
                 }
             } else {
                 setDeleteList((prev) => [...prev, deleteContent]);
             }
-
-            // deleteContent가 newList에 존재하지 않는 경우에만 setDeleteList를 업데이트합니다.
-            // if (
-            //     !newList.some(
-            //         (item: any) =>
-            //             item.contentsName === deleteContent.contentsName && item.mediaPath === deleteContent.mediaPath
-            //     )
-            // ) {
-            // }
         }
     };
 
@@ -137,43 +109,34 @@ const InternetVideoUrlCard = ({
             ...prevData,
             [name]: value,
         }));
-        if (name === 'visibleType') {
-            // forceUpdate({}); //TODO: forceUpdate 사용처 확인
-        }
     };
 
     const applyUpdateContents = () => {
         const updateResult: { content?: ManagedContent } = {};
 
-        setWorldCupContentsList(
-            (prev) =>
-                prev.map((contents) => {
-                    if (contents.id === index) {
-                        // 수정 조건을 만족하는 경우, 수정된 컨텐츠 정보를 저장
-                        if (
-                            contents.contentsName !== mediaData.contentsName ||
-                            contents.mediaData !== mediaData.mediaData ||
-                            contents.videoStartTime !== mediaData.videoStartTime ||
-                            contents.videoPlayDuration !== mediaData.videoPlayDuration
-                        ) {
-                            const modifiedContent = {
-                                ...contents,
-                                contentsName: mediaData.contentsName,
-                                mediaData: mediaData.mediaData,
-                                videoStartTime: mediaData.videoStartTime,
-                                videoPlayDuration: mediaData.videoPlayDuration,
-                            };
-                            updateResult.content = modifiedContent;
-                            return modifiedContent;
-                        }
+        setWorldCupContentsList((prev) =>
+            prev.map((contents) => {
+                if (contents.id === index) {
+                    // 수정 조건을 만족하는 경우, 수정된 컨텐츠 정보를 저장
+                    if (
+                        contents.contentsName !== mediaData.contentsName ||
+                        contents.mediaData !== mediaData.mediaData ||
+                        contents.videoStartTime !== mediaData.videoStartTime ||
+                        contents.videoPlayDuration !== mediaData.videoPlayDuration
+                    ) {
+                        const modifiedContent = {
+                            ...contents,
+                            contentsName: mediaData.contentsName,
+                            mediaData: mediaData.mediaData,
+                            videoStartTime: mediaData.videoStartTime,
+                            videoPlayDuration: mediaData.videoPlayDuration,
+                        };
+                        updateResult.content = modifiedContent;
+                        return modifiedContent;
                     }
-                    return contents;
-                })
-            // prev.map((contents: any) =>
-            //     contents.id === index
-            //         ? { ...contents, contentsName: mediaData.contentsName, mediaData: mediaData.mediaData }
-            //         : contents
-            // )
+                }
+                return contents;
+            })
         );
         const modifiedContent = updateResult.content;
 
@@ -202,30 +165,6 @@ const InternetVideoUrlCard = ({
                 });
             }
         }
-
-        console.log('modifiedContent', modifiedContent);
-        // setWorldCupContentsList((prev: any) =>
-        //     prev.map((contents: any) =>
-        //         contents.id === index
-        //             ? { ...contents, contentsName: mediaData.contentsName, mediaData: mediaData.mediaData }
-        //             : contents
-        //     )
-        // );
-
-        // if (mediaData.contentsId) {
-        //     const accessToken = getAccessToken();
-        //     const requestBody = {
-        //         contentsName: mediaData.contentsName,
-        //         originalName: mediaData.originalName,
-        //         mediaData: mediaData.mediaData,
-        //         videoStartTime: mediaData.videoStartTime,
-        //         videoPlayDuration: mediaData.videoPlayDuration,
-        //         visibleType: mediaData.visibleType,
-        //     };
-        //     // console.log('전송 데이터', requestBody);
-
-        //     updateMyWorldCupContents(worldCupId, mediaData.contentsId, requestBody, accessToken);
-        // }
 
         setIsUpdateMode(false);
     };
