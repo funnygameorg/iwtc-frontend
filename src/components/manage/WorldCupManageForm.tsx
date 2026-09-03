@@ -55,23 +55,6 @@ const WorldCupManageForm = ({
         }
     }, [myWorldCupData]);
 
-    // useEffect(() => {
-    //     if (params.initWorldCupGame !== undefined) {
-    //         setValue({
-    //             title: params.initWorldCupGame.title,
-    //             description: params.initWorldCupGame.description,
-    //             visibleType: params.initWorldCupGame.visibleType,
-    //         });
-    //         setFreezeWorldCup({
-    //             freezeTitle: params.initWorldCupGame.title,
-    //             freezeDescription: params.initWorldCupGame.description,
-    //             freezeVisibleType: params.initWorldCupGame.visibleType,
-    //         });
-    //     }
-    // }, [params.initWorldCupGame]);
-
-    // const { title, description, visibleType } = worldCup;
-
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setWorldCuptInfo((prevWorldCup) => ({

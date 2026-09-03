@@ -1,5 +1,4 @@
 import '../styles/globals.css';
-// import "tw-elements-react/dist/css/tw-elements-react.min.css";
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import QueryProvider from '@/providers/QueryProvider';
@@ -39,9 +38,6 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <>
             <html lang="en">
-                {/* <head>
-                    <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
-                </head> */}
                 <body className={inter.className} suppressHydrationWarning={true}>
                     {isMobile ? (
                         <MobileView />
@@ -49,7 +45,6 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                         <QueryProvider>
                             <AuthProvider>
                                 <PopupProvider>
-                                    {/* TODO: 공통 header적용 */}
                                     <Header />
                                     {children}
                                 </PopupProvider>

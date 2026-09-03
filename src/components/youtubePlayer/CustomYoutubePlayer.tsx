@@ -72,9 +72,6 @@ const CustomYoutubePlayer = ({ videoUrl, time, width, height, isAutoPlay = true,
             }}
             onReady={onReady}
             onStateChange={onStateChange}
-            // onEnd={(e) => {
-            //     e.target.stopVideo(0);
-            // }}
         />
     );
 };

@@ -28,7 +28,6 @@ const Page = ({ params }: { params: { id: string } }) => {
 
     const worldCupId = Number(params.id);
     const { data: roundList } = useQueryGetWorldCupGameRound(worldCupId);
-    // const {worldCupTitle} = roundList?.data
     const [selectRound, setSelectRound] = useState<number>(0);
     const [isPlay, setIsPlay] = useState<boolean>(false);
     const [gameList, setGameList] = useState<GameContentView[]>([]);
@@ -107,10 +106,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                 winnerContentId,
                 loserContentId,
             });
-            // setRankContents(updatedRankContents);
             router.push(createGameClearPath(worldCupId, updatedRankContents));
             return;
-            // 최종 선택 API 호출 후 return
         }
         setTimeout(() => {
             resetSelectionAnimation();
@@ -126,8 +123,6 @@ const Page = ({ params }: { params: { id: string } }) => {
             }
             setIsSwapping(false);
         }, 1000);
-        // useSpringAnimation(0, 0);
-        //클릭한 아이템은 저장!
     };
 
     if (!isPlay) {
@@ -141,16 +136,9 @@ const Page = ({ params }: { params: { id: string } }) => {
     if (gameList.length > 0) {
         const leftGame = gameList[0];
         const rightGame = gameList[1];
-        const wcTitle = roundList?.data?.worldCupTitle;
-        const nameLength = wcTitle ? wcTitle.length : 0;
-        const calculatedWidth = `${nameLength * 2}rem`; // 예시로 간단한 계산을 적용했습니다.
         return (
             <>
                 <div className="grid h-full flex  place-items-center box-border" style={{ height: '1000px' }}>
-                    {/* <div
-                        className="absolute mx-auto left-0 right-0 text-center z-10 rounded-md shadow-md "
-                        style={{ width: calculatedWidth }}
-                    > */}
                     <div style={{ height: '15px' }} />
                     <h1 className="text-white text-2xl font-black">🔥 {roundList?.data?.worldCupTitle} 🔥</h1>
                     <h1 className="text-white text-2xl font-black">
@@ -179,15 +167,12 @@ const Page = ({ params }: { params: { id: string } }) => {
                         ))}
                     </div>
                     <div
-                        // key={index}
                         className="absolute left-0 transform -translate-x-1/2 -translate-y-1/2"
                         style={{ left: `${progressPercentage}%`, top: '50%' }}
                     >
                         {`4강`}
                     </div>
-                    {/* </div> */}
                     <div className="relative flex p-4 text-black shadow " style={{ width: '1600px', height: '800px' }}>
-                        {/* <div className="flex items-start relative" onClick={() => handleClick()}> */}
                         <animated.div
                             className={'flex items-start mx-auto left-0 right-0 w-full'}
                             style={{
@@ -202,11 +187,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 </div>
                             </div>
                         </animated.div>
-                        {/* <div className="fixed bottom-0 left-0 bg-white p-4 text-white"> */}
-
-                        {/* </div> */}
-                        {/* </div> */}
-                        {/* <div className="grid place-items-center "> */}
                         <div className="flex items-center justify-center">
                             <div className="absolute">
                                 <div className="flex items-center justify-center h-screen">
@@ -218,8 +198,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 </div>
                             </div>
                         </div>
-                        {/* <span className='text-white'>VS</span> */}
-                        {/* <div className="flex items-end mx-auto left-0 right-0" onClick={() => handleSelection(0)}> */}
                         <animated.div
                             className={'flex items-end mx-auto left-0 right-0 w-full'}
                             style={{
@@ -234,10 +212,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 </div>
                             </div>
                         </animated.div>
-                        {/* </div> */}
                     </div>
                 </div>
-                {/* <div className="grid place-items-center box-border h-32 w-32 p-4 border-4">GamePage</div> */}
             </>
         );
     }

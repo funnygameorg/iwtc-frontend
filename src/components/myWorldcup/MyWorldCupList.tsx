@@ -8,16 +8,6 @@ const MyWorldCupList = () => {
     const accessToken = getAccessToken();
     const { data: myWorldCupList, isSuccess, refetch } = useQueryGetMyWorldCupList(accessToken);
 
-    // useEffect(() => {
-    //     const accessToken = getAccessToken();
-
-    //     const fetchData = async () => {
-    //         const response: any = await getMyWorldCupList(accessToken);
-    //         setMyWorldCupList(response.data.data);
-    //     };
-    //     fetchData();
-    // }, []);
-
     if (isSuccess) {
         return (
             <div>
