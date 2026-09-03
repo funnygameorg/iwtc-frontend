@@ -47,7 +47,7 @@ npm test
 npm run build
 ```
 
-- 테스트: 34개, 14 suites
+- 테스트: 43개, 17 suites
 - 테스트 도구: 별도 라이브러리 없이 Node.js `node:test`
 - production build는 `.env.production`을 사용한다.
 - lint에는 기존 `@next/next/no-img-element` 경고 3건이 남아 있다.
@@ -87,6 +87,9 @@ npm run build
 - 게임 진행 화면, 종료 화면, 랭킹 목록, 라운드 팝업의 상태 타입을 API DTO부터 연결했다.
 - YouTube 플레이어 두 종류의 활성 `any`를 제거했다.
 - 후보 선택 시 승자·패자 ID와 다음 제외 목록을 계산하는 로직을 순수 함수로 분리했다.
+- 결승 종료·다음 라운드 요청·같은 라운드의 다음 후보 표시를 상태 전이로 분리했다.
+- 1~4위 누적 규칙과 결과 페이지 경로 생성을 순수 함수로 분리했다.
+- 선택 애니메이션, 후보 미디어 렌더링, 진행률 상태를 각각 훅과 컴포넌트로 분리했다.
 
 ### 홈 목록·공통 타입 경계
 
@@ -95,10 +98,17 @@ npm run build
 - 홈 목록 미디어 좌·우 요청의 4가지 성공/실패 조합을 테스트로 고정했다.
 - `BaseService` 메서드의 기본 응답 타입을 `any`에서 `unknown`으로 축소하고, 제네릭을 생략했던 활성 호출부에 응답·요청 타입을 연결했다.
 - 인증 폼, 헤더, 관리 폼, 검증 메시지, 댓글 Popper의 활성 `any`를 제거했다.
+- 관리 컨텐츠 생성 폼의 공통·YouTube·파일 검증 규칙을 순수 함수로 분리했다.
 
 최근 작업 커밋:
 
 ```text
+e75daad refactor: 관리 컨텐츠 검증 로직 분리
+441bc24 refactor: 게임 진행 상태 훅 분리
+c258a20 refactor: 게임 순위 누적 로직 분리
+3b5f371 refactor: 게임 후보 미디어 렌더링 분리
+76252c4 refactor: 게임 선택 애니메이션 훅 분리
+26d61fd refactor: 게임 라운드 상태 전이 분리
 f97d3ce refactor: 게임 후보 선택 로직 분리
 6b1ba50 refactor: 폼과 표시 컴포넌트 타입 연결
 05bfd7a refactor: API 기본 응답 타입 축소
@@ -181,23 +191,24 @@ rg -n "\\bany\\b" src --glob '*.{ts,tsx}'
 - style 객체: `StylesConfig` 또는 라이브러리가 제공하는 공개 타입을 기존 설치 버전에서 확인
 - 검증 결과: 실제 react-hook-form/yup 사용처를 확인한 뒤 필요한 필드만 모델링
 
-### 4. 게임 페이지 책임 분리 (다음 시작점)
+### 4. 게임 페이지 책임 분리 (완료)
 
 `src/app/play-game/[id]/page.tsx`는 타입 경계와 순수 계산 테스트는 확보됐지만 아직 크고 책임이 많다.
 
 다음 후보:
 
 - 후보 선택과 승자/패자 ID 계산 (완료)
-- 다음 라운드 요청 시점과 제외 ID 누적
-- 애니메이션 제어
-- 후보 미디어 렌더링
-- 진행 상태 Hook
+- 다음 라운드 요청 시점과 제외 ID 누적 (완료)
+- 애니메이션 제어 (완료)
+- 후보 미디어 렌더링 (완료)
+- 진행 상태 Hook (완료)
 
 선택 로직을 순수 함수 테스트로 먼저 고정한 뒤 Hook과 UI를 분리한다. 현재 클릭 방향과 승자/패자 index 규칙을 임의로 바꾸지 않는다.
 
-### 5. 관리 페이지 추가 분리
+### 5. 관리 페이지 추가 분리 (다음 시작점)
 
-- `WorldCupContentsManageList.tsx`의 생성 폼·검증·미디어 입력 책임 분리
+- `WorldCupContentsManageList.tsx`의 검증 책임 분리 (완료)
+- `WorldCupContentsManageList.tsx`의 생성 폼·미디어 입력 책임 분리
 - `WorldCupContentsManagerListWrapper.tsx`의 생성/수정/삭제 요청 조합 분리
 - 이미지와 MP4 변환 로직 분리
 - FFmpeg 관련 코드는 의존성과 브라우저 동작 영향이 크므로 가장 마지막에 진행
