@@ -8,7 +8,14 @@ import { useRouter } from 'next/navigation';
 import { animated } from '@react-spring/web';
 import Spiner from '@/components/common/Spiner';
 import { createRoundLabels, getRoundProgressIncrement } from '@/domain/game/round';
-import { createWorldCupGameRequest, resolveGameContinuation, resolveGameSelection } from '@/domain/game/play';
+import {
+    createGameClearPath,
+    createWorldCupGameRequest,
+    GameRankContents,
+    resolveGameContinuation,
+    resolveGameSelection,
+    updateGameRankContents,
+} from '@/domain/game/play';
 import { MappedMediaContent } from '@/domain/game/mediaFile';
 import { WorldCupGameContent } from '@/interfaces/models/world-cup/WcGameData';
 import { useGameSelectionAnimation } from '@/hooks/useGameSelectionAnimation';
@@ -26,7 +33,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     const [isPlay, setIsPlay] = useState<boolean>(false);
     const [gameList, setGameList] = useState<GameContentView[]>([]);
     const [saveClickContents, setSaveClickContents] = useState<number[]>([]);
-    const [rankContents, setRankContents] = useState({
+    const [rankContents, setRankContents] = useState<GameRankContents>({
         firstWinnerContentsId: 0,
         secondWinnerContentsId: 0,
         thirdWinnerContentsId: 0,
@@ -114,25 +121,16 @@ const Page = ({ params }: { params: { id: string } }) => {
         // selectRound가 2이면 결승
         setSaveClickContents(nextExcludedContents);
         if (selectRound === 4) {
-            if (rankContents.fourthWinnerContentsId !== 0) {
-                const updatedRankContents = { ...rankContents, thirdWinnerContentsId: loserContentId };
-                setRankContents(updatedRankContents);
-            } else {
-                const updatedRankContents = { ...rankContents, fourthWinnerContentsId: loserContentId };
-                setRankContents(updatedRankContents);
-            }
+            setRankContents(updateGameRankContents(rankContents, selectRound, { winnerContentId, loserContentId }));
         }
 
         if (continuation.type === 'finish') {
-            const updatedRankContents = {
-                ...rankContents,
-                firstWinnerContentsId: winnerContentId,
-                secondWinnerContentsId: loserContentId,
-            };
+            const updatedRankContents = updateGameRankContents(rankContents, selectRound, {
+                winnerContentId,
+                loserContentId,
+            });
             // setRankContents(updatedRankContents);
-            router.push(
-                `/play-clear/${worldCupId}/${updatedRankContents.firstWinnerContentsId}/${updatedRankContents.secondWinnerContentsId}/${updatedRankContents.thirdWinnerContentsId}/${updatedRankContents.fourthWinnerContentsId}`
-            );
+            router.push(createGameClearPath(worldCupId, updatedRankContents));
             return;
             // 최종 선택 API 호출 후 return
         }

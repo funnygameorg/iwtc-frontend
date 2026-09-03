@@ -1,6 +1,13 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { createWorldCupGameRequest, resolveGameContinuation, resolveGameSelection } from './play';
+import {
+    createGameClearPath,
+    createWorldCupGameRequest,
+    GameRankContents,
+    resolveGameContinuation,
+    resolveGameSelection,
+    updateGameRankContents,
+} from './play';
 
 describe('createWorldCupGameRequest', () => {
     it('creates the initial round request without exclusions', () => {
@@ -67,5 +74,55 @@ describe('resolveGameContinuation', () => {
             type: 'show-next-pair',
             remainingContents: [{ contentsId: 3 }, { contentsId: 4 }],
         });
+    });
+});
+
+describe('game rank contents', () => {
+    const emptyRankContents: GameRankContents = {
+        firstWinnerContentsId: 0,
+        secondWinnerContentsId: 0,
+        thirdWinnerContentsId: 0,
+        fourthWinnerContentsId: 0,
+    };
+
+    it('records the first semifinal loser as fourth and the second as third', () => {
+        const afterFirstSemifinal = updateGameRankContents(emptyRankContents, 4, {
+            winnerContentId: 10,
+            loserContentId: 20,
+        });
+        const afterSecondSemifinal = updateGameRankContents(afterFirstSemifinal, 4, {
+            winnerContentId: 30,
+            loserContentId: 40,
+        });
+
+        assert.equal(afterFirstSemifinal.fourthWinnerContentsId, 20);
+        assert.equal(afterSecondSemifinal.thirdWinnerContentsId, 40);
+    });
+
+    it('records the final winner and loser without changing semifinal ranks', () => {
+        const result = updateGameRankContents(
+            { ...emptyRankContents, thirdWinnerContentsId: 40, fourthWinnerContentsId: 20 },
+            2,
+            { winnerContentId: 10, loserContentId: 30 }
+        );
+
+        assert.deepEqual(result, {
+            firstWinnerContentsId: 10,
+            secondWinnerContentsId: 30,
+            thirdWinnerContentsId: 40,
+            fourthWinnerContentsId: 20,
+        });
+    });
+
+    it('creates the existing clear-page route order', () => {
+        assert.equal(
+            createGameClearPath(5, {
+                firstWinnerContentsId: 10,
+                secondWinnerContentsId: 30,
+                thirdWinnerContentsId: 40,
+                fourthWinnerContentsId: 20,
+            }),
+            '/play-clear/5/10/30/40/20'
+        );
     });
 });

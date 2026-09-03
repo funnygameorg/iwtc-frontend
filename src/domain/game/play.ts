@@ -16,6 +16,13 @@ export interface GameSelectionResult {
     nextExcludedContents: number[];
 }
 
+export interface GameRankContents {
+    firstWinnerContentsId: number;
+    secondWinnerContentsId: number;
+    thirdWinnerContentsId: number;
+    fourthWinnerContentsId: number;
+}
+
 export type GameContinuation<T> =
     | { type: 'finish' }
     | {
@@ -66,6 +73,32 @@ export const resolveGameContinuation = <T>(
         remainingContents: contents.slice(2),
     };
 };
+
+export const updateGameRankContents = (
+    rankContents: GameRankContents,
+    currentRound: number,
+    selection: Pick<GameSelectionResult, 'winnerContentId' | 'loserContentId'>
+): GameRankContents => {
+    if (currentRound === 4) {
+        if (rankContents.fourthWinnerContentsId !== 0) {
+            return { ...rankContents, thirdWinnerContentsId: selection.loserContentId };
+        }
+        return { ...rankContents, fourthWinnerContentsId: selection.loserContentId };
+    }
+
+    if (currentRound === 2) {
+        return {
+            ...rankContents,
+            firstWinnerContentsId: selection.winnerContentId,
+            secondWinnerContentsId: selection.loserContentId,
+        };
+    }
+
+    return rankContents;
+};
+
+export const createGameClearPath = (worldCupId: number, rankContents: GameRankContents): string =>
+    `/play-clear/${worldCupId}/${rankContents.firstWinnerContentsId}/${rankContents.secondWinnerContentsId}/${rankContents.thirdWinnerContentsId}/${rankContents.fourthWinnerContentsId}`;
 
 export const createWorldCupGameRequest = (
     worldCupId: number,
