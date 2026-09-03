@@ -14,3 +14,15 @@ export interface userInfo {
     nickname: string;
     serviceId: string;
 }
+
+export interface UserSummaryResponse {
+    data: userInfo;
+}
+
+export interface RefreshTokenResponse {
+    code: number;
+    data: {
+        newAccessToken: string;
+        refreshToken: string;
+    };
+}

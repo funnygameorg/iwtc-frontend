@@ -82,11 +82,11 @@ instance.interceptors.response.use(
 //   // SessionStorage.setAuthToken(token);
 // };
 
-export const ajaxGet = async <T = any>(subUrl: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> => {
+export const ajaxGet = async <T = unknown>(subUrl: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> => {
     return instance.get(subUrl, config);
 };
 
-export const ajaxPost = async <T = any, D = unknown>(
+export const ajaxPost = async <T = unknown, D = unknown>(
     subUrl: string,
     data?: D,
     config?: AxiosRequestConfig<D>
@@ -97,7 +97,7 @@ export const ajaxPost = async <T = any, D = unknown>(
     return instance.post(subUrl, data);
 };
 
-export const ajaxPut = async <T = any, D = unknown>(
+export const ajaxPut = async <T = unknown, D = unknown>(
     subUrl: string,
     data: D,
     config?: AxiosRequestConfig<D>
@@ -105,7 +105,7 @@ export const ajaxPut = async <T = any, D = unknown>(
     return instance.put(subUrl, data, config);
 };
 
-export const ajaxDelete = async <T = any>(
+export const ajaxDelete = async <T = unknown>(
     subUrl: string,
     data: unknown = {},
     headers?: RawAxiosRequestHeaders

@@ -1,15 +1,19 @@
-import { SignUpInfo, SignInInfo } from '@/interfaces/models/login/MemberData';
+import {
+    RefreshTokenResponse,
+    SignUpInfo,
+    SignInInfo,
+    UserSummaryResponse,
+} from '@/interfaces/models/login/MemberData';
 import { ajaxGet, ajaxPost } from './BaseService';
 import { getAccessToken, getRefreshToken } from '@/utils/TokenManager';
 
-//TODO: type 설정
 export const userSignUp = async (param: SignUpInfo) => {
-    const response = await ajaxPost('/members/sign-up', param);
+    const response = await ajaxPost<void, SignUpInfo>('/members/sign-up', param);
     return response;
 };
 
 export const userSignIn = async (param: SignInInfo) => {
-    const response = await ajaxPost('/members/sign-in', param);
+    const response = await ajaxPost<void, SignInInfo>('/members/sign-in', param);
     return response;
 };
 
@@ -19,13 +23,11 @@ export const userSignOut = async () => {
         'access-token': `${getAccessToken()}`,
     };
 
-    const response = await ajaxGet(`/members/sign-out`, {
+    const response = await ajaxGet<void>(`/members/sign-out`, {
         headers: headers,
         timeout: 5000,
     });
-    if (response) {
-        return response;
-    }
+    return response;
 };
 
 export const userMeSummary = async (token: string) => {
@@ -34,13 +36,11 @@ export const userMeSummary = async (token: string) => {
         'access-token': `${token}`,
     };
     // try {
-    const response = await ajaxGet(`/members/me/summary`, {
+    const response = await ajaxGet<UserSummaryResponse>(`/members/me/summary`, {
         headers: headers,
         timeout: 5000,
     });
-    if (response) {
-        return response.data;
-    }
+    return response.data;
     // } catch (e) {
     //     console.log('eeee', e);
     // }
@@ -56,11 +56,9 @@ export const newAccessToken = async () => {
     const headers = {
         'Content-Type': 'application/json',
     };
-    const response = await ajaxPost(`/new-access-token`, params, {
+    const response = await ajaxPost<RefreshTokenResponse, typeof params>(`/new-access-token`, params, {
         headers: headers,
         timeout: 5000,
     });
-    if (response) {
-        return response.data;
-    }
+    return response.data;
 };
