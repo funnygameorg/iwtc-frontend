@@ -103,10 +103,12 @@ npm run build
 - 신규·수정 컨텐츠의 API 요청 payload 구성 규칙을 도메인 함수로 분리했다.
 - 삭제·수정·신규 생성 API를 병렬로 실행하는 저장 요청 조합을 분리하고 실패 전파를 테스트했다.
 - 이미지 파일 선택 시 FileReader 결과와 파일 메타데이터를 초안에 결합하는 변환을 분리했다.
+- 2024년 1월부터 비활성 상태였던 GIF→MP4 변환 코드의 이력과 참조를 확인하고, FFmpeg 패키지 3개와 약 23MB의 public 런타임 파일을 제거했다.
 
 최근 작업 커밋:
 
 ```text
+575d19b chore: 사용하지 않는 FFmpeg 의존성 제거
 2b887cb refactor: 관리 이미지 입력 변환 분리
 933a67d refactor: 관리 컨텐츠 저장 요청 조합 분리
 b6afb78 refactor: 관리 컨텐츠 요청 데이터 구성 분리
@@ -213,17 +215,17 @@ rg -n "\\bany\\b" src --glob '*.{ts,tsx}'
 
 선택 로직을 순수 함수 테스트로 먼저 고정한 뒤 Hook과 UI를 분리한다. 현재 클릭 방향과 승자/패자 index 규칙을 임의로 바꾸지 않는다.
 
-### 5. 관리 페이지 추가 분리 (다음 시작점)
+### 5. 관리 페이지 추가 분리 (완료)
 
 - `WorldCupContentsManageList.tsx`의 검증 책임 분리 (완료)
 - `WorldCupContentsManageList.tsx`의 생성 폼·미디어 입력 책임 분리 (완료)
 - `WorldCupContentsManagerListWrapper.tsx`의 신규·수정 요청 payload 구성 분리 (완료)
 - `WorldCupContentsManagerListWrapper.tsx`의 생성/수정/삭제 요청 실행 조합 분리 (완료)
 - 활성 이미지 입력 변환 로직 분리 (완료)
-- 비활성 GIF→MP4 변환 코드의 유지·제거 여부 확인
-- FFmpeg 관련 코드는 의존성과 브라우저 동작 영향이 크므로 가장 마지막에 진행
+- 비활성 GIF→MP4 변환 코드의 유지·제거 여부 확인 (제거 완료)
+- Git 이력상 2024-01-15부터 YouTube 라이브러리와의 충돌로 비활성 상태였고, import·동적 import·설정 참조가 없어 관련 주석 코드와 의존성·런타임을 함께 제거했다.
 
-### 6. dead code·unused dependency 확인
+### 6. dead code·unused dependency 확인 (다음 시작점)
 
 - 카드와 관리 컴포넌트에 주석 처리된 과거 구현이 남아 있다.
 - 주석 코드 제거는 활성 호출 흐름과 git history에서 용도를 확인한 뒤 별도 커밋으로 진행한다.
